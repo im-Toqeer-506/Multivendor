@@ -1,14 +1,14 @@
 import React from "react";
 import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { LoginPage } from "./routes/Routes.jsx";
+import { LoginPage, SignupPage } from "./routes/Routes.jsx";
 const App = () => {
   return (
     <div>
       <BrowserRouter>
         <Routes>
-          <Route path="/login" element={<LoginPage/>}/>
-
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignupPage />} />
         </Routes>
       </BrowserRouter>
     </div>
