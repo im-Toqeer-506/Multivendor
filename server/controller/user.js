@@ -15,7 +15,7 @@ router.post("/create-user", upload.single("file"), async (req, res, next) => {
   const userEmail = await User.findOne({ email });
   // if the user Email already found in our DataBase
   if (userEmail) {
-    next(new ErrorHandler("User Already Exist", 409));
+    return next(new ErrorHandler("User Already Exist", 409));
   }
 
   const filename = req.file.filename;
