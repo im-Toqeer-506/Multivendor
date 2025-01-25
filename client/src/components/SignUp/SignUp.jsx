@@ -2,18 +2,36 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { RxAvatar } from "react-icons/rx";
+import { server } from "../../server";
+import axios from "axios";
 const SignUp = () => {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [visible, setVisible] = useState(false);
   const [avatar, setAvatar] = useState(null);
-  const handleSubmit = () => {
-    console.log("Submit");
-  };
-  const handleFileInputChange = () => {
+  //Handle the file Input Change
+  const handleFileInputChange = (e) => {
     const file = e.target.files[0];
-    avatar(file);
+    setAvatar(file);
+  };
+  // Handle form Submission
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("file", avatar);
+    formData.append("name", name);
+    formData.append("email", email);
+    formData.append("password", password);
+    const config = { headers: { "Content-Type": "multipart/form-data" } };
+    axios
+      .post(`${server}/api/user/create-user`, formData, config)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   return (
@@ -25,7 +43,8 @@ const SignUp = () => {
       </div>
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-          <form className="space-y-6">
+          <form className="space-y-6" onSubmit={handleSubmit}>
+            {/* Input for name */}
             <div>
               <label
                 htmlFor="Full Name"
@@ -45,6 +64,7 @@ const SignUp = () => {
                 />
               </div>
             </div>
+            {/* Input for Email */}
             <div>
               <label
                 htmlFor="email"
@@ -64,6 +84,7 @@ const SignUp = () => {
                 />
               </div>
             </div>
+            {/* Input for Password */}
             <div>
               <label
                 htmlFor="password"
@@ -81,6 +102,7 @@ const SignUp = () => {
                   onChange={(e) => setPassword(e.target.value)}
                   className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 />
+                {/* toggle visibiltiy Password */}
                 {visible ? (
                   <AiOutlineEye
                     className="absolute right-2 cursor-pointer top-2"
@@ -96,6 +118,7 @@ const SignUp = () => {
                 )}
               </div>
             </div>
+            {/* Input for Avatar */}
             <div>
               <label
                 htmlFor="avatar"
@@ -103,6 +126,7 @@ const SignUp = () => {
               ></label>
               <div className="mt-2 flex items-center">
                 <span className="inline-block h-8 w-8 rounded-full overflow-hidden">
+                  {/* Set the Avatar PreView */}
                   {avatar ? (
                     <img
                       src={URL.createObjectURL(avatar)}
@@ -113,6 +137,7 @@ const SignUp = () => {
                     <RxAvatar className="h-8 w-8" />
                   )}
                 </span>
+                {/* File Input for Avatar */}
                 <label
                   htmlFor="file-input"
                   className="ml-5 flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium
@@ -126,10 +151,12 @@ const SignUp = () => {
                     accept=".jpg,.png,.gif,.pdf"
                     onChange={handleFileInputChange}
                     className="sr-only"
+                    // Hide Class
                   />
                 </label>
               </div>
             </div>
+            {/* Submit Button */}
             <div>
               <button
                 type="submit"
@@ -138,6 +165,7 @@ const SignUp = () => {
                 Submit
               </button>
             </div>
+            {/* Link to the SignIn*/}
             <div className=" flex items-center w-full">
               <h4>Already have an Account?</h4>
               <Link to="/login" className="text-blue-600 pl-2">

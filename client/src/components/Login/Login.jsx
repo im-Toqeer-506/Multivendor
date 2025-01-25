@@ -15,6 +15,7 @@ const Login = () => {
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
           <form className="space-y-6">
+          {/* Input for Email */}
             <div>
               <label
                 htmlFor="email"
@@ -34,6 +35,7 @@ const Login = () => {
                 />
               </div>
             </div>
+            {/* Input for Password */}
             <div>
               <label
                 htmlFor="password"
@@ -66,6 +68,7 @@ const Login = () => {
                 )}
               </div>
             </div>
+            {/* Remember me  */}
             <div className="flex items-center justify-between">
               <div className="flex items-center">
                 <input
@@ -90,6 +93,7 @@ const Login = () => {
                 </a>
               </div>
             </div>
+            {/* Submit Button */}
             <div>
               <button
                 type="submit"
@@ -98,6 +102,7 @@ const Login = () => {
                 Submit
               </button>
             </div>
+            {/* Link to signUp */}
             <div className=" flex items-center w-full">
               <h4>Not have any Account?</h4>
               <Link to="/signup" className="text-blue-600 pl-2">
