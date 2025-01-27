@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { RxAvatar } from "react-icons/rx";
 import { server } from "../../server";
 import axios from "axios";
 const SignUp = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
@@ -25,9 +27,10 @@ const SignUp = () => {
     formData.append("password", password);
     const config = { headers: { "Content-Type": "multipart/form-data" } };
     axios
-      .post(`${server}/api/user/create-user`, formData, config)
+      .post(`${server}/user/create-user`, formData, config)
       .then((res) => {
-        console.log(res);
+        if(res.data.success==true)
+          navigate('/')
       })
       .catch((error) => {
         console.log(error);
