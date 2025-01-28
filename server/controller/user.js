@@ -13,7 +13,6 @@ const router = express.Router();
 router.post("/create-user", upload.single("file"), async (req, res, next) => {
   try {
     const { name, email, password } = req.body;
-    console.log(req.body);
     //All fields are required
     if (!name || !email || !password) {
       return next(new ErrorHandler("All Fields Are Required!", 400));
@@ -48,7 +47,7 @@ router.post("/create-user", upload.single("file"), async (req, res, next) => {
       avatar: fileURL,
     };
     const activationToken = createActivationToken(user);
-    const activationUrl = `http://localhost:3000/activation/${activationToken}`;
+    const activationUrl = `http://localhost:5173/activation/${activationToken}`;
     try {
       await sendMail({
         email: user.email,
