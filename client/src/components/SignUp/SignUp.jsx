@@ -29,8 +29,7 @@ const SignUp = () => {
     axios
       .post(`${server}/user/create-user`, formData, config)
       .then((res) => {
-        if(res.data.success==true)
-          navigate('/')
+       alert(res.message);
       })
       .catch((error) => {
         console.log(error);
