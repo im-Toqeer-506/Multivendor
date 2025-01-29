@@ -9,7 +9,7 @@ const jwt = require("jsonwebtoken");
 const sendToken = require("../utils/jwtToken");
 const sendMail = require("../utils/SendMail");
 const router = express.Router();
-
+//craete_user route and controller
 router.post("/create-user", upload.single("file"), async (req, res, next) => {
   try {
     const { name, email, password } = req.body;
@@ -65,13 +65,13 @@ router.post("/create-user", upload.single("file"), async (req, res, next) => {
     next(new ErrorHandler(error.message, 400));
   }
 });
-//create activation Token
+//create activation Token (Function)
 const createActivationToken = (user) => {
   return jwt.sign(user, process.env.ACTIVATION_SECRET, {
     expiresIn: process.env.JWT_EXPIRES,
   });
 };
-//activate user
+//activate user route and controller
 router.post(
   "/activation",
   catchAsyncError(async (req, res, next) => {
@@ -104,4 +104,30 @@ router.post(
     }
   })
 );
+//Login User Route and controller
+router.post(
+  "/login-user",
+  catchAsyncError(async (req, res, next) => {
+    try {
+      let { email, password } = req.body;
+      if (!email || !password)
+        return next(new ErrorHandler("All Fileds are required!", 500));
+      const user = await User.findOne({ email }).select("+password");
+      if (!user) {
+        return next(new ErrorHandler("User Does't Exist!", 400));
+      }
+      const ValidPassword = await user.comparePassword(password);
+      if (!ValidPassword) {
+        return next(
+          new ErrorHandler("Please,Provide the correct information!", 400)
+        );
+      }
+      sendToken(user, 201, res);
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+//
+
 module.exports = router;
