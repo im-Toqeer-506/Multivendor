@@ -8,8 +8,9 @@ const fs = require("fs");
 const jwt = require("jsonwebtoken");
 const sendToken = require("../utils/jwtToken");
 const sendMail = require("../utils/SendMail");
+const { isAthuenticated } = require("../middleware/auth");
 const router = express.Router();
-//craete_user route and controller
+//craete_user Route
 router.post("/create-user", upload.single("file"), async (req, res, next) => {
   try {
     const { name, email, password } = req.body;
@@ -71,7 +72,7 @@ const createActivationToken = (user) => {
     expiresIn: process.env.JWT_EXPIRES,
   });
 };
-//activate user route and controller
+//activate user Route
 router.post(
   "/activation",
   catchAsyncError(async (req, res, next) => {
@@ -104,7 +105,7 @@ router.post(
     }
   })
 );
-//Login User Route and controller
+//Login User Route
 router.post(
   "/login-user",
   catchAsyncError(async (req, res, next) => {
@@ -128,6 +129,23 @@ router.post(
     }
   })
 );
-//
-
+//load User Route
+router.get(
+  "/getuser",
+  isAthuenticated,
+  catchAsyncError(async (req, res, next) => {
+    try {
+      const user = await User.findById(req.user._id);
+      if (!user) {
+        return next(new ErrorHandler("User does'nt exist!", 400));
+      }
+      res.status(200).json({
+        success: true,
+        user,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
 module.exports = router;
