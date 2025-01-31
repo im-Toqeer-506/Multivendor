@@ -45,7 +45,7 @@ export const brandingData = [
           strokeMiterlimit="10"
           strokeLinecap="square"
         ></path>
-          <path
+        <path
           d="M8.72763 35.0002C10.4347 35.0002 11.8185 33.6163 11.8185 31.9093C11.8185 30.2022 10.4347 28.8184 8.72763 28.8184C7.02057 28.8184 5.63672 30.2022 5.63672 31.9093C5.63672 33.6163 7.02057 35.0002 8.72763 35.0002Z"
           stroke="#FFBB38"
           strokeWidth="2"
