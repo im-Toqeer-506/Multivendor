@@ -3,9 +3,7 @@ import "./App.css";
 import { ToastContainer, Bounce, toast } from "react-toastify";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
-import { LoginPage, SignupPage, ActivationPage } from "./routes/Routes.jsx";
-import { server } from "./server.js";
-import axios from "axios";
+import { LoginPage, SignupPage, ActivationPage ,HomePage} from "./routes/Routes.jsx";
 import Store from "./redux/store.js";
 import {getUser} from "./redux/actions/user.js"
 const App = () => {
@@ -18,6 +16,7 @@ const App = () => {
     <div>
       <BrowserRouter>
         <Routes>
+          <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route
