@@ -195,22 +195,19 @@ export const categoriesData = [
     id: 1,
     title: "Computers and Laptops",
     subTitle: "",
-    imageUrl:
-      "https://cdn.shopify.com/s/files/1/1706/9177/products/NEWAppleMacbookProwithM1ProChip14InchLaptop2021ModelMKGQ3LL_A_16GB_1TBSSD_custommacbd.jpg?v=1659592838",
+    imageUrl: "https://m.media-amazon.com/images/I/61JHBCsTZxL._AC_UY218_.jpg",
   },
   {
     id: 2,
     title: "Cosmetics and Body Care",
     subTitle: "",
-    imageUrl:
-      "https://indian-retailer.s3.ap-south-1.amazonaws.com/s3fs-public/2021-07/kosme1.png",
+    imageUrl: "https://m.media-amazon.com/images/I/81lwB2RXQ6L._AC_UL320_.jpg",
   },
   {
     id: 3,
     title: "Accessories",
     subTitle: "",
-    imageUrl:
-      "https://img.freepik.com/free-vector/ordering-goods-online-internet-store-online-shopping-niche-e-commerce-website-mother-buying-babies-clothes-footwear-toys-infant-accessories_335657-2345.jpg?w=2000",
+    imageUrl: "https://m.media-amazon.com/images/I/716YUdHaK0L._AC_UL320_.jpg",
   },
   {
     id: 4,
@@ -223,29 +220,28 @@ export const categoriesData = [
     id: 5,
     title: "Shoes",
     subTitle: "",
-    imageUrl:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQvBQPQMVNRd6TtDkGs2dCri0Y-rxKkFOiEWw&usqp=CAU",
+    imageUrl: "https://m.media-amazon.com/images/I/41xGPGGSfTL._AC_UL320_.jpg",
   },
   {
     id: 6,
     title: "Gifts",
     subTitle: "",
     imageUrl:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKs02TwAnaoj0XPxNX94aAapvxIzk41BbOjJJa9-Bj5DdWpaG_LXuAYc0aDcaS0gTV_aw&usqp=CAU",
+      "https://www.realsimple.com/thmb/1nO0GmEuF87RSxFBmTWtfo6TZW0=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/the-best-gift-giver-GettyImages-1706575747-2089a300e6594496b7f558585a4baefb.jpg",
   },
   {
     id: 7,
     title: "Pet Care",
     subTitle: "",
     imageUrl:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5RM9MqAqw52MIjqzYn3rf2fJjtzxdJimGJw&usqp=CAU",
+      "https://plus.unsplash.com/premium_photo-1663047910718-c8758a6785e9?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cGV0JTIwY2FyZXxlbnwwfHwwfHx8MA%3D%3D",
   },
   {
     id: 8,
     title: "Mobile and Tablets",
     subTitle: "",
     imageUrl:
-      "https://st-troy.mncdn.com/mnresize/1500/1500/Content/media/ProductImg/original/mpwp3tua-apple-iphone-14-256gb-mavi-mpwp3tua-637986832343472449.jpg",
+      "https://images.unsplash.com/photo-1651936716950-7aca46b99653?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjB8fG1vYmlsZXMlMjBhbmQlMjB0YWJsZXRzfGVufDB8fDB8fHww",
   },
   {
     id: 9,
@@ -268,24 +264,28 @@ export const productData = [
   {
     id: 1,
     category: "Computers and Laptops",
-    name: "MacBook Pro M2 chipset 256GB SSD 8GB RAM space-gray color with Apple 1 year warranty",
+    name:
+      "MacBook Pro M2 chipset 256GB SSD 8GB RAM space-gray color with Apple 1 year warranty",
     description:
       "Product details are a crucial part of any eCommerce website or online marketplace. These details help potential customers to make informed decisions about the products they are interested in buying. A well-written product description can also be a powerful marketing tool that can help increase sales. Product details typically include information about the product's features, specifications, dimensions, weight, materials, and other relevant information that can help customers understand the product better. The product details section should also include high-quality images and videos of the product, as well as customer reviews and ratings.",
     imageUrl: [
       {
         publicId: "test",
-        url: "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/mbp-spacegray-select-202206_GEO_EMEA_LANG_FR?wid=904&hei=840&fmt=jpeg&qlt=90&.v=1654021658445",
+        url:
+          "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/mbp-spacegray-select-202206_GEO_EMEA_LANG_FR?wid=904&hei=840&fmt=jpeg&qlt=90&.v=1654021658445",
       },
       {
         publicId: "test",
-        url: "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/mbp-spacegray-select-202206_GEO_EMEA_LANG_FR?wid=904&hei=840&fmt=jpeg&qlt=90&.v=1654021658445",
+        url:
+          "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/mbp-spacegray-select-202206_GEO_EMEA_LANG_FR?wid=904&hei=840&fmt=jpeg&qlt=90&.v=1654021658445",
       },
     ],
     shop: {
       name: "Apple Inc.",
       shopAvatar: {
         publicId: "test",
-        url: "https://www.mega.pk/items_images/Apple+MacBook+Air+M2+Chip+MLY33+8GB+Ram+256GB+SSD+Midnight+Price+in+Pakistan%2C+Specifications%2C+Features_-_23441.webp",
+        url:
+          "https://www.mega.pk/items_images/Apple+MacBook+Air+M2+Chip+MLY33+8GB+Ram+256GB+SSD+Midnight+Price+in+Pakistan%2C+Specifications%2C+Features_-_23441.webp",
       },
       ratings: 4.2,
     },
@@ -315,7 +315,8 @@ export const productData = [
       name: "Amazon Ltd",
       shopAvatar: {
         publicId: "test",
-        url: "https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg",
+        url:
+          "https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg",
       },
       ratings: 4.2,
     },
@@ -333,18 +334,21 @@ export const productData = [
     imageUrl: [
       {
         publicId: "test",
-        url: "https://i0.wp.com/eccocibd.com/wp-content/uploads/2022/01/1802NL02_1.png?fit=550%2C550&ssl=1",
+        url:
+          "https://i0.wp.com/eccocibd.com/wp-content/uploads/2022/01/1802NL02_1.png?fit=550%2C550&ssl=1",
       },
       {
         publicId: "test",
-        url: "https://i0.wp.com/eccocibd.com/wp-content/uploads/2022/01/1802NL02_1.png?fit=550%2C550&ssl=1",
+        url:
+          "https://i0.wp.com/eccocibd.com/wp-content/uploads/2022/01/1802NL02_1.png?fit=550%2C550&ssl=1",
       },
     ],
     shop: {
       name: "Shahriar Watch House",
       shopAvatar: {
         publicId: "test",
-        url: "https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg",
+        url:
+          "https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg",
       },
       ratings: 4.2,
     },
@@ -353,20 +357,23 @@ export const productData = [
     rating: 4,
     totalSell: 12,
     stock: 10,
-  },{
+  },
+  {
     id: 4,
     category: "Shoes",
     name: "New Trend shoes for gents with all sizes",
-    description: "Product details are a crucial part of any eCommerce website or online marketplace. These details help potential customers to make informed decisions about the products they are interested in buying. A well-written product description can also be a powerful marketing tool that can help increase sales. Product details typically include information about the product's features, specifications, dimensions, weight, materials, and other relevant information that can help customers understand the product better. The product details section should also include high-quality images and videos of the product, as well as customer reviews and ratings.",
+    description:
+      "Product details are a crucial part of any eCommerce website or online marketplace. These details help potential customers to make informed decisions about the products they are interested in buying. A well-written product description can also be a powerful marketing tool that can help increase sales. Product details typically include information about the product's features, specifications, dimensions, weight, materials, and other relevant information that can help customers understand the product better. The product details section should also include high-quality images and videos of the product, as well as customer reviews and ratings.",
     imageUrl: [
       {
         publicId: "shoes1",
-        url: 
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQvBQPQMVNRd6TtDkGs2dCri0Y-rxKkFOiEWw&usqp=CAU",
+        url:
+          "https://t3.ftcdn.net/jpg/01/21/81/86/360_F_121818673_6EID5iF76VCCc4aGOLJkd94Phnggre3o.jpg",
       },
       {
         publicId: "shoes2",
-        url: "https://unsplash.com/photos/white-and-blue-nike-air-force-1-high-jvoZ-Aux9aw",
+        url:
+          "https://unsplash.com/photos/white-and-blue-nike-air-force-1-high-jvoZ-Aux9aw",
       },
     ],
     shop: {
@@ -382,7 +389,7 @@ export const productData = [
     rating: 5,
     totalSell: 49,
     stock: 10,
-  },      
+  },
   {
     id: 5,
     category: "Music and Gaming",
@@ -392,18 +399,21 @@ export const productData = [
     imageUrl: [
       {
         publicId: "test",
-        url: "https://www.startech.com.bd/image/cache/catalog/headphone/havit/h763d/h763d-02-500x500.jpg",
+        url:
+          "https://www.startech.com.bd/image/cache/catalog/headphone/havit/h763d/h763d-02-500x500.jpg",
       },
       {
         publicId: "test",
-        url: "https://eratablet.com/wp-content/uploads/2022/08/H51ba6537405f4948972e293927673546u.jpg",
+        url:
+          "https://eratablet.com/wp-content/uploads/2022/08/H51ba6537405f4948972e293927673546u.jpg",
       },
     ],
     shop: {
       name: "Asus Ltd",
       shopAvatar: {
         publicId: "test",
-        url: "https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg",
+        url:
+          "https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg",
       },
       ratings: 4.2,
     },
