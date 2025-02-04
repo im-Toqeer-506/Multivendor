@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import styles from "../../../styles/style";
+import ProductCardDetails from "../ProductCardDetails/ProductCardDetails"
 import {
   AiFillStar,
   AiOutlineStar,
@@ -75,7 +76,7 @@ const ProductCard = ({ data }) => {
               size={20}
               className="cursor-pointer absolute right-2 top-5"
               onClick={() => setClick(!click)}
-              color={click?"red":"#333"}
+              color={click ? "red" : "#333"}
               title="Remove from wishlist"
             />
           ) : (
@@ -100,7 +101,9 @@ const ProductCard = ({ data }) => {
             color="#444"
             title="Add to Cart"
           />
-
+          {opens ? (
+            <ProductCardDetails setOpens={setOpens} data={data} />
+          ) : null}
         </div>
       </div>
     </>
