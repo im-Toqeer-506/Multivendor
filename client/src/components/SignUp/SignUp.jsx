@@ -1,13 +1,11 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { RxAvatar } from "react-icons/rx";
 import { server } from "../../server";
 import axios from "axios";
 import { toast } from "react-toastify";
 const SignUp = () => {
-  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
@@ -173,11 +171,11 @@ const SignUp = () => {
                 Submit
               </button>
             </div>
-            {/* Link to the SignIn*/}
+            {/* Link to the Login*/}
             <div className=" flex items-center w-full">
               <h4>Already have an Account?</h4>
               <Link to="/login" className="text-blue-600 pl-2">
-                Sign In
+               login
               </Link>
             </div>
           </form>
