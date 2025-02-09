@@ -97,7 +97,7 @@ router.post(
         password,
         avatar,
       });
-      await user.save();
+      // await user.save();
 
       sendToken(user, 201, res);
     } catch (error) {

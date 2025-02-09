@@ -13,11 +13,10 @@ import { CgProfile } from "react-icons/cg";
 import DropDown from "./DropDown";
 import Navbar from "./Navbar";
 import { useSelector } from "react-redux";
-import { backend_url } from "../../server.js";
+import { backend_url } from "../../server";
 
 const Header = ({ activeHeading }) => {
-  // const { isAuthenticated, user } = useSelector((state) => state.user);
-  // console.log(user);
+  const { isAuthenticated, user } = useSelector((state) => state.user);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchData, setSearchData] = useState(null);
   const [active, setActive] = useState(false);
@@ -156,9 +155,18 @@ const Header = ({ activeHeading }) => {
             </div>
             <div className={`${styles.noramlFlex}`}>
               <div className="relative mr-[15px] cursor-pointer">
-                <Link to="/login">
-                  <CgProfile size={30} color="rgb(255 255 255/83%)" />
-                </Link>
+                {isAuthenticated ? (
+                  <Link to="/profile">
+                    <img
+                      className="h-[35px] w-[35px] rounded-full"
+                      src={`${backend_url}/${user.avatar}`}
+                    />
+                  </Link>
+                ) : (
+                  <Link to="/login">
+                    <CgProfile size={30} color="rgb(255 255 255/83%)" />
+                  </Link>
+                )}
               </div>
             </div>
           </div>
