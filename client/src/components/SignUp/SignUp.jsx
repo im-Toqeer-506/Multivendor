@@ -2,10 +2,12 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { RxAvatar } from "react-icons/rx";
-import { server } from "../../server";
+import { server } from "../../server.js";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 const SignUp = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
@@ -33,10 +35,10 @@ const SignUp = () => {
         setEmail("");
         setPassword("");
         setAvatar(null);
+        navigate("/login");
       })
       .catch((error) => {
         toast.error(error.response.data.message);
-
       });
   };
 
@@ -175,7 +177,7 @@ const SignUp = () => {
             <div className=" flex items-center w-full">
               <h4>Already have an Account?</h4>
               <Link to="/login" className="text-blue-600 pl-2">
-               login
+                login
               </Link>
             </div>
           </form>
