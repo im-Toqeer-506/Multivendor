@@ -17,20 +17,20 @@ import Store from "./redux/store.js";
 import { getUser } from "./redux/actions/user.js";
 import { useSelector } from "react-redux";
 const App = () => {
-  const { loading } = useSelector((state) => state.user);
+  // const { loading } = useSelector((state) => state.user);
   useEffect(() => {
     Store.dispatch(getUser());
   }, []);
   return (
     <>
-      {loading ? null : (
+      {/* {loading ? null : ( */}
         <>
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/signup" element={<SignupPage />} />
-              <Route path="/activate/:token" element={<ActivationPage />} />
+              <Route path="/activation/:token" element={<ActivationPage />} />
               <Route path="/products" element={<ProductsPage />} />
               <Route path="/best-selling" element={<BestSelling />} />
               <Route path="/events" element={<Events />} />
@@ -50,7 +50,7 @@ const App = () => {
             pauseOnHover
           />
         </>
-      )}
+      {/* )} */}
     </>
   );
 };

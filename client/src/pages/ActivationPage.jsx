@@ -1,44 +1,45 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { server } from "../server";
 import axios from "axios";
+import React, { useEffect } from "react";
+import { useState } from "react";
+import { useParams } from "react-router-dom";
+import { server } from "../server.js";
 
 const ActivationPage = () => {
   const { activation_token } = useParams();
   const [error, setError] = useState(false);
+
   useEffect(() => {
     if (activation_token) {
-      const activation_Email = async () => {
-        try {
-          const res = await axios.post(`${server}/user/activation`, {
+      const sendRequest = async () => {
+        await axios
+          .post(`${server}/user/activation`, {
             activation_token,
+          })
+          .then((res) => {
+            console.log(res);
+          })
+          .catch((err) => {
+            setError(true);
           });
-          console.log(res.data.message); 
-        } catch (error) {
-          console.log(error.response?.data?.message || "An error occurred");
-          setError(true); 
-        }
       };
-  
-      activation_Email();
+      sendRequest();
     }
-  }, [activation_token]);
-  
+  }, []);
+
   return (
     <div
       style={{
         width: "100%",
         height: "100vh",
         display: "flex",
-        flexDirection: "column",
+        justifyContent: "center",
         alignItems: "center",
-        justifyContent:"center",
       }}
     >
       {error ? (
-        <p>Your Token is Expired!</p>
+        <p>Your token is expired!</p>
       ) : (
-        <p>Your account has been created successfully!</p>
+        <p>Your account has been created suceessfully!</p>
       )}
     </div>
   );

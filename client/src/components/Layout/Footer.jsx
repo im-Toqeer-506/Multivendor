@@ -57,7 +57,7 @@ const Footer = () => {
           {footerProductLinks &&
             footerProductLinks.map((i, index) => {
               return (
-                <l1 key={i.index} className="flex flex-col">
+                <li key={index} className="flex flex-col">
                   <Link
                     className="text-gray-400 hover:text-teal-400 duration-300
                    text-sm cursor-pointer leading-6"
@@ -65,7 +65,7 @@ const Footer = () => {
                   >
                     {i.name}
                   </Link>
-                </l1>
+                </li>
               );
             })}
         </ul>
@@ -74,7 +74,7 @@ const Footer = () => {
           {footerCompanyLinks &&
             footerCompanyLinks.map((i, index) => {
               return (
-                <l1 key={i.index} className="flex flex-col">
+                <li key={index} className="flex flex-col">
                   <Link
                     className="text-gray-400 hover:text-teal-400 duration-300
                    text-sm cursor-pointer leading-6"
@@ -82,7 +82,7 @@ const Footer = () => {
                   >
                     {i.name}
                   </Link>
-                </l1>
+                </li>
               );
             })}
         </ul>
@@ -91,7 +91,7 @@ const Footer = () => {
           {footerSupportLinks &&
             footerSupportLinks.map((i, index) => {
               return (
-                <l1 key={i.index} className="flex flex-col">
+                <li key={index} className="flex flex-col">
                   <Link
                     className="text-gray-400 hover:text-teal-400 duration-300
                    text-sm cursor-pointer leading-6"
@@ -99,7 +99,7 @@ const Footer = () => {
                   >
                     {i.name}
                   </Link>
-                </l1>
+                </li>
               );
             })}
         </ul>
@@ -110,12 +110,12 @@ const Footer = () => {
       >
         <span>© Multivendor 2025. All rights reserved.</span>
         <span>Term Privacy. and Policy</span>
-       <div className="sm:block flex items-center justify-center w-full">
-       <img
-          src="https://hamart-shop.vercel.app/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Ffooter-payment.a37c49ac.png&w=640&q=75"
-          alt="payment-card"
-        />
-       </div>
+        <div className="sm:block flex items-center justify-center w-full">
+          <img
+            src="https://hamart-shop.vercel.app/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Ffooter-payment.a37c49ac.png&w=640&q=75"
+            alt="payment-card"
+          />
+        </div>
       </div>
     </div>
   );

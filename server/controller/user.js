@@ -105,7 +105,7 @@ router.post(
     }
   })
 );
-//Login User Route
+//login_user Route
 router.post(
   "/login-user",
   catchAsyncError(async (req, res, next) => {
