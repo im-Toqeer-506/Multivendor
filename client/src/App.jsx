@@ -9,10 +9,12 @@ import {
   ActivationPage,
   HomePage,
   ProductsPage,
+  ProductDetailsPage,
   BestSelling,
   Events,
   FaqPage,
 } from "./routes/Routes.jsx";
+
 import Store from "./redux/store.js";
 import { getUser } from "./redux/actions/user";
 import { useSelector } from "react-redux";
@@ -35,6 +37,7 @@ const App = () => {
                 element={<ActivationPage />}
               />
               <Route path="/products" element={<ProductsPage />} />
+              <Route path="/product/:name" element={<ProductDetailsPage />} />
               <Route path="/best-selling" element={<BestSelling />} />
               <Route path="/events" element={<Events />} />
               <Route path="/faq" element={<FaqPage />} />

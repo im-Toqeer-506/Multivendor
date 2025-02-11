@@ -12,6 +12,8 @@ import { BiMenuAltLeft } from "react-icons/bi";
 import { CgProfile } from "react-icons/cg";
 import DropDown from "./DropDown";
 import Navbar from "./Navbar";
+import Cart from "../Cart/Cart";
+import Wishlist from "../Wishlist/Wishlist";
 import { useSelector } from "react-redux";
 import { backend_url } from "../../server";
 
@@ -21,6 +23,8 @@ const Header = ({ activeHeading }) => {
   const [searchData, setSearchData] = useState(null);
   const [active, setActive] = useState(false);
   const [dropDown, setDropDown] = useState(false);
+  const [openCart, setOpenCart] = useState(false);
+  const [openWishlist, setOpenWishlist] = useState(false);
 
   const handleSearchChange = (e) => {
     e.preventDefault();
@@ -137,22 +141,31 @@ const Header = ({ activeHeading }) => {
           </div>
           {/* Speacial Icons */}
           <div className={`${styles.noramlFlex}`}>
+            {/* Wishlist Clicking */}
             <div className={`${styles.noramlFlex}`}>
-              <div className="relative mr-[15px] cursor-pointer">
+              <div
+                className="relative mr-[15px] cursor-pointer"
+                onClick={() => setOpenWishlist(!openWishlist)}
+              >
                 <AiOutlineHeart size={30} color="rgb(255 255 255/83%)" />
                 <span className="absolute  right-0 top-0 rounded-full bg-[#3bc177] w-4 h-4  p-0 m-0 text-white font-monospace text-center  font-[12px] leading-tight ">
                   0
                 </span>
               </div>
             </div>
+            {/* Shoping Cart clicking */}
             <div className={`${styles.noramlFlex}`}>
-              <div className="relative mr-[15px] cursor-pointer">
+              <div
+                className="relative mr-[15px] cursor-pointer"
+                onClick={() => setOpenCart(!openCart)}
+              >
                 <AiOutlineShoppingCart size={30} color="rgb(255 255 255/83%)" />
                 <span className="absolute  right-0 top-0 rounded-full bg-[#3bc177] w-4 h-4  p-0 m-0 text-white font-monospace text-center  font-[12px] leading-tight ">
                   1
                 </span>
               </div>
             </div>
+            {/* Profile Picture styling */}
             <div className={`${styles.noramlFlex}`}>
               <div className="relative mr-[15px] cursor-pointer">
                 {isAuthenticated ? (
@@ -169,6 +182,12 @@ const Header = ({ activeHeading }) => {
                 )}
               </div>
             </div>
+            {/* OpenCart  Fixed Positend PopUp*/}
+            {openCart ? <Cart setOpenCart={setOpenCart} /> : null}
+            {/* Wishlist  Fixed Positend PopUp*/}
+            {openWishlist ? (
+              <Wishlist setOpenWishlist={setOpenWishlist} />
+            ) : null}
           </div>
         </div>
       </div>
