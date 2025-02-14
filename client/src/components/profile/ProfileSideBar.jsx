@@ -5,6 +5,9 @@ import {
   AiOutlineMessage,
 } from "react-icons/ai";
 import { MdOutlineTrackChanges } from "react-icons/md";
+import { server } from "../../server";
+import axios from "axios";
+import { toast } from "react-toastify";
 import { TbAddressBook } from "react-icons/tb";
 import { HiOutlineReceiptRefund, HiOutlineShoppingBag } from "react-icons/hi";
 import { RxPerson } from "react-icons/rx";
@@ -12,6 +15,18 @@ import { useNavigate } from "react-router-dom";
 
 const ProfileSideBar = ({ active, setActive }) => {
   const navigate = useNavigate();
+  const logOutHandler = () => {
+    axios
+      .get(`${server}/user/logout`, { withCredentials: true })
+      .then((res) => {
+        toast.success(res.data.message);
+        navigate("/login");
+        window.location.reload(true);
+      })
+      .catch((error) => {
+        toast.error(error.response.data?.message);
+      });
+  };
   return (
     <div className="w-ful bg-[#fff] shadow-sm rounded-[4px] p-4 pt-8">
       <div
@@ -93,7 +108,7 @@ const ProfileSideBar = ({ active, setActive }) => {
       <div
         className="w-full flex cursor-pointer items-center mb-8 "
         onClick={() => {
-          setActive(8);
+          setActive(8) || logOutHandler();
         }}
       >
         <AiOutlineLogin size={20} color={active === 8 ? "red" : ""} />

@@ -97,8 +97,6 @@ router.post(
         password,
         avatar,
       });
-      // await user.save();
-
       sendToken(user, 201, res);
     } catch (error) {
       next(new ErrorHandler(error.message, 500));
@@ -142,6 +140,25 @@ router.get(
       res.status(200).json({
         success: true,
         user,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+// Logout User
+router.get(
+  "/logout",
+  isAthuenticated,
+  catchAsyncError(async (reeq, res, next) => {
+    try {
+      res.cookie("token", "", {
+        expires: new Date(Date.now()),
+        httpOnly: true,
+      });
+      res.status(201).json({
+        success: true,
+        message: "Logout Successfully!",
       });
     } catch (error) {
       return next(new ErrorHandler(error.message, 500));
