@@ -13,6 +13,7 @@ import {
   BestSelling,
   Events,
   FaqPage,
+  ProfilePage,
 } from "./routes/Routes.jsx";
 
 import Store from "./redux/store.js";
@@ -41,6 +42,7 @@ const App = () => {
               <Route path="/best-selling" element={<BestSelling />} />
               <Route path="/events" element={<Events />} />
               <Route path="/faq" element={<FaqPage />} />
+              <Route path="/profile" element={<ProfilePage />} />
             </Routes>
           </BrowserRouter>
           <ToastContainer

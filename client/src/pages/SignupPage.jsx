@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import SignUp from "../components/SignUp/SignUp"
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
