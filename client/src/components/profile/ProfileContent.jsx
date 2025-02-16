@@ -93,10 +93,10 @@ const ProfileContent = ({ active }) => {
 
               <div className="w-full 800px:flex block pb-3">
                 <div className=" w-[100%] 800px:w-[50%]">
-                  <label className="block pb-2">Address 1</label>
+                  <label className="block pb-2 ">Address 1</label>
                   <input
                     type="address"
-                    className={`${styles.input} !w-[95%]`}
+                    className={`${styles.input} !w-[95%] mb-4 800px:mb-0`}
                     required
                     value={address1}
                     onChange={(e) => setAddress1(e.target.value)}
@@ -106,7 +106,7 @@ const ProfileContent = ({ active }) => {
                   <label className="block pb-2">Address 2</label>
                   <input
                     type="address"
-                    className={`${styles.input} !w-[95%]`}
+                    className={`${styles.input} !w-[95%] mb-4 800px:mb-0`}
                     required
                     value={address2}
                     onChange={(e) => setAddress2(e.target.value)}

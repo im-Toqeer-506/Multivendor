@@ -15,12 +15,13 @@ import {
   FaqPage,
   ProfilePage,
 } from "./routes/Routes.jsx";
+import ProtectedRoute from "./routes/ProtectedRoutes.jsx";
 
 import Store from "./redux/store.js";
 import { getUser } from "./redux/actions/user";
 import { useSelector } from "react-redux";
 const App = () => {
-  const { loading } = useSelector((state) => state.user);
+  const { loading, isAuthenticated } = useSelector((state) => state.user);
   useEffect(() => {
     Store.dispatch(getUser());
   }, []);
@@ -42,7 +43,14 @@ const App = () => {
               <Route path="/best-selling" element={<BestSelling />} />
               <Route path="/events" element={<Events />} />
               <Route path="/faq" element={<FaqPage />} />
-              <Route path="/profile" element={<ProfilePage />} />
+              <Route
+                path="/profile"
+                element={
+                  <ProtectedRoute isAuthunticated={isAuthenticated}>
+                    <ProfilePage />
+                  </ProtectedRoute>
+                }
+              />
             </Routes>
           </BrowserRouter>
           <ToastContainer
