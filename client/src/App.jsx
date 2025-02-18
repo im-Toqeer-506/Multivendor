@@ -14,6 +14,8 @@ import {
   Events,
   FaqPage,
   ProfilePage,
+  ShopCreatePage,
+  SellerActivationPage,
 } from "./routes/Routes.jsx";
 import ProtectedRoute from "./routes/ProtectedRoutes.jsx";
 
@@ -38,6 +40,10 @@ const App = () => {
                 path="/activation/:activation_token"
                 element={<ActivationPage />}
               />
+              <Route
+                path="seller/activation/:activation_token"
+                element={<SellerActivationPage />}
+              />
               <Route path="/products" element={<ProductsPage />} />
               <Route path="/product/:name" element={<ProductDetailsPage />} />
               <Route path="/best-selling" element={<BestSelling />} />
@@ -51,6 +57,7 @@ const App = () => {
                   </ProtectedRoute>
                 }
               />
+              <Route path="/shop-create" element={<ShopCreatePage />} />
             </Routes>
           </BrowserRouter>
           <ToastContainer

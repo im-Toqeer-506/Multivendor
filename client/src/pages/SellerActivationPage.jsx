@@ -12,7 +12,7 @@ const ActivationPage = () => {
     if (activation_token) {
       const sendRequest = async () => {
         await axios
-          .post(`${server}/user/activation`, {
+          .post(`${server}/shop/activation`, {
             activation_token,
           })
           .then((res) => {
@@ -35,7 +35,7 @@ const ActivationPage = () => {
           </p>
         ) : (
           <p className="text-green-600 font-semibold text-lg">
-            Your account has been created suceessfully!
+            Your account has been created successfully!
           </p>
         )}
       </div>
