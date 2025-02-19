@@ -39,7 +39,7 @@ const ProfileSideBar = ({ active, setActive }) => {
         <span
           className={`pl-3 ${
             active == 1 ? "text-[red]" : ""
-          } [800px]:block hidden`}
+          } 800px:block  hidden`}
         >
           Profile
         </span>
@@ -54,7 +54,7 @@ const ProfileSideBar = ({ active, setActive }) => {
         <span
           className={`pl-3 ${
             active == 2 ? "text-[red]" : ""
-          }  [800px]:block hidden`}
+          }  800px:block  hidden`}
         >
           Orders
         </span>
@@ -69,7 +69,7 @@ const ProfileSideBar = ({ active, setActive }) => {
         <span
           className={`pl-3 ${
             active == 3 ? "text-[red]" : ""
-          }  [800px]:block hidden `}
+          }  800px:block hidden `}
         >
           ReFunds
         </span>
@@ -84,7 +84,7 @@ const ProfileSideBar = ({ active, setActive }) => {
         <span
           className={`pl-3 ${
             active == 4 ? "text-[red]" : ""
-          }  [800px]:block hidden`}
+          }  800px:block  hidden`}
         >
           Inbox
         </span>
@@ -100,7 +100,7 @@ const ProfileSideBar = ({ active, setActive }) => {
         <span
           className={`pl-3 ${
             active == 5 ? "text-[red]" : ""
-          } [800px]:block hidden `}
+          } 800px:block  hidden `}
         >
           Track Order
         </span>
@@ -115,7 +115,7 @@ const ProfileSideBar = ({ active, setActive }) => {
         <span
           className={`pl-3 ${
             active == 6 ? "text-[red]" : ""
-          }  [800px]:block hidden`}
+          }  800px:block  hidden`}
         >
           Payment Methods
         </span>
@@ -130,7 +130,7 @@ const ProfileSideBar = ({ active, setActive }) => {
         <span
           className={`pl-3 ${
             active == 7 ? "text-[red]" : ""
-          } [800px]:block hidden `}
+          } 800px:block  hidden `}
         >
           Address
         </span>
@@ -145,7 +145,7 @@ const ProfileSideBar = ({ active, setActive }) => {
         <span
           className={`pl-3 ${
             active == 8 ? "text-[red]" : ""
-          } [800px]:block hidden`}
+          } 800px:block  hidden`}
         >
           LogOut
         </span>

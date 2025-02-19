@@ -240,7 +240,7 @@ const ShopCreate = () => {
             <div className=" flex items-center w-full">
               <h4>Already have any Account?</h4>
               <Link to="/shop-login" className="text-blue-600 pl-2">
-                SignUp
+                Login
               </Link>
             </div>
           </form>

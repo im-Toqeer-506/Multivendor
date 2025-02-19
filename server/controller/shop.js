@@ -4,13 +4,13 @@ const path = require("path");
 const jwt = require("jsonwebtoken");
 const router = express.Router();
 const { upload } = require("../multer");
-const sendToken = require("../utils/jwtToken");
 const sendMail = require("../utils/SendMail");
+const sendShopToken = require("../utils/shopToken");
 const { isAthuenticated } = require("../middleware/auth");
 const ErrorHandler = require("../utils/ErrorHandler");
 const Shop = require("../model/shop");
 const catchAsyncError = require("../middleware/catchAsyncError");
-
+//craete Shop
 router.post("/create-shop", upload.single("file"), async (req, res, next) => {
   try {
     const { name, email, password, address, zipCode, phoneNumber } = req.body;
@@ -19,6 +19,16 @@ router.post("/create-shop", upload.single("file"), async (req, res, next) => {
     }
     const Selleremail = await Shop.findOne({ email });
     if (Selleremail) {
+      const filename = req.file.filename;
+      const filePath = `uploads/${filename}`;
+      fs.unlink(filePath, (err) => {
+        if (err) {
+          console.log(err);
+          res.status(500).json({
+            message: "Error Deleting Files",
+          });
+        }
+      });
       return next(new ErrorHandler("Seller is Already Exist!", 400));
     }
     const file = req.file.filename;
@@ -57,7 +67,7 @@ const createActivationToken = (seller) => {
     expiresIn: process.env.JWT_EXPIRES,
   });
 };
-//activate user Route
+//activate the Shop
 router.post(
   "/activation",
   catchAsyncError(async (req, res, next) => {
@@ -98,11 +108,34 @@ router.post(
         phoneNumber,
       });
 
-      sendToken(seller, 201, res);
+      sendShopToken(seller, 201, res);
     } catch (error) {
       return next(new ErrorHandler(error.message, 500));
     }
   })
 );
-
+//login to Our Shop
+router.post(
+  "/login-shop",
+  catchAsyncError(async (req, res, next) => {
+    try {
+      let { email, password } = req.body;
+      if (!email || !password)
+        return next(new ErrorHandler("All Fileds are required!", 500));
+      const seller = await Shop.findOne({ email }).select("+password");
+      if (!seller) {
+        return next(new ErrorHandler("Seller Does't Exist!", 400));
+      }
+      const ValidPassword = await seller.comparePassword(password);
+      if (!ValidPassword) {
+        return next(
+          new ErrorHandler("Please,Provide the correct information!", 400)
+        );
+      }
+      sendShopToken(seller, 201, res);
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
 module.exports = router;

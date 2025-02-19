@@ -16,6 +16,7 @@ import {
   ProfilePage,
   ShopCreatePage,
   SellerActivationPage,
+  ShopLoginPage,
 } from "./routes/Routes.jsx";
 import ProtectedRoute from "./routes/ProtectedRoutes.jsx";
 
@@ -58,6 +59,7 @@ const App = () => {
                 }
               />
               <Route path="/shop-create" element={<ShopCreatePage />} />
+              <Route path="/shop-login" element={<ShopLoginPage />} />
             </Routes>
           </BrowserRouter>
           <ToastContainer
