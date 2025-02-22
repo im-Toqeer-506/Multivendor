@@ -6,7 +6,7 @@ const router = express.Router();
 const { upload } = require("../multer");
 const sendMail = require("../utils/SendMail");
 const sendShopToken = require("../utils/shopToken");
-const { isAthuenticated } = require("../middleware/auth");
+const { isSeller } = require("../middleware/auth");
 const ErrorHandler = require("../utils/ErrorHandler");
 const Shop = require("../model/shop");
 const catchAsyncError = require("../middleware/catchAsyncError");
@@ -47,7 +47,7 @@ router.post("/create-shop", upload.single("file"), async (req, res, next) => {
     try {
       await sendMail({
         email: seller.email,
-        subject: "Activate Your Account!",
+        subject: "Activate Your Seller Account!",
         message: `Hello!\n Dear ${seller.name} Seller!\n Please click on the link below to activate your account \n${activationUrl}`,
       });
       res.status(201).json({
@@ -133,6 +133,25 @@ router.post(
         );
       }
       sendShopToken(seller, 201, res);
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+//Load Our Shop
+router.get(
+  "/get-seller",
+  isSeller,
+  catchAsyncError(async (req, res, next) => {
+    try {
+      const seller = await Shop.findById(req.seller._id);
+      if (!seller) {
+        return next(new ErrorHandler("User does'nt exist!", 400));
+      }
+      res.status(200).json({
+        success: true,
+        seller,
+      });
     } catch (error) {
       return next(new ErrorHandler(error.message, 500));
     }
