@@ -6,7 +6,7 @@ import { AiOutlinePlusCircle } from "react-icons/ai";
 import { createProduct } from "../../redux/actions/product";
 import { toast } from "react-toastify";
 const CreateProduct = () => {
-  const { success, error } = useSelector((state) => state.product);
+  const { success, error } = useSelector((state) => state.products);
   const { seller } = useSelector((state) => state.seller);
 
   const navigate = useNavigate();
@@ -24,11 +24,11 @@ const CreateProduct = () => {
     if (error) {
       toast.error(error);
       dispatch({ type: "clearErrors" });
-      window.location.reload();
     }
     if (success) {
       toast.success("Product Created Successfully!");
       navigate("/dashboard");
+      window.location.reload();
     }
   }, [dispatch, error, success]);
   const handleImageChange = (e) => {

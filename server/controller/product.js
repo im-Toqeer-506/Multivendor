@@ -31,4 +31,14 @@ router.post(
     }
   })
 );
+router.get(
+  "/get-all-products-shop/:id",
+  catchAsyncError(async (req, res, next) => {
+    const products = await Product.find({ shopId: req.params.id });
+    res.status(200).json({
+      success: true,
+      products,
+    });
+  })
+);
 module.exports = router;

@@ -19,7 +19,7 @@ import {
   ShopLoginPage,
 } from "./routes/Routes.jsx";
 import ProtectedRoute from "./routes/ProtectedRoutes.jsx";
-import { ShopDashboardPage, ShopCreateProduct } from "./routes/ShopRoutes.js";
+import { ShopDashboardPage, ShopCreateProduct ,ShopAllProducts} from "./routes/ShopRoutes.js";
 import { ShopHomePage } from "./routes/ShopRoutes.jsx";
 
 import Store from "./redux/store.js";
@@ -33,75 +33,81 @@ const App = () => {
 
   return (
     <>
-      <>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/signup" element={<SignupPage />} />
-            <Route
-              path="/activation/:activation_token"
-              element={<ActivationPage />}
-            />
-            <Route
-              path="seller/activation/:activation_token"
-              element={<SellerActivationPage />}
-            />
-            <Route path="/products" element={<ProductsPage />} />
-            <Route path="/product/:name" element={<ProductDetailsPage />} />
-            <Route path="/best-selling" element={<BestSelling />} />
-            <Route path="/events" element={<Events />} />
-            <Route path="/faq" element={<FaqPage />} />
-            <Route
-              path="/profile"
-              element={
-                <ProtectedRoute>
-                  <ProfilePage />
-                </ProtectedRoute>
-              }
-            />
-            {/* Shop Routes are Here  */}
-            <Route path="/shop-create" element={<ShopCreatePage />} />
-            <Route path="/shop-login" element={<ShopLoginPage />} />
-            <Route
-              path="/shop/:id"
-              element={
-                <SellerProtectedRoute>
-                  <ShopHomePage />
-                </SellerProtectedRoute>
-              }
-            />
-            <Route
-              path="/dashboard"
-              element={
-                <SellerProtectedRoute>
-                  <ShopDashboardPage />
-                </SellerProtectedRoute>
-              }
-            />
-            <Route
-              path="/dashboard-create-product"
-              element={
-                <SellerProtectedRoute>
-                  <ShopCreateProduct />
-                </SellerProtectedRoute>
-              }
-            />
-          </Routes>
-        </BrowserRouter>
-        <ToastContainer
-          transition={Bounce}
-          position="top-right"
-          autoClose={5000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-        />
-      </>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignupPage />} />
+          <Route
+            path="/activation/:activation_token"
+            element={<ActivationPage />}
+          />
+          <Route
+            path="seller/activation/:activation_token"
+            element={<SellerActivationPage />}
+          />
+          <Route path="/products" element={<ProductsPage />} />
+          <Route path="/product/:name" element={<ProductDetailsPage />} />
+          <Route path="/best-selling" element={<BestSelling />} />
+          <Route path="/events" element={<Events />} />
+          <Route path="/faq" element={<FaqPage />} />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <ProfilePage />
+              </ProtectedRoute>
+            }
+          />
+          {/* Shop Routes are Here  */}
+          <Route path="/shop-create" element={<ShopCreatePage />} />
+          <Route path="/shop-login" element={<ShopLoginPage />} />
+          <Route
+            path="/shop/:id"
+            element={
+              <SellerProtectedRoute>
+                <ShopHomePage />
+              </SellerProtectedRoute>
+            }
+          />
+          <Route
+            path="/dashboard"
+            element={
+              <SellerProtectedRoute>
+                <ShopDashboardPage />
+              </SellerProtectedRoute>
+            }
+          />
+          <Route
+            path="/dashboard-create-product"
+            element={
+              <SellerProtectedRoute>
+                <ShopCreateProduct />
+              </SellerProtectedRoute>
+            }
+          />
+          <Route
+            path="/dashboard-products"
+            element={
+              <SellerProtectedRoute>
+                <ShopAllProducts />
+              </SellerProtectedRoute>
+            }
+          />
+        </Routes>
+      </BrowserRouter>
+      <ToastContainer
+        transition={Bounce}
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </>
   );
 };
