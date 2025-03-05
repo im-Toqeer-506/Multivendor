@@ -276,7 +276,7 @@ const ProductsDetailsInfo = ({ data }) => {
             </p>
           </div>
           {/* right section */}
-          <div lassName="w-full 800px:w-[50%] mt-5 800px:mt-0 800px:flex flex-col items-end">
+          <div className="w-full 800px:w-[50%] mt-5 800px:mt-0 800px:flex flex-col items-end">
             <div className="text-left">
               <h5 className="font-[600]">
                 Joined On:

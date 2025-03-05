@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllProductsShop } from "../../redux/actions/product";
+import { deleteProduct, getAllProductsShop } from "../../redux/actions/product";
 import Loader from "../Layout/Loader";
-import { Button } from "@material-ui/core";
+import Button from "@mui/material/Button";
 import { DataGrid } from "@mui/x-data-grid";
 import { Link } from "react-router-dom";
 import { AiOutlineDelete, AiOutlineEye } from "react-icons/ai";
@@ -13,6 +13,10 @@ const AllProducts = () => {
   useEffect(() => {
     dispatch(getAllProductsShop(seller._id));
   }, [dispatch]);
+  const handleDelete = (id) => {
+    dispatch(deleteProduct(id));
+    window.location.reload();
+  };
   const columns = [
     { field: "id", headerName: "Product Id", minWidth: 150, flex: 0.7 },
     {
@@ -87,7 +91,8 @@ const AllProducts = () => {
         name: item.name,
         price: "US$ " + item.discountPrice,
         Stock: item.stock,
-        sold: item?.sold_out,
+        sold:10,
+        // sold: item?.sold_out,
       });
     });
   return (
@@ -97,12 +102,11 @@ const AllProducts = () => {
       ) : (
         <div className="">
           <DataGrid
-            rows={row} 
+            rows={row}
             columns={columns}
             pageSize={10}
             disableSelectionOnClick
             autoHeight
-           
           />
         </div>
       )}
