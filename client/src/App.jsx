@@ -19,7 +19,12 @@ import {
   ShopLoginPage,
 } from "./routes/Routes.jsx";
 import ProtectedRoute from "./routes/ProtectedRoutes.jsx";
-import { ShopDashboardPage, ShopCreateProduct ,ShopAllProducts} from "./routes/ShopRoutes.js";
+import {
+  ShopDashboardPage,
+  ShopCreateProduct,
+  ShopAllProducts,
+  ShopCreateEvents,
+} from "./routes/ShopRoutes.js";
 import { ShopHomePage } from "./routes/ShopRoutes.jsx";
 
 import Store from "./redux/store.js";
@@ -91,6 +96,14 @@ const App = () => {
             element={
               <SellerProtectedRoute>
                 <ShopAllProducts />
+              </SellerProtectedRoute>
+            }
+          />
+          <Route
+            path="/dashboard-create-event"
+            element={
+              <SellerProtectedRoute>
+                <ShopCreateEvents />
               </SellerProtectedRoute>
             }
           />
