@@ -50,7 +50,6 @@ const AllProducts = () => {
       field: "Preview",
       flex: 0.8,
       minWidth: 100,
-      headerName: "",
       type: "number",
       sortable: false,
       renderCell: (params) => {
@@ -69,7 +68,6 @@ const AllProducts = () => {
       field: "Delete",
       flex: 0.8,
       minWidth: 120,
-      headerName: "",
       type: "number",
       sortable: false,
       renderCell: (params) => {
@@ -91,7 +89,7 @@ const AllProducts = () => {
         name: item.name,
         price: "US$ " + item.discountPrice,
         Stock: item.stock,
-        sold:10,
+        sold: 10,
         // sold: item?.sold_out,
       });
     });
@@ -100,7 +98,7 @@ const AllProducts = () => {
       {isLoading ? (
         <Loader />
       ) : (
-        <div className="">
+        <div className="w-full">
           <DataGrid
             rows={row}
             columns={columns}
