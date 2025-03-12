@@ -4,8 +4,7 @@ import { deleteProduct, getAllProductsShop } from "../../redux/actions/product";
 import Loader from "../Layout/Loader";
 import Button from "@mui/material/Button";
 import { DataGrid } from "@mui/x-data-grid";
-import { Link } from "react-router-dom";
-import { AiOutlineDelete, AiOutlineEye } from "react-icons/ai";
+import { AiOutlineDelete } from "react-icons/ai";
 import styles from "../../styles/style";
 import { RxCross1 } from "react-icons/rx";
 import axios from "axios";
@@ -13,16 +12,29 @@ import { toast } from "react-toastify";
 import { server } from "../../server";
 const AllCoupons = () => {
   const [name, setName] = useState("");
-  const [minAmmount, setMinAmmount] = useState("");
+  const [minAmount, setMinAmount] = useState("");
+  const [coupons, setCoupons] = useState([]);
+  const [isLoading, setisLoading] = useState(true);
   const [value, setValue] = useState("");
   const [selectedProducts, setSelectedProducts] = useState("");
-  const [maxAmmount, setMaxAmmount] = useState("");
+  const [maxAmount, setMaxAmount] = useState("");
   const [open, setOpen] = useState(false);
-  const { products, isLoading } = useSelector((state) => state.products);
   const { seller } = useSelector((state) => state.seller);
+  const { products } = useSelector((state) => state.products);
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getAllProductsShop(seller._id));
+    axios
+      .get(`${server}/coupon/get-coupon/${seller._id}`, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        setisLoading(false);
+        console.log(res.data);
+        setCoupons(res.data.couponCode);
+      })
+      .catch((error) => {
+        setisLoading(false);
+      });
   }, [dispatch]);
   const handleDelete = (id) => {
     dispatch(deleteProduct(id));
@@ -36,8 +48,8 @@ const AllCoupons = () => {
         `${server}/coupon/create-coupun-code`,
         {
           name,
-          minAmmount,
-          maxAmmount,
+          minAmount,
+          maxAmount,
           selectedProducts,
           value,
           shop: seller,
@@ -55,7 +67,12 @@ const AllCoupons = () => {
       });
   };
   const columns = [
-    { field: "id", headerName: "Product Id", minWidth: 150, flex: 0.7 },
+    {
+      field: "id",
+      headerName: "Product Id",
+      minWidth: 150,
+      flex: 0.7,
+    },
     {
       field: "name",
       headerName: "Name",
@@ -67,39 +84,6 @@ const AllCoupons = () => {
       headerName: "Price",
       minWidth: 100,
       flex: 0.6,
-    },
-    {
-      field: "Stock",
-      headerName: "Stock",
-      type: "number",
-      minWidth: 80,
-      flex: 0.5,
-    },
-
-    {
-      field: "sold",
-      headerName: "Sold out",
-      type: "number",
-      minWidth: 130,
-      flex: 0.6,
-    },
-    {
-      field: "Preview",
-      flex: 0.8,
-      minWidth: 100,
-      type: "number",
-      sortable: false,
-      renderCell: (params) => {
-        return (
-          <>
-            <Link to={`/product/${params.id}`}>
-              <Button>
-                <AiOutlineEye size={20} />
-              </Button>
-            </Link>
-          </>
-        );
-      },
     },
     {
       field: "Delete",
@@ -119,15 +103,12 @@ const AllCoupons = () => {
     },
   ];
   const row = [];
-  products &&
-    products.forEach((item) => {
+  coupons &&
+    coupons.forEach((item) => {
       row.push({
         id: item._id,
         name: item.name,
-        price: "US$ " + item.discountPrice,
-        Stock: item.stock,
-        sold: 10,
-        // sold: item?.sold_out,
+        price: item.value + "%",
       });
     });
   return (
@@ -200,29 +181,29 @@ const AllCoupons = () => {
                   <br />
                   <div>
                     <label className="pb-2">
-                      Minimum Ammount: <span className="text-red-500">*</span>
+                      Minimum Amount: <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="number"
                       name="minAmmount"
-                      value={minAmmount}
+                      value={minAmount}
                       className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm capitalize"
-                      onChange={(e) => setMinAmmount(e.target.value)}
-                      placeholder="Enter Your Coupon Code Minimum Ammount... "
+                      onChange={(e) => setMinAmount(e.target.value)}
+                      placeholder="Enter Your Coupon Code Minimum Amount... "
                     />
                   </div>
                   <br />
                   <div>
                     <label className="pb-2">
-                      Maximum Ammount: <span className="text-red-500">*</span>
+                      Maximum Amount: <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="number"
-                      name="maxAmmount"
-                      value={maxAmmount}
+                      name="maxAmount"
+                      value={maxAmount}
                       className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm capitalize"
-                      onChange={(e) => setMaxAmmount(e.target.value)}
-                      placeholder="Enter Your Coupon Code Maximum Ammount... "
+                      onChange={(e) => setMaxAmount(e.target.value)}
+                      placeholder="Enter Your Coupon Code Maximum Amount... "
                     />
                   </div>
                   <br />
