@@ -39,4 +39,24 @@ router.get(
     });
   })
 );
+router.delete(
+  "/delete-coupon/:id",
+  isSeller,
+  catchAsyncError(async (req, res, next) => {
+    try {
+      const couponCode = await CouponCode.findByIdAndDelete(req.params.id);
+
+      if (!couponCode) {
+        return next(new ErrorHandler("Coupon code dosen't exists!", 400));
+      }
+      res.status(201).json({
+        success: true,
+        message: "Coupon code deleted successfully!",
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error, 400));
+    }
+  })
+);
+
 module.exports = router;
