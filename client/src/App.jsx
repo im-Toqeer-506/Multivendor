@@ -3,6 +3,7 @@ import "./App.css";
 import { ToastContainer, Bounce, toast } from "react-toastify";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
+// Importing local routes
 import {
   LoginPage,
   SignupPage,
@@ -18,13 +19,16 @@ import {
   SellerActivationPage,
   ShopLoginPage,
 } from "./routes/Routes.jsx";
+
 import ProtectedRoute from "./routes/ProtectedRoutes.jsx";
+// import Shop Routes
 import {
   ShopDashboardPage,
   ShopCreateProduct,
   ShopAllProducts,
   ShopCreateEvents,
   ShopAllEvents,
+  ShopPreviewPage,
   ShopAllCoupons,
 } from "./routes/ShopRoutes.js";
 import { ShopHomePage } from "./routes/ShopRoutes.jsx";
@@ -42,6 +46,7 @@ const App = () => {
     <>
       <BrowserRouter>
         <Routes>
+          {/* Mounting Local Routes*/}
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
@@ -66,7 +71,9 @@ const App = () => {
               </ProtectedRoute>
             }
           />
-          {/* Shop Routes are Here  */}
+          <Route path="/shop/preview/:id" element={<ShopPreviewPage />} />
+
+          {/* Mounting Shop Routes */}
           <Route path="/shop-create" element={<ShopCreatePage />} />
           <Route path="/shop-login" element={<ShopLoginPage />} />
           <Route

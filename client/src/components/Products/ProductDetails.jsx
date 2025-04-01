@@ -16,6 +16,7 @@ const ProductDetails = ({ data }) => {
   const incrementCount = () => {
     setCout(count + 1);
   };
+  console.log(data);
   const decrementCount = () => {
     if (count > 1) {
       setCout(count - 1);
@@ -127,20 +128,23 @@ const ProductDetails = ({ data }) => {
                 </div>
                 {/* Selller part */}
                 <div className="flex items-center pt-8 space-x-4">
-                  <img
-                    className="w-[50px] h-[50px] rounded-full  mr-2"
-                    src={`${data.shop.shopAvatar.url}`}
-                    alt=""
-                  />
-                  {/* rating icons */}
-                  <div className="pr-8">
-                    <h3 className={`${styles.shop_name} pb-1 pt-1`}>
-                      {data.shop.name}
-                    </h3>
-                    <h5 className="pb-3 text-[15px]">
-                      ({data.shop.ratings}) Ratings
-                    </h5>
-                  </div>
+                  <Link to={`/shop/preview/${data.shop?._id}`}>
+                    <img
+                      className="w-[50px] h-[50px] rounded-full  mr-2"
+                      src={`${data.shop.shopAvatar.url}`}
+                      alt=""
+                    />
+                    {/* rating icons */}
+                    <div className="pr-8">
+                      <h3 className={`${styles.shop_name} pb-1 pt-1`}>
+                        {data?.shop?.name}
+                      </h3>
+                      <h5 className="pb-3 text-[15px]">
+                        ({data?.shop?.ratings}) Ratings
+                      </h5>
+                    </div>
+                  </Link>
+
                   <div
                     className={`${styles.button} bg-[#6443d1] mt-4 !rounded !h-11 capitalize`}
                     onClick={handleMessageSubmit}
@@ -290,11 +294,11 @@ const ProductsDetailsInfo = ({ data }) => {
                 Total Reviews:
                 <span className="font-[500] text-left">1,223</span>
               </h5>
-              <Link to="/">
+              <Link to={`/shop/preview/${data?.shop._id}`}>
                 <div
-                  className={`${styles.button} !rounded-[4px] !h-[40px] mt-3`}
+                  className={`${styles.button} !rounded-[4px] !h-[39.5px] mt-3`}
                 >
-                  <h4 className="text-[#fff]">Visit Shop</h4>
+                  <h4 className="text-white">Visit Shop</h4>
                 </div>
               </Link>
             </div>
