@@ -1,8 +1,9 @@
 import { createReducer } from "@reduxjs/toolkit";
+
 const initialState = {
-  isLoading: true,
-  product: null,
   products: [],
+  allProducts:[],
+  isLoading: false,
   success: false,
   error: null,
 };
@@ -14,7 +15,7 @@ export const productReducer = createReducer(initialState, (builder) => {
     })
     .addCase("productCreateSuccess", (state, action) => {
       state.isLoading = false;
-      state.product = action.payload;
+      state.products = action.payload;
       state.success = true;
     })
     .addCase("productCreateFail", (state, action) => {
@@ -34,6 +35,18 @@ export const productReducer = createReducer(initialState, (builder) => {
       state.isLoading = false;
       state.error = action.payload;
     })
+    // (General) To get all the products.
+    .addCase("getAllProductsRequest", (state) => {
+      state.isLoading = true;
+    })
+    .addCase("getAllProductsSuccess", (state, action) => {
+      state.isLoading = false;
+      state.allProducts = action.payload; 
+    })
+    .addCase("getAllProductsFailed", (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    })
     //delete products
     .addCase("deleteProductRequest", (state) => {
       state.isLoading = true;
@@ -50,3 +63,4 @@ export const productReducer = createReducer(initialState, (builder) => {
       state.error = null;
     });
 });
+

@@ -42,38 +42,22 @@ router.get(
     });
   })
 );
-router.delete(
-  "/delete-shop-product/:id",
-  isSeller,
+
+// get all products
+router.get(
+  "/get-all-products",
   catchAsyncError(async (req, res, next) => {
     try {
-      const productId = req.params.id;
-      const productData = await Product.findById(productId);
-      productData.images.forEach((img) => {
-        const filename = img;
-        const filepath = `uploads/${filename}`;
-        fs.unlink((error, filepath) => {
-          if (error) {
-            console.log(error);
-          }
-        });
-      });
-      const product = await Product.findByIdAndDelete(productId);
-
-      if (!product) {
-        return new ErrorHandler("Product not found with thi ID", 500);
-      }
-
+      const products = await Product.find().sort({ createdAt: -1 });
       res.status(201).json({
         success: true,
-        message: "Product Deleted Successfully!",
+        products,
       });
     } catch (error) {
-      return new ErrorHandler(error, 400);
+      return next(new ErrorHandler(error, 400));
     }
   })
 );
-
 // delete product of a shop
 router.delete(
   "/delete-shop-product/:id",
