@@ -27,40 +27,60 @@ export const createEvent = (newForm) => async (dispatch) => {
 export const getAllEventsShop = (id) => async (dispatch) => {
   try {
     dispatch({
-      type: "getAlleventsShopRequest",
+      type: "getAllEventsShopRequest",
     });
 
     const { data } = await axios.get(`${server}/event/get-all-events/${id}`);
 
     dispatch({
-      type: "getAlleventsShopSuccess",
+      type: "getAllEventsShopSuccess",
       payload: data.events,
     });
   } catch (error) {
     dispatch({
-      type: "getAlleventsShopFailed",
+      type: "getAllEventsShopFailed",
       payload: error.response.data.message,
     });
   }
 };
-//delete all event products
+//delete all event shop
 export const deleteEvent = (id) => async (dispatch) => {
   try {
     dispatch({
-      type: "deleteeventRequest",
+      type: "deleteEventRequest",
     });
-    axios.delete(`${server}/event/delete-shop-event/${id}`, {
+    await axios.delete(`${server}/event/delete-shop-event/${id}`, {
       withCredentials: true,
     });
 
     dispatch({
-      type: "deleteeventSuccess",
+      type: "deleteEventSuccess",
       payload: data.message,
     });
   } catch (error) {
     dispatch({
-      type: "deleteeventFailed",
+      type: "deleteEventFailed",
       payload: error.response.data?.message,
+    });
+  }
+};
+//get all events ;
+export const getAllEvents = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: "getAllEventsRequest",
+    });
+
+    const { data } = await axios.get(`${server}/event/get-all-events`);
+
+    dispatch({
+      type: "getAllEventsSuccess",
+      payload: data.events,
+    });
+  } catch (error) {
+    dispatch({
+      type: "getAllEventsFailed",
+      payload: error.response.data.message,
     });
   }
 };
