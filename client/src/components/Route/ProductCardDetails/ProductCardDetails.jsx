@@ -7,6 +7,7 @@ import {
   AiOutlineMessage,
   AiOutlineShoppingCart,
 } from "react-icons/ai";
+import { backend_url } from "../../../server";
 
 const ProductCardDetails = ({ setOpens, data }) => {
   const [count, setCount] = useState(1);
@@ -36,18 +37,27 @@ const ProductCardDetails = ({ setOpens, data }) => {
             <div className="block w-full 800px:flex overflow-hidden">
               {/* Left Container */}
               <div className="w-full 800px:w-[50%]">
-                <img src={data.imageUrl[0].url} alt="" />
-                <div className="flex ">
+                {data.images && data.images[0] && (
                   <img
-                    className="w-[50px] h-[50px] rounded-full mr-2"
-                    src={data.shop.shopAvatar.url}
+                    src={`${backend_url}/${data.images[0]}`}
                     alt=""
+                    className="w-full h-auto object-cover"
                   />
+                )}
+
+                <div className="flex ">
+                  {data.shop && data.shop.avatar && (
+                    <img
+                      src={`${backend_url}/${data.shop.avatar}`}
+                      alt=""
+                      className="w-[50px] h-[50px] rounded-full mr-2"
+                    />
+                  )}
                   {/* Ratings to Product */}
                   <div>
                     <h3 className={`${styles.shop_name}`}>{data.shop.name}</h3>
                     <h5 className="pb-3 text-[15px] ">
-                      ({data.shop.ratings})Ratings
+                      ({data?.shop?.ratings}) Ratings
                     </h5>
                   </div>
                 </div>
@@ -60,7 +70,7 @@ const ProductCardDetails = ({ setOpens, data }) => {
                   </span>
                 </div>
                 <h5 className="text-16px text-red-600 mt-5">
-                  {`${data.totalSell}`} sold Out
+                  {`${data.sold_out}`} sold Out
                 </h5>
               </div>
               {/* Right Container */}

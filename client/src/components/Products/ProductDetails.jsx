@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styles from "../../styles/style";
 import {
@@ -7,16 +7,24 @@ import {
   AiOutlineMessage,
   AiOutlineShoppingCart,
 } from "react-icons/ai";
+import { backend_url } from "../../server";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllProductsShop } from "../../redux/actions/product";
 
 const ProductDetails = ({ data }) => {
+  const navigate = useNavigate();
+  const { products } = useSelector((state) => state.products);
   const [count, setCout] = useState(1);
   const [click, setClick] = useState(false);
   const [select, setSelect] = useState(0);
-  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getAllProductsShop(data&&data?._id));
+  }, [dispatch]);
   const incrementCount = () => {
     setCout(count + 1);
   };
-  console.log(data);
   const decrementCount = () => {
     if (count > 1) {
       setCout(count - 1);
@@ -25,6 +33,7 @@ const ProductDetails = ({ data }) => {
   const handleMessageSubmit = () => {
     navigate("/inbox/conversation=50nisnr44laaus");
   };
+  
   return (
     <div className="bg-[#fff] ">
       {data ? (
@@ -32,39 +41,35 @@ const ProductDetails = ({ data }) => {
           <div className="w-[100%] py-5">
             <div className="block w-full 800px:flex  ">
               {/* left Part  */}
-              <div className="w-full 800px:w-[50%]">
+              <div className="object-fit: cover w-full 800px:w-[50%]">
                 <img
-                  src={data.imageUrl[select].url}
-                  className="w-[80%] "
+                  src={`${backend_url}/${data && data.images[select]}`}
                   alt=""
+                  className="w-[80%]"
                 />
-                <div className="w-full 800px:w-[50%]">
-                  <div className="w-full flex">
-                    <div
-                      className={`${
-                        select === 0 ? "border" : "null"
-                      } cursor-pointer p-6 mt-6`}
-                    >
-                      <img
-                        src={data?.imageUrl[0].url}
-                        alt=""
-                        className="h-[200px] "
-                        onClick={() => setSelect(0)}
-                      />
-                    </div>
-                    <div
-                      className={`${
-                        select === 1 ? "border" : "null"
-                      } cursor-pointer p-6 mt-6`}
-                    >
-                      <img
-                        src={data?.imageUrl[1].url}
-                        alt=""
-                        className="h-[200px] "
-                        onClick={() => setSelect(1)}
-                      />
-                    </div>
-                  </div>
+                <div className="w-full flex gap-2
+                ">
+                  {data &&
+                    data.images.map((i, index) => (
+                      <div
+                        key={index}
+                        className={`${
+                          select === index ? "border" : ""
+                        } cursor-pointer`}
+                      >
+                        <img
+                          src={`${backend_url}/${i}`}
+                          alt=""
+                          className="h-[200px] overflow-hidden mr-3 mt-3"
+                          onClick={() => setSelect(index)}
+                        />
+                      </div>
+                    ))}
+                  <div
+                    className={`${
+                      select === 1 ? "border" : "null"
+                    } cursor-pointer`}
+                  ></div>
                 </div>
               </div>
               {/* right Part */}
@@ -76,7 +81,7 @@ const ProductDetails = ({ data }) => {
                     {data.discountPrice}$
                   </h4>
                   <h3 className={`${styles.price}`}>
-                    {data.price ? data.price + "$" : null}
+                    {data.originalPrice ? data.originalPrice + "$" : null}
                   </h3>
                 </div>
                 {/* Quantity Handler */}
@@ -131,7 +136,7 @@ const ProductDetails = ({ data }) => {
                   <Link to={`/shop/preview/${data.shop?._id}`}>
                     <img
                       className="w-[50px] h-[50px] rounded-full  mr-2"
-                      src={`${data.shop.shopAvatar.url}`}
+                      src={`${backend_url}/${data?.shop?.avatar}`}
                       alt=""
                     />
                     {/* rating icons */}
@@ -139,9 +144,7 @@ const ProductDetails = ({ data }) => {
                       <h3 className={`${styles.shop_name} pb-1 pt-1`}>
                         {data?.shop?.name}
                       </h3>
-                      <h5 className="pb-3 text-[15px]">
-                        ({data?.shop?.ratings}) Ratings
-                      </h5>
+                      <h5 className="pb-3 text-[15px]">(4/5) Ratings</h5>
                     </div>
                   </Link>
 
@@ -160,13 +163,13 @@ const ProductDetails = ({ data }) => {
           <br />
           <br />
           {/* Product Details and more Information */}
-          <ProductsDetailsInfo data={data} />
+          <ProductsDetailsInfo data={data} products={products} />
         </div>
       ) : null}
     </div>
   );
 };
-const ProductsDetailsInfo = ({ data }) => {
+const ProductsDetailsInfo = ({ data, products }) => {
   const [active, setActive] = useState(1);
   return (
     <div className="bg-[#f5f6fb] px-3 800px:px-10 py-2 rounded ">
@@ -214,38 +217,7 @@ const ProductsDetailsInfo = ({ data }) => {
       {active === 1 ? (
         <>
           <p className="py-2 text-[10px] leading-8 pb-10 whitespace-pre-line">
-            These premium wireless noise-canceling headphones deliver
-            crystal-clear sound and deep bass, perfect for audiophiles and
-            frequent travelers. The advanced noise-canceling technology blocks
-            out background noise, allowing you to fully immerse yourself in your
-            music or podcasts. With a long-lasting battery that offers up to 30
-            hours of playback on a single charge, you can enjoy uninterrupted
-            listening throughout the day. The sleek, ergonomic design ensures
-            comfort, even during long listening sessions. Bluetooth connectivity
-            makes pairing simple, while the foldable design offers easy
-            portability for your on-the-go lifestyle.
-          </p>
-          <p className="py-2 text-[10px] leading-8 pb-10 whitespace-pre-line">
-            Keep track of your fitness goals and overall health with the
-            FitTrack Z5, a sleek and stylish fitness tracker that monitors your
-            heart rate, steps, calories burned, sleep patterns, and more. The
-            tracker syncs seamlessly with your smartphone via Bluetooth,
-            allowing you to track your daily activities, set goals, and monitor
-            your progress in real-time. It also offers detailed insights into
-            your sleep quality, helping you optimize rest for better recovery.
-            With a long-lasting battery and water resistance, the FitTrack Z5 is
-            perfect for both casual users and fitness enthusiasts alike.
-          </p>
-          <p className="py-2 text-[10px] leading-8 pb-10 whitespace-pre-line">
-            Keep track of your fitness goals and overall health with the
-            FitTrack Z5, a sleek and stylish fitness tracker that monitors your
-            heart rate, steps, calories burned, sleep patterns, and more. The
-            tracker syncs seamlessly with your smartphone via Bluetooth,
-            allowing you to track your daily activities, set goals, and monitor
-            your progress in real-time. It also offers detailed insights into
-            your sleep quality, helping you optimize rest for better recovery.
-            With a long-lasting battery and water resistance, the FitTrack Z5 is
-            perfect for both casual users and fitness enthusiasts alike.
+            {data.description}
           </p>
         </>
       ) : null}
@@ -258,37 +230,36 @@ const ProductsDetailsInfo = ({ data }) => {
         <div className="w-full block 800px:flex  justify-between m p-5">
           {/* left section */}
           <div className="w-full 800px:w-[50%]">
-            <div className="flex items-center">
+           <Link to={`/shop/preview/${data?.shop?._id}`} >
+           <div className="flex items-center">
               <img
-                src={data?.shop.shopAvatar.url}
+                src={`${backend_url}/${data?.shop?.avatar}`}
                 alt=""
                 className="w-[50px] h-[50px] rounded-full mr-2"
               />
               <div className="pl-3">
                 <h3 className={`${styles.shop_name}`}>{data.shop.name}</h3>
-                <h5 className="pb-2 text-[15px] ">
-                  ({data.shop.ratings})Ratings
-                </h5>
+                <h5 className="pb-2 text-[15px] ">(4/5)Ratings</h5>
               </div>
             </div>
-            <p className="pt-2">
-              Here’s a 50-word Lorem Ipsum sample: Lorem ipsum dolor sit amet,
-              consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut
-              labore et dolore magna aliqua. Ut enim ad minim veniam, quis
-              nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-              consequat. Duis aute irure dolor in reprehenderit.
-            </p>
+           </Link>
+           
+            <p className="pt-2">{data?.shop?.description}</p>
           </div>
           {/* right section */}
           <div className="w-full 800px:w-[50%] mt-5 800px:mt-0 800px:flex flex-col items-end">
             <div className="text-left">
               <h5 className="font-[600]">
                 Joined On:
-                <span className="font-[500] text-left">12-02-2025</span>
+                <span className="font-[500] text-left">
+                  {data.shop?.createdAt.slice(0, 10)}
+                </span>
               </h5>
               <h5 className="font-[600] pt-3">
                 Total Products:
-                <span className="font-[500] text-left">1,223</span>
+                <span className="font-[500] text-left">
+                  {products && products.length}
+                </span>
               </h5>
               <h5 className="font-[600] pt-3">
                 Total Reviews:
@@ -308,5 +279,4 @@ const ProductsDetailsInfo = ({ data }) => {
     </div>
   );
 };
-
 export default ProductDetails;

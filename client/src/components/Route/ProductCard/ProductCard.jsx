@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import styles from "../../../styles/style";
-import ProductCardDetails from "../ProductCardDetails/ProductCardDetails"
+import { backend_url } from "../../../server";
+import ProductCardDetails from "../ProductCardDetails/ProductCardDetails";
 import {
   AiFillStar,
   AiOutlineStar,
@@ -21,17 +22,23 @@ const ProductCard = ({ data }) => {
         <div className="flex justify-end "></div>
         <Link to={`/product/${product_name}`}>
           <img
-            src={data.imageUrl[0].url}
+            src={
+              data && data.images && data.images.length > 0
+                ? `${backend_url}/${data.images[0]}`
+                : "defaultImage.jpg"
+            }
             alt=""
             className="w-full h-[170px] object-contain"
           />
         </Link>
         <Link to="/">
-          <h5 className={`${styles.shop_name}`}>{data.shop.name}</h5>
+          <h5 className={`${styles.shop_name}`}>{data?.shop.name}</h5>
         </Link>
         <Link to={`/product/${product_name}`}>
           <h4 className="pb-3 font-[500] ">
-            {data.name.length > 40 ? data.name.slice(0, 40) + "..." : data.name}
+            {data?.name.length > 40
+              ? data?.name.slice(0, 40) + "..."
+              : data?.name}
           </h4>
           <div className="flex ">
             <AiFillStar
@@ -58,13 +65,13 @@ const ProductCard = ({ data }) => {
           <div className=" py-2 flex items-center justify-between">
             <div className="flex">
               <h5 className={`${styles.productDiscountPrice}`}>
-                {data.price === 0 ? data.price : data.discountPrice}$
+                {data?.price === 0 ? data?.price : data?.discountPrice}$
               </h5>
               <h4 className={`${styles.price}`}>
                 {data.price ? data.price + "" : null}
               </h4>
               <span className={`font-[400] text-[17px] text-[#68d284]`}>
-                {data.totalSell}sold
+                {data?.sold_out} solds
               </span>
             </div>
           </div>
