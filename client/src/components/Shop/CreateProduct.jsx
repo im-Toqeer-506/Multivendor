@@ -36,7 +36,6 @@ const CreateProduct = () => {
     let files = Array.from(e.target.files);
     setImages((prevImages) => [...prevImages, ...files]);
   };
-
   const HandleSubmit = (e) => {
     e.preventDefault();
     const newForm = new FormData();
