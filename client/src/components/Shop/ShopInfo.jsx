@@ -9,7 +9,6 @@ import styles from "../../styles/style";
 import { toast } from "react-toastify";
 
 const ShopInfo = ({ isOwner }) => {
-  const { seller } = useSelector((state) => state.seller);
   const [data, setData] = useState({});
   const { products } = useSelector((state) => state.products);
   const [isLoading, setIsLoading] = useState(false);
@@ -21,7 +20,7 @@ const ShopInfo = ({ isOwner }) => {
     axios
       .get(`${server}/shop/get-shop-info/${id}`)
       .then((res) => {
-        setData(res.data.seller);
+        setData(res.data.shop);
         setIsLoading(false);
       })
       .catch((error) => {
@@ -49,12 +48,12 @@ const ShopInfo = ({ isOwner }) => {
           <div className="w-full py-5">
             <div className="w-full flex item-center justify-center">
               <img
-                src={`${backend_url}/${seller?.avatar}`}
+                src={`${backend_url}/${data.avatar}`}
                 alt="profile"
                 className="w-[150px] h-[150px] object-cover rounded-full"
               />
             </div>
-            <h3 className="text-center py-2 text-[20px]">{data?.name}</h3>
+            <h3 className="text-center py-2 text-[20px]">{data.name}</h3>
             <p className="text-[16px] text-[#000000a6] p-[10px] flex items-center">
               {data.description}
             </p>

@@ -34,12 +34,17 @@ import {
 import { ShopHomePage } from "./routes/ShopRoutes.jsx";
 
 import Store from "./redux/store.js";
-import { getSeller, getUser } from "./redux/actions/user";
+import {  getUser } from "./redux/actions/user";
+import { getSeller} from "./redux/actions/seller";
 import SellerProtectedRoute from "./routes/SellerProtectedRoute.jsx";
+import { getAllProducts } from "./redux/actions/product.js";
+import { getAllEvents } from "./redux/actions/event.js";
 const App = () => {
   useEffect(() => {
     Store.dispatch(getUser());
     Store.dispatch(getSeller());
+    Store.dispatch(getAllProducts());
+    Store.dispatch(getAllEvents())
   }, []);
 
   return (

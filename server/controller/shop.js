@@ -181,13 +181,13 @@ router.get(
   catchAsyncError(async (req, res, next) => {
     try {
       //this will return an object
-      const seller = await Shop.findById(req.params.id);
-      if (!seller) {
+      const shop = await Shop.findById(req.params.id);
+      if (!shop) {
         return next(new ErrorHandler("Seller does'nt exist!", 400));
       }
       res.status(200).json({
         success: true,
-        seller,
+        shop,
       });
     } catch (error) {
       return next(new ErrorHandler(error.message, 500));
