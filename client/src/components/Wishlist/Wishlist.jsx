@@ -4,38 +4,28 @@ import { BsCartPlus } from "react-icons/bs";
 import styles from "../../styles/style";
 import { useState } from "react";
 import { AiOutlineHeart } from "react-icons/ai";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  removeFromWishList,
+  addToWishList,
+} from "../../redux/actions/wishlist";
+import { backend_url } from "../../server";
+import { addToCart } from "../../redux/actions/cart";
 
 const Wishlist = ({ setOpenWishlist }) => {
-  const CartData = [
-    {
-      name: "Iphone 14 Pro Max 256GB SSD and 8GB RAM",
-      description:
-        "The latest iPhone with advanced features and high performance.",
-      price: 1099,
-      image_Url:
-        "https://islamicmart.com.pk/cdn/shop/files/ReadQuranChargeyourimanBrown_823x_953bc26d-2ad9-4c74-973e-cca68b66e571@2x.jpg?v=1708059890",
-    },
-    {
-      name: "Samsung Galaxy S23 Ultra 512GB SSD and 12GB RAM",
-      description:
-        "A premium smartphone with a stunning display and exceptional camera performance.",
-      price: 119,
-      image_Url:
-        "https://www.bpmcdn.com/f/files/peacearch/import/2019-11/19401729_web1_191115-BPD-M-2019-Chevrolet-Blazer-049.jpeg;w=480;h=320;mode=crop",
-    },
-    {
-      name: "Google Pixel 8 Pro 256GB SSD and 8GB RAM",
-      description:
-        "Experience the purest Android experience with exceptional camera quality and AI features.",
-      price: 999,
-      image_Url:
-        "https://imgd.aeplcdn.com/370x208/n/cw/ec/153099/harleydavidson-x440-right-front-three-quarter1.jpeg?isig=0&q=80",
-    },
-  ];
-
+  const { wishlist } = useSelector((state) => state.wishlist);
+  const dispatch = useDispatch();
+  const removeFromWishlistHandler = (data) => {
+    dispatch(removeFromWishList(data));
+  };
+  const addToCartHandler = (data) => {
+    const newData = { ...data, qty: 1 };
+    dispatch(addToCart(newData));
+    setOpenWishlist(false);
+  };
   return (
     <div className="fixed top-0 left-0 w-full bg-[#0000004b] h-screen z-10">
-      <div className="fixed top-0 right-0 m-h-full w-[80%] 800px:w-[25%] bg-white flex flex-col overflow-y-scroll justify-between shadow-sm">
+      <div className="fixed top-0 right-0 h-full w-[80%] 800px:w-[25%] bg-white flex flex-col overflow-y-scroll justify-between shadow-sm">
         <div>
           <div className="flex w-full justify-end pt-5 pr-5 ">
             <RxCross1
@@ -47,14 +37,21 @@ const Wishlist = ({ setOpenWishlist }) => {
           {/* Items Length */}
           <div className={`${styles.noramlFlex} p-4`}>
             <AiOutlineHeart size={25} />
-            <h5 className="pl-2 text-[20px] font-[500]">3 items</h5>
+            <h5 className="pl-2 text-[20px] font-[500]">
+              {wishlist && wishlist.length} items
+            </h5>
           </div>
           {/* Card Single Items */}
           <br />
           <div className="w-full border-t ">
-            {CartData &&
-              CartData.map((item, index) => (
-                <CartSingle key={index} item={item} />
+            {wishlist &&
+              wishlist.map((item, index) => (
+                <CartSingle
+                  removeFromWishlistHandler={removeFromWishlistHandler}
+                  addToCartHandler={addToCartHandler}
+                  key={index}
+                  item={item}
+                />
               ))}
           </div>
         </div>
@@ -63,17 +60,20 @@ const Wishlist = ({ setOpenWishlist }) => {
   );
 };
 
-const CartSingle = ({ item }) => {
+const CartSingle = ({ item, removeFromWishlistHandler, addToCartHandler }) => {
   const [value, setValue] = useState(1);
-  const totalPrice = item.price * value;
+  const totalPrice = item.discountPrice * value;
   return (
     <div className="border-b p-4 ">
       <div className="w-full flex  items-center">
-        <RxCross1 className="cursor-pointer" />
+        <RxCross1
+          onClick={() => removeFromWishlistHandler(item)}
+          className="cursor-pointer"
+        />
         {/* Product Image */}
         <img
-          className="w-[80px] h-[80px] ml-2"
-          src={item.image_Url}
+          className="w-[130px] h-min ml-2 mr-2 rounded-[5px] "
+          src={`${backend_url}/${item.images[0]}`}
           alt="Static Product"
         />
 
@@ -86,6 +86,7 @@ const CartSingle = ({ item }) => {
         <div>
           <BsCartPlus
             size={20}
+            onClick={() => addToCartHandler(item)}
             className="cursor-pointer"
             title="Add to Cart"
           />

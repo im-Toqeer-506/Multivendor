@@ -42,7 +42,7 @@ export const getAllProductsShop = (id) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: "getAllProductsShopFailed",
-      payload: error.response.data.message,
+      payload: error.response?.data?.message || error.message || "Something went wrong",
     });
   }
 };
@@ -86,4 +86,3 @@ export const getAllProducts = () => async (dispatch) => {
     });
   }
 };
-
