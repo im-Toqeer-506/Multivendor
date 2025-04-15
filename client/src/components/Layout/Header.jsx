@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styles from "../../styles/style";
 import { Link } from "react-router-dom";
-import { productData, categoriesData } from "../../static/data.jsx";
+import { categoriesData } from "../../static/data.jsx";
 import {
   AiOutlineHeart,
   AiOutlineSearch,
@@ -20,6 +20,7 @@ import { RxCross1 } from "react-icons/rx";
 
 const Header = ({ activeHeading }) => {
   const { isAuthenticated, user } = useSelector((state) => state.user);
+  const { cart } = useSelector((state) => state.cart);
   const { allProducts } = useSelector((state) => state.products);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchData, setSearchData] = useState(null);
@@ -28,7 +29,7 @@ const Header = ({ activeHeading }) => {
   const [openCart, setOpenCart] = useState(false);
   const [openWishlist, setOpenWishlist] = useState(false);
   const [open, setOpen] = useState(false);
-
+  const { wishlist } = useSelector((state) => state.wishlist);
   const handleSearchChange = (e) => {
     e.preventDefault();
     const term = e.target.value;
@@ -47,6 +48,10 @@ const Header = ({ activeHeading }) => {
       setActive(false);
     }
   });
+  const handleSuggestionClick = () => {
+    setSearchTerm("");
+    setSearchData([]);
+  };
 
   return (
     <>
@@ -75,17 +80,19 @@ const Header = ({ activeHeading }) => {
               className="absolute right-2 top-1.5 cursor-pointer"
             />
             {searchData && searchData.length !== 0 ? (
-              <div className="absolute min-h-[30vh] bg-slate-50 shadow-sm-2 z[9] p-4">
+              <div className="absolute min-h-[30vh] bg-slate-50 shadow-sm-2 z-[9] p-4">
                 {searchData &&
                   searchData.map((i, index) => {
-                    const d = i.name;
-                    const productname = d.replace(/\s+/g, "-");
                     return (
-                      <Link to={`/product/${productname}`}>
-                        <div className="w-full flex py-3 items-start ">
+                      <Link
+                        to={`/product/${i._id}`}
+                        key={index}
+                        onClick={handleSuggestionClick}
+                      >
+                        <div className="w-full flex  items-start py-3 ">
                           <img
                             src={`${backend_url}/${i.images[0]}`}
-                            className="w-[40px] "
+                            className="w-[40px] h-[40px] mr-[10px] "
                           />
                           <h1>{i.name}</h1>
                         </div>
@@ -156,7 +163,7 @@ const Header = ({ activeHeading }) => {
               >
                 <AiOutlineHeart size={30} color="rgb(255 255 255/83%)" />
                 <span className="absolute  right-0 top-0 rounded-full bg-[#3bc177] w-4 h-4  p-0 m-0 text-white font-monospace text-center  font-[12px] leading-tight ">
-                  0
+                  {wishlist && wishlist.length}
                 </span>
               </div>
             </div>
@@ -168,7 +175,7 @@ const Header = ({ activeHeading }) => {
               >
                 <AiOutlineShoppingCart size={30} color="rgb(255 255 255/83%)" />
                 <span className="absolute  right-0 top-0 rounded-full bg-[#3bc177] w-4 h-4  p-0 m-0 text-white font-monospace text-center  font-[12px] leading-tight ">
-                  1
+                  {cart && cart.length}
                 </span>
               </div>
             </div>
@@ -223,10 +230,11 @@ const Header = ({ activeHeading }) => {
             </Link>
           </div>
           <div>
-            <div className="relative mr-[20px]">
+            <div className="relative mr-[20px] cursor-pointer"
+            onClick={() => setOpenCart(!openCart)}>
               <AiOutlineShoppingCart size={30} />
               <span className="absolute  right-0 top-0 rounded-full bg-[#3bc177] w-4 h-4  p-0 m-0 text-white font-monospace text-center  font-[12px] leading-tight ">
-                1
+                {cart && cart.length}
               </span>
             </div>
           </div>
@@ -239,10 +247,13 @@ const Header = ({ activeHeading }) => {
             <div className="fixed w-[70%] bg-[#fff] h-screen top-0 left-0 z-10 overflow-y-scroll">
               <div className="w-full justify-between flex pr-3">
                 <div>
-                  <div className="relative mr-[15px]">
+                  <div
+                    className="relative mr-[15px] cursor-pointer"
+                    oncclik={() => setOpenWishlist(!openWishlist)}
+                  >
                     <AiOutlineHeart size={30} className="mt-5 ml-3" />
-                    <span className="absolute right-0 top-0 rounded-full bg-[#3bc177] w-4 h-4 top right p-0 m-0 text-white font-mono text-[12px]  leading-tight text-center">
-                      0
+                    <span className="absolute   right-0 top-0 rounded-full bg-[#3bc177] w-4 h-4 top right p-0 m-0 text-white font-mono text-[12px]  leading-tight text-center">
+                      {wishlist && wishlist.length}
                     </span>
                   </div>
                 </div>
@@ -262,14 +273,12 @@ const Header = ({ activeHeading }) => {
                 />
                 {searchData && (
                   <div className="absolute bg-[#fff] z-10 shadow w-full left-0 p-3">
-                    {searchData.map((i) => {
-                      const d = i.name;
-                      const Product_name = d.replace(/\s+/g, "-");
+                    {searchData.map((i, index) => {
                       return (
-                        <Link to={`/product/${Product_name}`}>
+                        <Link to={`/product/${i._id}`} key={index}>
                           <div className="flex items-center">
                             <img
-                              src={i.imageUrl[0].url}
+                              src={i.images[0]}
                               alt=""
                               className="w-[50px] mr-2"
                             />
