@@ -165,4 +165,61 @@ router.get(
     }
   })
 );
+//update User InFo
+router.put(
+  "/update-user-info",
+  isAthuenticated,
+  catchAsyncError(async (req, res, next) => {
+    try {
+      const { name, email, password, phoneNumber } = req.body;
+      const user = await User.findOne({ email }).select("+password");
+      if (!user) {
+        return next(new ErrorHandler(error.message, 400));
+      }
+
+      const ValidPassword = await user.comparePassword(password);
+      if (!ValidPassword) {
+        return next(
+          new ErrorHandler("Please,Provide the correct information!", 400)
+        );
+      }
+      user.name = name;
+      user.email = email;
+      user.password = password;
+      user.phoneNumber = phoneNumber;
+      await user.save();
+      res.status(201).json({
+        success: true,
+        user,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
+//update user Avatar
+router.put(
+  "/update-avatar",
+  isAthuenticated,
+  upload.single("image"),
+  catchAsyncError(async (req, res, next) => {
+    try {
+      const existsUser = await User.findById(req.user.id);
+      const existsAvatarPath = `uploads/${existsUser.avatar}`;
+      fs.unlinkSync(existsAvatarPath);
+      const fileUrl = path.join(req.file.filename);
+      const user = await User.findByIdAndUpdate(req.body.id, {
+        avatar: fileUrl,
+      });
+
+      res.status(200).json({
+        success: true,
+        user,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
 module.exports = router;

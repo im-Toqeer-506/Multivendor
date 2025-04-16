@@ -1,29 +1,60 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   AiOutlineArrowRight,
   AiOutlineCamera,
   AiOutlineDelete,
 } from "react-icons/ai";
-import { useSelector } from "react-redux";
-import { backend_url } from "../../server";
+import { useDispatch, useSelector } from "react-redux";
+import { backend_url, server } from "../../server";
 import styles from "../../styles/style";
 import { DataGrid } from "@mui/x-data-grid";
 import Button from "@mui/material/Button";
 import { Link } from "react-router-dom";
 import { MdOutlineTrackChanges } from "react-icons/md";
+import { updateUserInfo } from "../../redux/actions/user";
+import { toast } from "react-toastify";
+import axios from "axios";
+import { getUser } from "../../redux/actions/user";
 const ProfileContent = ({ active }) => {
-  const { user } = useSelector((state) => state.user);
+  const { user, error } = useSelector((state) => state.user);
+  const [avatar, setAvatar] = useState(null);
   const [name, setName] = useState(user && user.name);
   const [email, setEmail] = useState(user && user.email);
-  const [phoneNumber, setPhoneNumber] = useState();
-  const [zipCode, setZipCode] = useState();
-  const [address1, setAddress1] = useState("");
-  const [address2, setAddress2] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState(user && user.phoneNumber);
+  const [password, setPassword] = useState("");
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+    }
+  }, [error]);
+  const handleImage = async (e) => {
+    const file = e.target.files[0];
+    const userId = user._id;
+    setAvatar(file);
+
+    const formData = new FormData();
+    formData.append("image", file);
+    formData.append("id", userId);
+
+    try {
+      await axios.put(`${server}/user/update-avatar`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        withCredentials: true,
+      });
+      dispatch(getUser());
+      toast.success("Avatar updated successfully!");
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    dispatch(updateUserInfo({ name, email, password, phoneNumber }));
   };
-
   return (
     <div className="w-full">
       {/* profile Page */}
@@ -32,12 +63,20 @@ const ProfileContent = ({ active }) => {
           <div className="flex justify-center w-full">
             <div className="relative">
               <img
-                src={`${backend_url}/uploads/${user?.avatar}`}
+                src={`${backend_url}/${user && user?.avatar}`}
                 className="w-[150px] h-[150px] rounded-full object-cover border-[3px] border-[#3ad132]"
                 alt=""
               />
               <div className="w-[30px] h-[30px] bg-[#E3E9EE] rounded-full flex items-center justify-center cursor-pointer absolute bottom-[5px] right-[5px]">
-                <AiOutlineCamera />
+                <input
+                  type="file"
+                  id="image"
+                  className="hidden"
+                  onChange={handleImage}
+                />
+                <label htmlFor="image">
+                  <AiOutlineCamera />
+                </label>
               </div>
             </div>
           </div>
@@ -80,36 +119,13 @@ const ProfileContent = ({ active }) => {
                   />
                 </div>
                 <div className=" w-[100%] 800px:w-[50%]">
-                  <label className="block pb-2">Zip Code</label>
+                  <label className="block pb-2">Password</label>
                   <input
-                    type="number"
+                    type="password"
                     className={`${styles.input} !w-[95%] mb-4 800px:mb-0`}
                     required
-                    value={zipCode}
-                    onChange={(e) => setZipCode(e.target.value)}
-                  />
-                </div>
-              </div>
-
-              <div className="w-full 800px:flex block pb-3">
-                <div className=" w-[100%] 800px:w-[50%]">
-                  <label className="block pb-2 ">Address 1</label>
-                  <input
-                    type="address"
-                    className={`${styles.input} !w-[95%] mb-4 800px:mb-0`}
-                    required
-                    value={address1}
-                    onChange={(e) => setAddress1(e.target.value)}
-                  />
-                </div>
-                <div className=" w-[100%] 800px:w-[50%]">
-                  <label className="block pb-2">Address 2</label>
-                  <input
-                    type="address"
-                    className={`${styles.input} !w-[95%] mb-4 800px:mb-0`}
-                    required
-                    value={address2}
-                    onChange={(e) => setAddress2(e.target.value)}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                   />
                 </div>
               </div>
@@ -446,6 +462,33 @@ const PaymentMethods = () => {
   );
 };
 const Address = () => {
+  const [open, setOpen] = useState(false);
+  const [country, setCountry] = useState("");
+  const [city, setCity] = useState("");
+  const [zipCode, setZipCode] = useState();
+  const [address1, setAddress1] = useState("");
+  const [address2, setAddress2] = useState("");
+  const [addressType, setAddressType] = useState("");
+  const { user } = useSelector((state) => state.user);
+
+  const addressTypeData = [
+    {
+      name: "Default",
+    },
+    {
+      name: "Home",
+    },
+    {
+      name: "Office",
+    },
+  ];
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (addressType === "" || country === "" || city === "") {
+      toast.error("Please fill all the fields!");
+    } else {
+    }
+  };
   return (
     <div className="w-full px-5">
       <div className="w-full px-5">
@@ -454,7 +497,9 @@ const Address = () => {
             My Address
           </h1>
           <div className={`${styles.button} !rounded-md`}>
-            <span className="text-[#fff]">Add New</span>
+            <span onClick={() => setOpen(true)} className="text-[#fff]">
+              Add New
+            </span>
           </div>
         </div>
         <br />

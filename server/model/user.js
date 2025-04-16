@@ -24,6 +24,7 @@ const userSchema = new mongoose.Schema({
     type: Number,
     trim: true,
   },
+  
   addresses: [
     {
       country: { type: String },

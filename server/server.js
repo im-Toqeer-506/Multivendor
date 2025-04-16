@@ -1,5 +1,5 @@
 const app = require("./app");
-const dbConnection=require("./db/Database")
+const dbConnection = require("./db/Database");
 //Handling uncaugth Exception
 process.on("uncaughtException", (error) => {
   console.log(`Error: ${error.message}`);
