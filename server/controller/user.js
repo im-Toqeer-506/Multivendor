@@ -222,4 +222,64 @@ router.put(
     }
   })
 );
+//update User Addresses
+router.put(
+  "/update-user-addresses",
+  isAthuenticated,
+  catchAsyncError(async (req, res, next) => {
+    try {
+      const user = await User.findById(req.user.id);
+      const sameTypeAdress = user.addresses.find(
+        (address) => address.addressType === req.body.addressType
+      );
+      if (sameTypeAdress) {
+        return next(
+          new ErrorHandler(
+            `${req.body.addressType} address is already exists`,
+            400
+          )
+        );
+      }
+      const existAddress = user.addresses.find(
+        (address) => address._id === req.body._id
+      );
+      if (existAddress) {
+        Object.assign(existAddress, req.body);
+      } else {
+        user.addresses.push(req.body);
+      }
+      await user.save();
+      res.status(200).json({
+        success: true,
+        user,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+//delete user address
+router.delete(
+  `/delete-user-address/:id`,
+  isAthuenticated,
+  catchAsyncError(async (req, res, next) => {
+    try {
+      const userId = req.user._id;
+      const addressId = req.params.id;
+      //“Find a user by their ID , then (pull/remove) one address from their list of addresses.
+      await User.updateOne(
+        { _id: userId },
+        { $pull: { addresses: { _id: addressId } } }
+      );
+      const user = await User.findById(userId);
+      res.status(200).json({
+        success: true,
+        user,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
 module.exports = router;

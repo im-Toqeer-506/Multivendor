@@ -5,6 +5,8 @@ const initialState = {
   loading: false,
   error: null,
   user: null,
+  addressloading: false,
+  successMessage: null,
 };
 //builder callback notation
 export const userReducer = createReducer(initialState, (builder) => {
@@ -34,6 +36,34 @@ export const userReducer = createReducer(initialState, (builder) => {
       state.loading = false;
       state.error = action.payload;
     })
+    
+    // Update User Address
+    .addCase("updateUserAddressRequest", (state) => {
+      state.addressloading = true;
+    })
+    .addCase("updateUserAddressSuccess", (state, action) => {
+      state.addressloading = false;
+      state.successMessage = action.payload.successMessage;
+      state.user = action.payload.user;
+    })
+    .addCase("updateUserAddressFailure", (state, action) => {
+      state.addressloading = false;
+      state.error = action.payload;
+    })
+    // Delete User Address
+    .addCase("deleteUserAddressRequest", (state) => {
+      state.addressloading = true;
+    })
+    .addCase("deleteUserAddressSuccess", (state, action) => {
+      state.addressloading = false;
+      state.successMessage = action.payload.successMessage;
+      state.user = action.payload.user;
+    })
+    .addCase("deleteUserAddressFailure", (state, action) => {
+      state.addressloading = false;
+      state.error = action.payload;
+    })
+    //Clear Errors
     .addCase("clearErrors", (state) => {
       state.error = null;
     });
