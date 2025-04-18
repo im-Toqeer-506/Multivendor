@@ -1,9 +1,6 @@
 import React from "react";
-import {
-  AiOutlineCreditCard,
-  AiOutlineLogin,
-  AiOutlineMessage,
-} from "react-icons/ai";
+import { AiOutlineLogin, AiOutlineMessage } from "react-icons/ai";
+import { RiLockPasswordFill } from "react-icons/ri";
 import { MdOutlineTrackChanges } from "react-icons/md";
 import { server } from "../../server";
 import axios from "axios";
@@ -111,13 +108,13 @@ const ProfileSideBar = ({ active, setActive }) => {
           setActive(6);
         }}
       >
-        <AiOutlineCreditCard size={20} color={active === 6 ? "red" : ""} />
+        <RiLockPasswordFill size={20} color={active === 6 ? "red" : ""} />
         <span
           className={`pl-3 ${
             active == 6 ? "text-[red]" : ""
           }  800px:block  hidden`}
         >
-          Payment Methods
+          Change Password
         </span>
       </div>
       <div

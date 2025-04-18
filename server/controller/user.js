@@ -9,6 +9,7 @@ const jwt = require("jsonwebtoken");
 const sendToken = require("../utils/jwtToken");
 const sendMail = require("../utils/SendMail");
 const { isAthuenticated } = require("../middleware/auth");
+const { isatty } = require("tty");
 const router = express.Router();
 //craete_user Route
 router.post("/create-user", upload.single("file"), async (req, res, next) => {
@@ -281,5 +282,26 @@ router.delete(
     }
   })
 );
+//update password
+router.put(`/update-user-password`, isAthuenticated, async (req, res, next) => {
+  try {
+    const user = await User.findById(req.user._id).select("+password");
+    const comparePassword = await user.comparePassword(req.body.oldPassword);
+    if (!comparePassword) {
+      return next(new ErrorHandler("Wrong Password", 400));
+    }
+    if (req.body.newPassword !== req.body.confirmPassword) {
+      return next(new ErrorHandler("Password dosn't match ", 400));
+    }
+    user.password = req.body.newPassword;
+    await user.save();
+    res.status(200).json({
+      success: true,
+      message: "Password Updated Successfully!",
+    });
+  } catch (error) {
+    return next(new ErrorHandler(error.message, 500));
+  }
+});
 
 module.exports = router;
