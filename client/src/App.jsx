@@ -1,8 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
 import { ToastContainer, Bounce, toast } from "react-toastify";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
 // Importing local routes
 import {
   LoginPage,
@@ -13,6 +15,8 @@ import {
   ProductDetailsPage,
   BestSelling,
   Events,
+  CheckOutPage,
+  PaymentPage,
   FaqPage,
   ProfilePage,
   ShopCreatePage,
@@ -32,24 +36,50 @@ import {
   ShopAllCoupons,
 } from "./routes/ShopRoutes.js";
 import { ShopHomePage } from "./routes/ShopRoutes.jsx";
-
 import Store from "./redux/store.js";
-import {  getUser } from "./redux/actions/user";
-import { getSeller} from "./redux/actions/seller";
+import { getUser } from "./redux/actions/user";
+import { getSeller } from "./redux/actions/seller";
 import SellerProtectedRoute from "./routes/SellerProtectedRoute.jsx";
 import { getAllProducts } from "./redux/actions/product.js";
 import { getAllEvents } from "./redux/actions/event.js";
+import axios from "axios";
+import { server } from "./server.js";
 const App = () => {
+  const [stripeApiKey, setStripeApiKey] = useState("");
+  async function getStripeApikey() {
+    try {
+      const { data } = await axios.get(`${server}/payment/stripe-api-key`);
+      setStripeApiKey(data?.stripeapikey);
+    } catch (error) {
+      console.error("Error fetching Stripe API key:", error);
+    }
+  }
   useEffect(() => {
     Store.dispatch(getUser());
     Store.dispatch(getSeller());
     Store.dispatch(getAllProducts());
-    Store.dispatch(getAllEvents())
+    Store.dispatch(getAllEvents());
+    getStripeApikey();
   }, []);
 
   return (
     <>
       <BrowserRouter>
+        {/* Adding the Payment  Page + Stripe Route  */}
+        {stripeApiKey && (
+          <Elements stripe={loadStripe(stripeApiKey)}>
+            <Routes>
+              <Route
+                path="/payment"
+                element={
+                  <ProtectedRoute>
+                    <PaymentPage />
+                  </ProtectedRoute>
+                }
+              />
+            </Routes>
+          </Elements>
+        )}
         <Routes>
           {/* Mounting Local Routes*/}
           <Route path="/" element={<HomePage />} />
@@ -77,7 +107,6 @@ const App = () => {
             }
           />
           <Route path="/shop/preview/:id" element={<ShopPreviewPage />} />
-
           {/* Mounting Shop Routes */}
           <Route path="/shop-create" element={<ShopCreatePage />} />
           <Route path="/shop-login" element={<ShopLoginPage />} />
@@ -135,6 +164,15 @@ const App = () => {
               <SellerProtectedRoute>
                 <ShopAllCoupons />
               </SellerProtectedRoute>
+            }
+          />
+          {/* Adding the CheckOut Page */}
+          <Route
+            path="/checkout"
+            element={
+              <ProtectedRoute>
+                <CheckOutPage />
+              </ProtectedRoute>
             }
           />
         </Routes>

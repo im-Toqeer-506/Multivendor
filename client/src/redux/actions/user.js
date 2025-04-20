@@ -59,6 +59,7 @@ export const updateUserAddress = ({
   city,
   address1,
   address2,
+  zipCode,
   addressType,
 }) => async (dispatch) => {
   try {
@@ -72,6 +73,7 @@ export const updateUserAddress = ({
         city,
         address1,
         address2,
+        zipCode,
         addressType,
       },
       { withCredentials: true }

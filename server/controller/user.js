@@ -7,9 +7,8 @@ const catchAsyncError = require("../middleware/catchAsyncError");
 const fs = require("fs");
 const jwt = require("jsonwebtoken");
 const sendToken = require("../utils/jwtToken");
-const sendMail = require("../utils/SendMail");
+const sendMail = require("../utils/sendMail");
 const { isAthuenticated } = require("../middleware/auth");
-const { isatty } = require("tty");
 const router = express.Router();
 //craete_user Route
 router.post("/create-user", upload.single("file"), async (req, res, next) => {

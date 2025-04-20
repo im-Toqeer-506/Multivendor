@@ -16,6 +16,8 @@
     "@mui/styled-engine-sc": "^6.4.3",
     "@mui/x-data-grid": "^7.26.0",
     "@reduxjs/toolkit": "^2.5.1",
+    "@stripe/react-stripe-js": "^3.6.0",
+    "@stripe/stripe-js": "^7.1.0",
     "axios": "^1.7.9",
     "country-state-city": "^3.2.1",
     "lottie-react": "^2.4.1",
