@@ -43,7 +43,7 @@ const Payment = () => {
   };
 
   const paypalPaymentHandler = async (paymentInfo) => {
-    log("Payment successful!", paymentInfo);
+    log("Payment successful!");
   };
 
   const paymentData = {
@@ -236,18 +236,6 @@ const PaymentInfo = ({
                       onClick={() => setOpen(false)}
                     />
                   </div>
-                  <PayPalScriptProvider
-                    options={{
-                      "client-id":
-                        "AcLJEF9S8qnW_NC7P8jdqYoDJyeu0sf9KG7oc8FIkT2DKhr9O55wW9Ojxaeu02k_o3S_R4Iqfs2JdkDC",
-                    }}
-                  >
-                    <PayPalButtons
-                      style={{ layout: "vertical" }}
-                      onApprove={onApprove}
-                      createOrder={createOrder}
-                    />
-                  </PayPalScriptProvider>
                 </div>
               </div>
             )}

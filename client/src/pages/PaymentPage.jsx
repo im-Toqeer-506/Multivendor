@@ -6,7 +6,7 @@ import Footer from "../components/Layout/Footer";
 
 const PaymentPage = () => {
   return (
-    <div>
+    <div className="w-full min-h-screen bg-[#f6f9fc]">
       <Header />
       <br />
       <br />

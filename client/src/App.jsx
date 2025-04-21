@@ -50,6 +50,7 @@ const App = () => {
     try {
       const { data } = await axios.get(`${server}/payment/stripe-api-key`);
       setStripeApiKey(data?.stripeapikey);
+      console.log("Stripe API Key:", data?.stripeapikey);
     } catch (error) {
       console.error("Error fetching Stripe API key:", error);
     }
@@ -67,19 +68,19 @@ const App = () => {
       <BrowserRouter>
         {/* Adding the Payment  Page + Stripe Route  */}
         {stripeApiKey && (
-          <Elements stripe={loadStripe(stripeApiKey)}>
-            <Routes>
-              <Route
-                path="/payment"
-                element={
-                  <ProtectedRoute>
-                    <PaymentPage />
-                  </ProtectedRoute>
-                }
-              />
-            </Routes>
-          </Elements>
-        )}
+        <Elements stripe={loadStripe(stripeApiKey)}>
+          <Routes>
+            <Route
+              path="/payment"
+              element={
+                <ProtectedRoute>
+                  <PaymentPage />
+                </ProtectedRoute>
+              }
+            />
+          </Routes>
+        </Elements>
+      )}
         <Routes>
           {/* Mounting Local Routes*/}
           <Route path="/" element={<HomePage />} />

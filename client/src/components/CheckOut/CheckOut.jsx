@@ -43,14 +43,14 @@ const Checkout = () => {
         country,
         city,
       };
-      const orderData = () => {
+      const orderData = {
         cart,
-          totalPrice,
-          subTotalPrice,
-          shipping,
-          discountPrice,
-          shippingAddress,
-          user;
+        totalPrice,
+        subTotalPrice,
+        shipping,
+        discountPrice,
+        shippingAddress,
+        user,
       };
       localStorage.setItem("latestOrder", JSON.stringify(orderData));
       navigate("/payment");
