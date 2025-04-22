@@ -4,6 +4,7 @@ const catchAsyncError = require("../middleware/catchAsyncError");
 const router = express.Router();
 const Order = require("../model/order");
 const Product = require("../model/product");
+//create Order of the User
 router.post(
   "/create-order",
   catchAsyncError(async (req, res, next) => {
@@ -34,8 +35,27 @@ router.post(
         });
         orders.push(order);
       }
-
       res.status(201).json({
+        success: true,
+        orders,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+//Get All Orders of The User
+router.get(
+  "/get-all-orders/:userId",
+  catchAsyncError(async (req, res, next) => {
+    try {
+      const orders = await Order.find({ "user._id": req.params.userId }).sort({
+        createdAt: -1,
+      });
+      if (!orders) {
+        return next(new ErrorHandler("No Order Found", 404));
+      }
+      res.status(200).json({
         success: true,
         orders,
       });
