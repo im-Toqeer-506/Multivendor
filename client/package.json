@@ -15,6 +15,7 @@
     "@mui/material": "^6.4.6",
     "@mui/styled-engine-sc": "^6.4.3",
     "@mui/x-data-grid": "^7.26.0",
+    "@paypal/react-paypal-js": "^8.8.3",
     "@reduxjs/toolkit": "^2.5.1",
     "@stripe/react-stripe-js": "^3.6.0",
     "@stripe/stripe-js": "^7.1.0",

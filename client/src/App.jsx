@@ -22,6 +22,7 @@ import {
   ShopCreatePage,
   SellerActivationPage,
   ShopLoginPage,
+  OrderSuccessPage,
 } from "./routes/Routes.jsx";
 
 import ProtectedRoute from "./routes/ProtectedRoutes.jsx";
@@ -68,19 +69,21 @@ const App = () => {
       <BrowserRouter>
         {/* Adding the Payment  Page + Stripe Route  */}
         {stripeApiKey && (
-        <Elements stripe={loadStripe(stripeApiKey)}>
-          <Routes>
-            <Route
-              path="/payment"
-              element={
-                <ProtectedRoute>
-                  <PaymentPage />
-                </ProtectedRoute>
-              }
-            />
-          </Routes>
-        </Elements>
-      )}
+          <Elements stripe={loadStripe(stripeApiKey)}>
+            <Routes>
+              <Route
+                path="/payment"
+                element={
+                  <ProtectedRoute>
+                    <PaymentPage />
+                  </ProtectedRoute>
+                }
+              />
+            </Routes>
+          </Elements>
+        )}
+        {/* Order SuccessPage */}
+
         <Routes>
           {/* Mounting Local Routes*/}
           <Route path="/" element={<HomePage />} />
@@ -176,6 +179,7 @@ const App = () => {
               </ProtectedRoute>
             }
           />
+          <Route path="/orders/success" element={<OrderSuccessPage />} />
         </Routes>
       </BrowserRouter>
       <ToastContainer

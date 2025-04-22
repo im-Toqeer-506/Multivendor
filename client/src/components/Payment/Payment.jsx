@@ -15,11 +15,15 @@ import {
   useElements,
 } from "@stripe/react-stripe-js";
 
+import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
+
 const Payment = () => {
   const [orderData, setOrderData] = useState([]);
   const [open, setOpen] = useState(false);
   const { user } = useSelector((state) => state.user);
   const navigate = useNavigate();
+  const stripe = useStripe();
+  const elements = useElements();
   window.scrollTo(0, 0);
 
   useEffect(() => {
@@ -28,9 +32,63 @@ const Payment = () => {
   }, []);
 
   const createOrder = (data, actions) => {
-    console.log("Hello!");
+    return actions.order
+      .create({
+        purchase_units: [
+          {
+            descryption: "Sunflower",
+            amount: {
+              currency_code: "USD",
+              value: orderData?.totalPrice,
+            },
+          },
+        ],
+        application_context: {
+          shipping_preference: "NO_SHIPPING",
+        },
+      })
+      .then((orderId) => {
+        return orderId;
+      });
   };
 
+  const onApprove = async (data, actions) => {
+    return actions.order.capture().then(async (details) => {
+      const { payer } = details;
+      let paymentInfo = payer;
+      if (paymentInfo !== undefined) {
+        paypalPaymentHandler(paymentInfo);
+      }
+      await paypalPaymentHandler(paymentInfo);
+    });
+  };
+
+  const paypalPaymentHandler = async (paymentInfo) => {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    order.PaymentInfo({
+      id: paymentInfo.payer_id,
+      status: "succeeded",
+      type: "Paypal",
+    });
+    await axios
+      .post(`${server}/order/create-order`, order, config)
+      .then((res) => {
+        setOpen(false);
+        localStorage.setItem("cartItems", JSON.stringify([]));
+        localStorage.setItem("latestOrders", JSON.stringify([]));
+        navigate("/orders/success");
+        toast.success("Order Placed Successfully!");
+        window.location.reload();
+      });
+  };
+
+  const paymentData = {
+    amount: Math.round(orderData?.totalPrice * 100),
+  };
   const order = {
     cart: orderData?.cart,
     shippingAddress: orderData?.shippingAddress,
@@ -38,24 +96,72 @@ const Payment = () => {
     totalPrice: orderData?.totalPrice,
   };
 
-  const onApprove = async (data, actions) => {
-    console.log("ddd");
-  };
-
-  const paypalPaymentHandler = async (paymentInfo) => {
-    log("Payment successful!");
-  };
-
-  const paymentData = {
-    amount: Math.round(orderData?.totalPrice * 100),
-  };
-
   const paymentHandler = async (e) => {
     e.preventDefault();
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+      const { data } = await axios.post(
+        `${server}/payment/process`,
+        paymentData,
+        config
+      );
+      const client_secret = data?.client_secret;
+      if (!stripe || !elements) return;
+      const result = await stripe.confirmCardPayment(client_secret, {
+        payment_method: {
+          card: elements.getElement(CardNumberElement),
+        },
+      });
+      if (result.error) {
+        toast.error(result.error.message);
+      } else {
+        if (result.paymentIntent.status === "succeeded") {
+          order.paymentInfo = {
+            id: result.paymentIntent.id,
+            status: result.paymentIntent.status,
+            type: "Credit Card",
+          };
+          await axios
+            .post(`${server}/order/create-order`, order, config)
+            .then((res) => {
+              setOpen(false);
+              localStorage.setItem("cartItems", JSON.stringify([]));
+              localStorage.setItem("latestOrders", JSON.stringify([]));
+              navigate("/orders/success");
+              toast.success("Order Placed Successfully!");
+              window.location.reload();
+            });
+        }
+      }
+    } catch (error) {
+      toast.error(error?.response?.data?.message || error.message);
+    }
   };
 
   const cashOnDeliveryHandler = async (e) => {
     e.preventDefault();
+    order.paymentInfo = {
+      type: "Cash on Delivery",
+    };
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    await axios
+      .post(`${server}/order/create-order`, order, config)
+      .then((res) => {
+        setOpen(false);
+        localStorage.setItem("cartItems", JSON.stringify([]));
+        localStorage.setItem("latestOrders", JSON.stringify([]));
+        navigate("/orders/success");
+        toast.success("Order Placed Successfully!");
+        window.location.reload();
+      });
   };
 
   return (
@@ -235,6 +341,18 @@ const PaymentInfo = ({
                       className="cursor-pointer absolute top-3 right-3"
                       onClick={() => setOpen(false)}
                     />
+                    <PayPalScriptProvider
+                      options={{
+                        "client-id":
+                          "AeJctrrk2T2zVAHNTtrxaAc5QleFsBg0CC0c-8UAvsLWR4SJAo81PDZ1-_ThgEsqcl9EjOGBCFdpxRgi",
+                      }}
+                    >
+                      <PayPalButtons
+                        style={{ layout: "vertical" }}
+                        onApprove={onApprove}
+                        createOrder={createOrder}
+                      />
+                    </PayPalScriptProvider>
                   </div>
                 </div>
               </div>

@@ -13,6 +13,7 @@ import SellerActivationPage from "../pages/SellerActivationPage";
 import ShopLoginPage from "../pages/ShopLoginPage";
 import CheckOutPage from "../pages/CheckOutPage";
 import PaymentPage from "../pages/PaymentPage";
+import OrderSuccessPage from "../pages/OrderSuccessPage";
 
 export {
   LoginPage,
@@ -30,4 +31,5 @@ export {
   ShopCreatePage,
   SellerActivationPage,
   ShopLoginPage,
+  OrderSuccessPage
 };
