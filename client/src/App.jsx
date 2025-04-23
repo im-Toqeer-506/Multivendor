@@ -35,6 +35,7 @@ import {
   ShopAllEvents,
   ShopPreviewPage,
   ShopAllCoupons,
+  ShopAllOrders,
 } from "./routes/ShopRoutes.js";
 import { ShopHomePage } from "./routes/ShopRoutes.jsx";
 import Store from "./redux/store.js";
@@ -51,9 +52,8 @@ const App = () => {
     try {
       const { data } = await axios.get(`${server}/payment/stripe-api-key`);
       setStripeApiKey(data?.stripeapikey);
-      console.log("Stripe API Key:", data?.stripeapikey);
     } catch (error) {
-      console.error("Error fetching Stripe API key:", error);
+      toast.error("Error fetching Stripe API key:", error);
     }
   }
   useEffect(() => {
@@ -143,6 +143,14 @@ const App = () => {
             element={
               <SellerProtectedRoute>
                 <ShopAllProducts />
+              </SellerProtectedRoute>
+            }
+          />
+          <Route
+            path="/dashboard-orders"
+            element={
+              <SellerProtectedRoute>
+                <ShopAllOrders />
               </SellerProtectedRoute>
             }
           />

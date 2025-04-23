@@ -5,7 +5,7 @@ const initialState = {
   error: null,
   orders: [],
 };
-//create all products
+//get all Orders of User
 export const orderReducer = createReducer(initialState, (builder) => {
   builder
     .addCase("getAllOrdersUserRequest", (state) => {
@@ -17,6 +17,20 @@ export const orderReducer = createReducer(initialState, (builder) => {
       state.success = true;
     })
     .addCase("getAllOrdersUserFailed", (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+      state.success = false;
+    })
+    //get all Orders of Seller
+    .addCase("getAllOrdersSellerRequest", (state) => {
+      state.isLoading = true;
+    })
+    .addCase("getAllOrdersSellerSuccess", (state, action) => {
+      state.isLoading = false;
+      state.orders = action.payload;
+      state.success = true;
+    })
+    .addCase("getAllOrdersSellerFailed", (state, action) => {
       state.isLoading = false;
       state.error = action.payload;
       state.success = false;
