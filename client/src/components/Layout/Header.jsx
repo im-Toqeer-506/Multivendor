@@ -20,6 +20,7 @@ import { RxCross1 } from "react-icons/rx";
 
 const Header = ({ activeHeading }) => {
   const { isAuthenticated, user } = useSelector((state) => state.user);
+  const { isSeller } = useSelector((state) => state.seller);
   const { cart } = useSelector((state) => state.cart);
   const { allProducts } = useSelector((state) => state.products);
   const [searchTerm, setSearchTerm] = useState("");
@@ -107,7 +108,8 @@ const Header = ({ activeHeading }) => {
           <div className={`${styles.button}`}>
             <Link to="/shop-create">
               <h1 className="text-white flex items-center">
-                Become a Seller <IoIosArrowForward className="ml-1" />
+                {isSeller ? "DASHBOARD" : "BECOME A SELLER"}
+                <IoIosArrowForward className="ml-1" />
               </h1>
             </Link>
           </div>
@@ -230,8 +232,10 @@ const Header = ({ activeHeading }) => {
             </Link>
           </div>
           <div>
-            <div className="relative mr-[20px] cursor-pointer"
-            onClick={() => setOpenCart(!openCart)}>
+            <div
+              className="relative mr-[20px] cursor-pointer"
+              onClick={() => setOpenCart(!openCart)}
+            >
               <AiOutlineShoppingCart size={30} />
               <span className="absolute  right-0 top-0 rounded-full bg-[#3bc177] w-4 h-4  p-0 m-0 text-white font-monospace text-center  font-[12px] leading-tight ">
                 {cart && cart.length}

@@ -1,19 +1,35 @@
 import React, { useEffect, useState } from "react";
 import styles from "../../styles/style";
 import { BsFillBagFill } from "react-icons/bs";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllOrdersOfShop } from "../../redux/actions/order";
-import { backend_url } from "../../server";
+import { backend_url, server } from "../../server";
+import { toast } from "react-toastify";
+import axios from "axios";
 
 const OrderDetails = () => {
   const { orders } = useSelector((state) => state.order);
   const { seller } = useSelector((state) => state.seller);
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [status, setStatus] = useState("");
-  const orderUpdateHandler = () => {
-    // Update order status logic here
-    console.log("Order status updated");
+  const orderUpdateHandler = async () => {
+    axios
+      .put(
+        `${server}/order/update-order-status/${id}`,
+        { status },
+        {
+          withCredentials: true,
+        }
+      )
+      .then((res) => {
+        toast.success("Order Updated Successfuly!");
+        navigate("/dashboard-orders");
+      })
+      .catch((error) => {
+        toast.error(error.response.data.message);
+      });
   };
 
   useEffect(() => {
@@ -96,35 +112,43 @@ const OrderDetails = () => {
       <br />
       <br />
       <h4 className="pt-3 text-[20px] font-[600]">Order Status:</h4>
-      <select
-        value={status}
-        onChange={(e) => setStatus(e.target.value)}
-        className="w-[200px] mt-2 border h-[35px] rounded-[5px]"
-      >
-        {[
-          "Processing",
-          "Transferred to delivery partner",
-          "Shipping",
-          "Received",
-          "On the way",
-          "Delivered",
-        ]
-          .slice(
-            [
+      {data?.status && (
+        <>
+          <select
+            value={status}
+            onChange={(e) => setStatus(e.target.value)}
+            className="w-[200px] mt-2 border h-[35px] rounded-[5px]"
+          >
+            {[
               "Processing",
               "Transferred to delivery partner",
               "Shipping",
               "Received",
               "On the way",
               "Delivered",
-            ].indexOf(data?.status)
-          )
-          .map((option, index) => (
-            <option key={option} value={option}>
-              {option}
-            </option>
-          ))}
-      </select>
+            ]
+              .slice(
+                Math.max(
+                  0,
+                  [
+                    "Processing",
+                    "Transferred to delivery partner",
+                    "Shipping",
+                    "Received",
+                    "On the way",
+                    "Delivered",
+                  ].indexOf(data.status)
+                )
+              )
+              .map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
+          </select>
+        </>
+      )}
+
       <div
         onClick={orderUpdateHandler}
         className={`${styles.button} mt-5 !bg-[#FCE1E6] !rounded-[4px] text-[#E94560] font-[600] !h-[45px] text-[18px]`}

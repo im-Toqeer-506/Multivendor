@@ -56,7 +56,7 @@ const UserOrderDetails = () => {
                 US${item.discountPrice} x {item.qty}
               </h5>
             </div>
-            {data?.status === "Delevered" && (
+            {data?.status === "Delivered" && (
               <div className={`${styles.button} text-[#fff]`}>
                 Write a Review
               </div>

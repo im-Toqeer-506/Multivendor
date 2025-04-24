@@ -23,7 +23,7 @@ import {
   SellerActivationPage,
   ShopLoginPage,
   OrderSuccessPage,
-  OrderDetailPage
+  OrderDetailPage,
 } from "./routes/Routes.jsx";
 
 import ProtectedRoute from "./routes/ProtectedRoutes.jsx";
@@ -117,7 +117,7 @@ const App = () => {
             path="/user/order/:id"
             element={
               <ProtectedRoute>
-                <OrderDetailPage/>
+                <OrderDetailPage />
               </ProtectedRoute>
             }
           />

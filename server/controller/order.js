@@ -4,13 +4,13 @@ const catchAsyncError = require("../middleware/catchAsyncError");
 const router = express.Router();
 const Order = require("../model/order");
 const Product = require("../model/product");
+const { isSeller } = require("../middleware/auth");
 //create Order of the User
 router.post(
   "/create-order",
   catchAsyncError(async (req, res, next) => {
     try {
       const { cart, shippingAddress, user, totalPrice, paymentInfo } = req.body;
-
       //   group cart items by shopId
       const shopItemsMap = new Map();
 
@@ -81,6 +81,47 @@ router.get(
         success: true,
         orders,
       });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+//Update Order Status
+router.put(
+  "/update-order-status/:id",
+  isSeller,
+  catchAsyncError(async (req, res, next) => {
+    try {
+      const order = await Order.findById(req.params.id);
+      if (!order) {
+        return next(new ErrorHandler("Order Not Found", 400));
+      }
+      if (req.body.status === "Transferred to delivery partner") {
+        for (const o of order.cart) {
+          await updateOrder(o._id, o.qty);
+        }
+      }
+      if (req.body.status === "Delivered") {
+        order.deliveredAt = Date.now();
+        order.paymentInfo.status = "succeeded";
+      }
+      order.status = req.body.status;
+      await order.save({ validateBeforeSave: false });
+
+      res.status(200).json({
+        success: true,
+        order,
+      });
+
+      // Define updateOrder function
+      async function updateOrder(id, qty) {
+        const product = await Product.findById(id);
+        if (product) {
+          product.stock -= qty;
+          product.sold_out += qty;
+          await product.save({ validateBeforeSave: false });
+        }
+      }
     } catch (error) {
       return next(new ErrorHandler(error.message, 500));
     }
