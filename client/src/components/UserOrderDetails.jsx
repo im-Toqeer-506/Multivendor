@@ -59,6 +59,7 @@ const UserOrderDetails = () => {
       })
       .then((res) => {
         toast.success(res.data.message);
+        dispatch(getAllOrdersOfUser(user._id));
       })
       .catch((error) => toast.error(error.response.data.message));
   };
@@ -96,7 +97,7 @@ const UserOrderDetails = () => {
                 US${item.discountPrice} x {item.qty}
               </h5>
             </div>
-            {item?.isReviewed ? null : (
+            {item?.isReviewed || item.status!=='delivered' ? null : (
               <div
                 className={`${styles.button} text-[#fff]`}
                 onClick={() => {
