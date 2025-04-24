@@ -52,6 +52,16 @@ const UserOrderDetails = () => {
   };
   const data = orders && orders.find((item) => item._id === id);
 
+  const refundHandler = async () => {
+    await axios
+      .put(`${server}/order/order-refund/${id}`, {
+        status: "processing refund",
+      })
+      .then((res) => {
+        toast.success(res.data.message);
+      })
+      .catch((error) => toast.error(error.response.data.message));
+  };
   return (
     <div className={`py-4 min-h-screen  ${styles.section}`}>
       <div className="w-full flex items-center justify-between">
@@ -209,11 +219,22 @@ const UserOrderDetails = () => {
             {data?.paymentInfo?.status ? data?.paymentInfo?.status : "Not Paid"}
           </h4>
         </div>
+        <br />
+        {data?.status === "Delivered" && (
+          <div
+            onClick={refundHandler}
+            className={`${styles.button}
+           text-white`}
+          >
+            Give A Refund
+          </div>
+        )}
       </div>
       <br />
       <Link to="/">
         <div className={`${styles.button} text-white`}>Send Message</div>
       </Link>
+
       <br />
       <br />
     </div>

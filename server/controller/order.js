@@ -5,7 +5,7 @@ const router = express.Router();
 const Order = require("../model/order");
 const Product = require("../model/product");
 const { isSeller } = require("../middleware/auth");
-//create Order of the User
+//create Order (User)
 router.post(
   "/create-order",
   catchAsyncError(async (req, res, next) => {
@@ -44,7 +44,7 @@ router.post(
     }
   })
 );
-//Get All Orders of The User
+//Get All Orders (User)
 router.get(
   "/get-all-orders/:userId",
   catchAsyncError(async (req, res, next) => {
@@ -64,7 +64,7 @@ router.get(
     }
   })
 );
-//get all orders of  Seller
+//get all orders (Seller)
 router.get(
   `/get-seller-all-orders/:shopId`,
   catchAsyncError(async (req, res, next) => {
@@ -86,7 +86,7 @@ router.get(
     }
   })
 );
-//Update Order Status
+//Update Order Status (seller)
 router.put(
   "/update-order-status/:id",
   isSeller,
@@ -122,6 +122,31 @@ router.put(
           await product.save({ validateBeforeSave: false });
         }
       }
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+// give a refund ( user)
+router.put(
+  "/order-refund/:id",
+  catchAsyncError(async (req, res, next) => {
+    try {
+      const order = await Order.findById(req.params.id);
+
+      if (!order) {
+        return next(new ErrorHandler("Order not found ", 400));
+      }
+
+      order.status = req.body.status;
+
+      await order.save({ validateBeforeSave: false });
+
+      res.status(200).json({
+        success: true,
+        order,
+        message: "Order Refund Request Successfully!",
+      });
     } catch (error) {
       return next(new ErrorHandler(error.message, 500));
     }

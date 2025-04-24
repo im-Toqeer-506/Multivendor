@@ -263,18 +263,12 @@ const AllOrders = () => {
   );
 };
 const AllRefundOrders = () => {
-  const orders = [
-    {
-      _id: "7463hvbfbhfbrtr28820221",
-      orderItems: [
-        {
-          name: "Iphone 14 pro max",
-        },
-      ],
-      totalPrice: 120,
-      orderStatus: "Processing",
-    },
-  ];
+  const { orders } = useSelector((state) => state.order);
+  const { user } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getAllOrdersOfUser(user._id));
+  }, []);
   const columns = [
     { field: "id", headerName: "Order ID", minWidth: 150, flex: 0.7 },
 
@@ -323,15 +317,17 @@ const AllRefundOrders = () => {
       },
     },
   ];
+  const eligibleOrder =
+    orders && orders.filter((item) => item.status === "processing refund");
   const row = [];
 
-  orders &&
-    orders.forEach((item) => {
+  eligibleOrder &&
+    eligibleOrder.forEach((item) => {
       row.push({
         id: item._id,
-        itemsQty: item.orderItems.length,
+        itemsQty: item.cart.length,
         total: "US$ " + item.totalPrice,
-        status: item.orderStatus,
+        status: item.status,
       });
     });
   return (
