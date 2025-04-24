@@ -7,7 +7,7 @@ import { useDispatch } from "react-redux";
 import { getAllProductsShop } from "../../redux/actions/product";
 import { getAllEventsShop } from "../../redux/actions/event";
 import { backend_url } from "../../server";
-import Ratings from "../Products/ratings";
+import Ratings from "../Products/Ratings";
 const ShopProfileData = ({ isOwner }) => {
   const { products } = useSelector((state) => state.products);
   const { events } = useSelector((state) => state.events);

@@ -1,6 +1,5 @@
 import axios from "axios";
 import { server } from "../../server";
-import { configureStore } from "@reduxjs/toolkit";
 //create all products
 export const createProduct = (newForm) => async (dispatch) => {
   try {
@@ -42,7 +41,10 @@ export const getAllProductsShop = (id) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: "getAllProductsShopFailed",
-      payload: error.response?.data?.message || error.message || "Something went wrong",
+      payload:
+        error.response?.data?.message ||
+        error.message ||
+        "Something went wrong",
     });
   }
 };
