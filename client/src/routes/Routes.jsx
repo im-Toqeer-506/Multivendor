@@ -16,6 +16,7 @@ import PaymentPage from "../pages/PaymentPage";
 import OrderSuccessPage from "../pages/OrderSuccessPage";
 import OrderDetailPage from "../pages/OrderDetailPage";
 import TrackOrderPage from "../pages/TrackOrderPage";
+import ShopAllRefundsPage from "../pages/Shop/ShopAllRefundsPage";
 
 export {
   LoginPage,
@@ -36,4 +37,5 @@ export {
   OrderSuccessPage,
   OrderDetailPage,
   TrackOrderPage,
+  ShopAllRefundsPage
 };

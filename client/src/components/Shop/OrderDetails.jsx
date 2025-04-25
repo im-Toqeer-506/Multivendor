@@ -14,6 +14,12 @@ const OrderDetails = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [status, setStatus] = useState("");
+  const { id } = useParams();
+  const data = orders && orders.find((item) => item._id === id);
+
+  useEffect(() => {
+    dispatch(getAllOrdersOfShop(seller._id));
+  }, [dispatch, seller._id]);
   const orderUpdateHandler = async () => {
     axios
       .put(
@@ -32,12 +38,24 @@ const OrderDetails = () => {
       });
   };
 
-  useEffect(() => {
-    dispatch(getAllOrdersOfShop(seller._id));
-  }, [dispatch, seller._id]);
-  const { id } = useParams();
-  const data = orders && orders.find((item) => item._id === id);
-
+  const refundOrderUpdateHandler = async (e) => {
+    axios
+      .put(
+        `${server}/order/order-refund-success/${id}`,
+        { status },
+        {
+          withCredentials: true,
+        }
+      )
+      .then((res) => {
+        toast.success("Order Updated Successfuly!");
+        dispatch(getAllOrdersOfShop(seller._id));
+        navigate("/dashboard-orders");
+      })
+      .catch((error) => {
+        toast.error(error.response.data.message);
+      });
+  };
   return (
     <div className={`py-4 min-h-screen  ${styles.section}`}>
       <div className="w-full flex items-center justify-between">
@@ -64,7 +82,6 @@ const OrderDetails = () => {
       {/* Order Items */}
       <br />
       <br />
-
       {data &&
         data.cart.map((item, index) => (
           <div key={index} className="w-full flex items-start mb-5">
@@ -81,7 +98,6 @@ const OrderDetails = () => {
             </div>
           </div>
         ))}
-
       <div className="border-t w-full text-right">
         <h5 className="pt-3 text-[18px]">
           Total Price: <strong>US${data?.totalPrice}</strong>
@@ -111,9 +127,10 @@ const OrderDetails = () => {
       </div>
       <br />
       <br />
+
       <h4 className="pt-3 text-[20px] font-[600]">Order Status:</h4>
-      {data?.status && (
-        <>
+      {data?.status !== "Processing refund" &&
+        data?.status !== "Refund Success" && (
           <select
             value={status}
             onChange={(e) => setStatus(e.target.value)}
@@ -128,32 +145,51 @@ const OrderDetails = () => {
               "Delivered",
             ]
               .slice(
-                Math.max(
-                  0,
-                  [
-                    "Processing",
-                    "Transferred to delivery partner",
-                    "Shipping",
-                    "Received",
-                    "On the way",
-                    "Delivered",
-                  ].indexOf(data.status)
-                )
+                [
+                  "Processing",
+                  "Transferred to delivery partner",
+                  "Shipping",
+                  "Received",
+                  "On the way",
+                  "Delivered",
+                ].indexOf(data?.status)
               )
-              .map((option) => (
+              .map((option, index) => (
                 <option key={option} value={option}>
                   {option}
                 </option>
               ))}
           </select>
-        </>
-      )}
+        )}
+
+      {data?.status === "Processing refund" ||
+      data?.status === "Refund Success" ? (
+        <select
+          value={status}
+          onChange={(e) => setStatus(e.target.value)}
+          className="w-[200px] mt-2 border h-[35px] rounded-[5px]"
+        >
+          {["Processing refund", "Refund Success"]
+            .slice(
+              ["Processing refund", "Refund Success"].indexOf(data?.status)
+            )
+            .map((option, index) => (
+              <option key={option} value={option}>
+                {option}
+              </option>
+            ))}
+        </select>
+      ) : null}
 
       <div
-        onClick={orderUpdateHandler}
+        onClick={
+          data?.status !== "Processing refund"
+            ? orderUpdateHandler
+            : refundOrderUpdateHandler
+        }
         className={`${styles.button} mt-5 !bg-[#FCE1E6] !rounded-[4px] text-[#E94560] font-[600] !h-[45px] text-[18px]`}
       >
-        United States
+        Update Status
       </div>
     </div>
   );

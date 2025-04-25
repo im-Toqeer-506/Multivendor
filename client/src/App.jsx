@@ -25,6 +25,7 @@ import {
   OrderSuccessPage,
   OrderDetailPage,
   TrackOrderPage,
+  ShopAllRefundsPage,
 } from "./routes/Routes.jsx";
 
 import ProtectedRoute from "./routes/ProtectedRoutes.jsx";
@@ -148,6 +149,14 @@ const App = () => {
             element={
               <SellerProtectedRoute>
                 <ShopDashboardPage />
+              </SellerProtectedRoute>
+            }
+          />
+          <Route
+            path="/dashboard-refunds"
+            element={
+              <SellerProtectedRoute>
+                <ShopAllRefundsPage />
               </SellerProtectedRoute>
             }
           />

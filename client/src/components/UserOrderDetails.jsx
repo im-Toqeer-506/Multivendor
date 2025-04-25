@@ -55,7 +55,7 @@ const UserOrderDetails = () => {
   const refundHandler = async () => {
     await axios
       .put(`${server}/order/order-refund/${id}`, {
-        status: "processing refund",
+        status: "Processing refund",
       })
       .then((res) => {
         toast.success(res.data.message);
@@ -97,7 +97,7 @@ const UserOrderDetails = () => {
                 US${item.discountPrice} x {item.qty}
               </h5>
             </div>
-            {item?.isReviewed || item.status!=='delivered' ? null : (
+            {!item.isReviewed && data?.status === "Delivered" ? null : (
               <div
                 className={`${styles.button} text-[#fff]`}
                 onClick={() => {
@@ -219,17 +219,17 @@ const UserOrderDetails = () => {
             Status:{" "}
             {data?.paymentInfo?.status ? data?.paymentInfo?.status : "Not Paid"}
           </h4>
+          {data?.status === "Delivered" && (
+            <div
+              onClick={refundHandler}
+              className={`${styles.button}
+           text-white`}
+            >
+              Give A Refund
+            </div>
+          )}
         </div>
         <br />
-        {data?.status === "Delivered" && (
-          <div
-            onClick={refundHandler}
-            className={`${styles.button}
-           text-white`}
-          >
-            Give A Refund
-          </div>
-        )}
       </div>
       <br />
       <Link to="/">

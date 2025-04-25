@@ -269,6 +269,8 @@ const AllRefundOrders = () => {
   useEffect(() => {
     dispatch(getAllOrdersOfUser(user._id));
   }, []);
+  const eligibleOrders =
+    orders && orders.filter((item) => item?.status === "Processing refund");
   const columns = [
     { field: "id", headerName: "Order ID", minWidth: 150, flex: 0.7 },
 
@@ -317,12 +319,11 @@ const AllRefundOrders = () => {
       },
     },
   ];
-  const eligibleOrder =
-    orders && orders.filter((item) => item.status === "processing refund");
+
   const row = [];
 
-  eligibleOrder &&
-    eligibleOrder.forEach((item) => {
+  eligibleOrders &&
+    eligibleOrders.forEach((item) => {
       row.push({
         id: item._id,
         itemsQty: item.cart.length,

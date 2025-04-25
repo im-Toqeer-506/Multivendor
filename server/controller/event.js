@@ -15,7 +15,7 @@ router.post(
       const shopId = req.body.shopId;
       const shop = await Shop.findById(shopId);
       if (!shop) {
-        return next(ErrorHandler("Shop Dose`nt Exist!", 404));
+        return next(new ErrorHandler("Shop Dose`nt Exist!", 404));
       } else {
         const files = req.files;
         const imgUrls = files.map((file) => `${file.filename}`);
@@ -29,7 +29,7 @@ router.post(
         });
       }
     } catch (error) {
-      return next(ErrorHandler(error, 400));
+      return next(new ErrorHandler(error, 400));
     }
   })
 );
@@ -93,7 +93,7 @@ router.get(
     });
     
    } catch (error) {
-    return next(ErrorHandler(error, 400));
+    return next(new ErrorHandler(error, 400));
     
    }
    

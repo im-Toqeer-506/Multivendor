@@ -208,7 +208,9 @@ const ProductDetails = ({ data }) => {
                       <h3 className={`${styles.shop_name} pb-1 pt-1`}>
                         {data?.shop?.name}
                       </h3>
-                      <h5 className="pb-3 text-[15px]">({totalRatings}/5) Ratings</h5>
+                      <h5 className="pb-3 text-[15px]">
+                        ({totalRatings}/5) Ratings
+                      </h5>
                     </div>
                   </Link>
 
