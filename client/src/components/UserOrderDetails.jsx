@@ -14,15 +14,18 @@ const UserOrderDetails = () => {
   const { orders } = useSelector((state) => state.order);
   const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
-  const [status, setStatus] = useState("");
   const [rating, setRating] = useState(1);
   const [open, setOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const [comment, setComment] = useState("");
   const { id } = useParams();
+  const data = orders && orders.find((item) => item._id === id);
   useEffect(() => {
-    dispatch(getAllOrdersOfUser(user._id));
+    if (user && user._id) {
+      dispatch(getAllOrdersOfUser(user._id));
+    }
   }, [dispatch, user._id]);
+  
   const reviewHandler = async (e) => {
     e.preventDefault();
     await axios
@@ -32,7 +35,7 @@ const UserOrderDetails = () => {
           user,
           rating,
           comment,
-          productId: selectedItem._id,
+          productId: selectedItem?._id,
           orderId: id,
         },
         {
@@ -50,7 +53,6 @@ const UserOrderDetails = () => {
         toast.error(error);
       });
   };
-  const data = orders && orders.find((item) => item._id === id);
 
   const refundHandler = async () => {
     await axios

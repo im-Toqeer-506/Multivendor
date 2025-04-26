@@ -20,6 +20,12 @@ const OrderDetails = () => {
   useEffect(() => {
     dispatch(getAllOrdersOfShop(seller._id));
   }, [dispatch, seller._id]);
+  useEffect(() => {
+    if (data?.status);
+    {
+      setStatus(data.status);
+    }
+  }, [data?.status]);
   const orderUpdateHandler = async () => {
     axios
       .put(

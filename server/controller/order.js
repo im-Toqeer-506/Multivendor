@@ -97,9 +97,9 @@ router.put(
         return next(new ErrorHandler("Order Not Found", 400));
       }
       if (req.body.status === "Transferred to delivery partner") {
-        for (const o of order.cart) {
+        order.cart.forEach(async (o) => {
           await updateOrder(o._id, o.qty);
-        }
+        });
       }
       if (req.body.status === "Delivered") {
         order.deliveredAt = Date.now();
