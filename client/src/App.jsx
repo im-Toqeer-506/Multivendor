@@ -40,6 +40,7 @@ import {
   ShopAllCoupons,
   ShopAllOrders,
   ShopOrderDetails,
+  ShopSettingsPage,
 } from "./routes/ShopRoutes.js";
 import { ShopHomePage } from "./routes/ShopRoutes.jsx";
 import Store from "./redux/store.js";
@@ -141,6 +142,14 @@ const App = () => {
             element={
               <SellerProtectedRoute>
                 <ShopHomePage />
+              </SellerProtectedRoute>
+            }
+          />
+          <Route
+            path="/settings"
+            element={
+              <SellerProtectedRoute>
+                <ShopSettingsPage/>
               </SellerProtectedRoute>
             }
           />

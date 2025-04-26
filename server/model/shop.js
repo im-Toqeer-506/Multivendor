@@ -24,7 +24,7 @@ const shopSchema = new mongoose.Schema({
     trim: true,
     required: true,
   },
-  discription: {
+  description: {
     type: String,
   },
   address: [

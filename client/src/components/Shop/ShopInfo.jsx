@@ -33,7 +33,7 @@ const ShopInfo = ({ isOwner }) => {
     try {
       await axios.get(`${server}/shop/logout`, { withCredentials: true });
       toast.success("Logout successful");
-      window.location.reload(); 
+      window.location.reload();
     } catch (error) {
       toast.error("Failed to logout");
       console.log(error);
@@ -93,7 +93,7 @@ const ShopInfo = ({ isOwner }) => {
                 className={`${styles.button} !w-full bg-red-700 !h-[42px] !rounded-[5px]`}
                 onClick={logoutHandler}
               >
-              <span className="text-white">Log Out</span>
+                <span className="text-white">Log Out</span>
               </div>
             </div>
           )}

@@ -24,8 +24,7 @@ const DashBoardHero = () => {
   }, []);
 
   const totalEarningWithoutTax =
-    deliveredOrder &&
-    deliveredOrder.reduce((acc, item) => (acc + item.totalPrice, 0));
+  deliveredOrder?.reduce((acc, item) => acc + item.totalPrice, 0) || 0;
   const serviceCharge = totalEarningWithoutTax * 0.1;
   const availableBalance = totalEarningWithoutTax - serviceCharge.toFixed(2);
 

@@ -194,4 +194,56 @@ router.get(
     }
   })
 );
+//Update Shop Info
+router.put(
+  "/update-shop-avatar",
+  isSeller,
+  upload.single("image"),
+  catchAsyncError(async (req, res, next) => {
+    try {
+      const existSeller = await Shop.findById(req.seller._id);
+      const existsAvatarPath = `uploads/${existSeller.avatar}`;
+      fs.unlinkSync(existsAvatarPath);
+      const fileUrl = path.join(req.file.filename);
+      const seller = await Shop.findByIdAndUpdate(req.seller.id, {
+        avatar: fileUrl,
+      });
+
+      res.status(200).json({
+        success: true,
+        seller,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+//Update Seller Info
+router.put(
+  "/update-seller-info",
+  isSeller,
+  catchAsyncError(async (req, res, next) => {
+    try {
+      const { name, description, address, phoneNumber, zipCode } = req.body;
+      const seller = await Shop.findOne(req.seller._id);
+
+      if (!seller) {
+        return next(new ErrorHandler("Seller not found!", 400));
+      }
+
+      seller.name = name;
+      seller.description = description;
+      seller.address = address;
+      seller.phoneNumber = phoneNumber;
+      seller.zipCode = zipCode;
+      await seller.save();
+      res.status(201).json({
+        success: true,
+        seller,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
 module.exports = router;
