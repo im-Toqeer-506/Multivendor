@@ -8,6 +8,7 @@ import { getAllProductsShop } from "../../redux/actions/product";
 import { getAllEventsShop } from "../../redux/actions/event";
 import { backend_url } from "../../server";
 import Ratings from "../Products/Ratings";
+import { all } from "axios";
 const ShopProfileData = ({ isOwner }) => {
   const { products } = useSelector((state) => state.products);
   const { events } = useSelector((state) => state.events);
@@ -20,6 +21,8 @@ const ShopProfileData = ({ isOwner }) => {
   }, [dispatch, id]);
   const allReviews =
     products && products.map((product) => product.reviews).flat();
+  console.log(allReviews);
+
   const [active, setActive] = useState(1);
   return (
     <div className="w-full">
@@ -111,7 +114,9 @@ const ShopProfileData = ({ isOwner }) => {
                     <Ratings rating={item?.rating} />
                   </div>
                   <p className="font-[400] text-[#000000a7]">{item?.comment}</p>
-                  <p className="text-[#000000a7] text-[14px]">{"2days ago"}</p>
+                  <p className="text-[#000000a7] text-[14px]">
+                    {item.createdAt}
+                  </p>
                 </div>
               </div>
             ))}

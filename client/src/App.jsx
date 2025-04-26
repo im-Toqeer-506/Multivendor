@@ -41,6 +41,8 @@ import {
   ShopAllOrders,
   ShopOrderDetails,
   ShopSettingsPage,
+  ShopWithDrawMoneyPage,
+  ShopInboxPage,
 } from "./routes/ShopRoutes.js";
 import { ShopHomePage } from "./routes/ShopRoutes.jsx";
 import Store from "./redux/store.js";
@@ -149,7 +151,7 @@ const App = () => {
             path="/settings"
             element={
               <SellerProtectedRoute>
-                <ShopSettingsPage/>
+                <ShopSettingsPage />
               </SellerProtectedRoute>
             }
           />
@@ -226,12 +228,29 @@ const App = () => {
               </SellerProtectedRoute>
             }
           />
+          {/* Withdraw Money */}
+          <Route
+            path="//dashboard-withdraw-money"
+            element={
+              <SellerProtectedRoute>
+                <ShopWithDrawMoneyPage />
+              </SellerProtectedRoute>
+            }
+          />
           {/* Adding the CheckOut Page */}
           <Route
             path="/checkout"
             element={
               <ProtectedRoute>
                 <CheckOutPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/dashboard-messages"
+            element={
+              <ProtectedRoute>
+                <ShopInboxPage />
               </ProtectedRoute>
             }
           />
