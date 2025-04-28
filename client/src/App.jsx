@@ -26,6 +26,7 @@ import {
   OrderDetailPage,
   TrackOrderPage,
   ShopAllRefundsPage,
+  UserInboxPage,
 } from "./routes/Routes.jsx";
 
 import ProtectedRoute from "./routes/ProtectedRoutes.jsx";
@@ -114,6 +115,14 @@ const App = () => {
             element={
               <ProtectedRoute>
                 <ProfilePage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/inbox"
+            element={
+              <ProtectedRoute>
+                <UserInboxPage />
               </ProtectedRoute>
             }
           />

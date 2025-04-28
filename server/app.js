@@ -29,6 +29,8 @@ const event = require("./controller/event");
 const coupon = require("./controller/copunCode");
 const payment = require("./controller/payment");
 const order = require("./controller/order");
+const converation = require("./controller/conversation");
+const message = require("./controller/messages");
 //Mount Routes
 app.use("/api/v2/user", user);
 app.use("/api/v2/shop", shop);
@@ -37,6 +39,8 @@ app.use("/api/v2/event", event);
 app.use("/api/v2/coupon", coupon);
 app.use("/api/v2/payment", payment);
 app.use("/api/v2/order", order);
+app.use("/api/v2/conversation", converation);
+app.use("/api/v2/message", message);
 //Error Handling Middleware
 app.use(ErrorHandler);
 module.exports = app;

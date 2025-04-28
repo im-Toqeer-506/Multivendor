@@ -106,7 +106,7 @@ const Header = ({ activeHeading }) => {
           </div>
           {/* Styling for seller button */}
           <div className={`${styles.button}`}>
-            <Link to="/shop-create">
+            <Link to={`${isSeller ? "/dashboard" : "/shop-create"}`}>
               <h1 className="text-white flex items-center">
                 {isSeller ? "DASHBOARD" : "BECOME A SELLER"}
                 <IoIosArrowForward className="ml-1" />

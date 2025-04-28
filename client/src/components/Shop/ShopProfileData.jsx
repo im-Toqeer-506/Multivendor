@@ -8,7 +8,7 @@ import { getAllProductsShop } from "../../redux/actions/product";
 import { getAllEventsShop } from "../../redux/actions/event";
 import { backend_url } from "../../server";
 import Ratings from "../Products/Ratings";
-import { all } from "axios";
+
 const ShopProfileData = ({ isOwner }) => {
   const { products } = useSelector((state) => state.products);
   const { events } = useSelector((state) => state.events);
@@ -21,7 +21,6 @@ const ShopProfileData = ({ isOwner }) => {
   }, [dispatch, id]);
   const allReviews =
     products && products.map((product) => product.reviews).flat();
-  console.log(allReviews);
 
   const [active, setActive] = useState(1);
   return (
