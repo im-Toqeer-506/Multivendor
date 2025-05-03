@@ -25,7 +25,7 @@ const UserOrderDetails = () => {
       dispatch(getAllOrdersOfUser(user._id));
     }
   }, [dispatch, user._id]);
-  
+
   const reviewHandler = async (e) => {
     e.preventDefault();
     await axios
@@ -99,7 +99,7 @@ const UserOrderDetails = () => {
                 US${item.discountPrice} x {item.qty}
               </h5>
             </div>
-            {!item.isReviewed && data?.status === "Delivered" ? null : (
+            {!item.isReviewed && item?.status !== "Delivered" ? null : (
               <div
                 className={`${styles.button} text-[#fff]`}
                 onClick={() => {

@@ -35,7 +35,7 @@ const Wishlist = ({ setOpenWishlist }) => {
             />
           </div>
           {/* Items Length */}
-          <div className={`${styles.noramlFlex} p-4`}>
+          <div className={`800px:${styles.noramlFlex} p-4`}>
             <AiOutlineHeart size={25} />
             <h5 className="pl-2 text-[20px] font-[500]">
               {wishlist && wishlist.length} items
@@ -65,10 +65,10 @@ const CartSingle = ({ item, removeFromWishlistHandler, addToCartHandler }) => {
   const totalPrice = item.discountPrice * value;
   return (
     <div className="border-b p-4 ">
-      <div className="w-full flex  items-center">
+      <div className="w-full 800px:flex  items-center">
         <RxCross1
           onClick={() => removeFromWishlistHandler(item)}
-          className="cursor-pointer"
+          className="cursor-pointer 800px:mb-['unset']  800px:ml-['unset'] mb-2 ml-2"
         />
         {/* Product Image */}
         <img
@@ -79,7 +79,7 @@ const CartSingle = ({ item, removeFromWishlistHandler, addToCartHandler }) => {
 
         <div className="pl-[5px]">
           <h1>{item.name}</h1>
-          <h4 className="font-[600] text-[17px] pt-[13px] text-[red] font-Roboto">
+          <h4 className="font-[600] text-[17px] 800px:pt-[3px]  text-[red] font-Roboto">
             US$ {totalPrice}
           </h4>
         </div>

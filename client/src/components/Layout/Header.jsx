@@ -234,7 +234,7 @@ const Header = ({ activeHeading }) => {
           <div>
             <div
               className="relative mr-[20px] cursor-pointer"
-              onClick={() => setOpenCart(!openCart)}
+              onClick={() => setOpenCart(true)}
             >
               <AiOutlineShoppingCart size={30} />
               <span className="absolute  right-0 top-0 rounded-full bg-[#3bc177] w-4 h-4  p-0 m-0 text-white font-monospace text-center  font-[12px] leading-tight ">
@@ -242,6 +242,10 @@ const Header = ({ activeHeading }) => {
               </span>
             </div>
           </div>
+          {/* OpenCart  Fixed Positend PopUp*/}
+          {openCart ? <Cart setOpenCart={setOpenCart} /> : null}
+          {/* Wishlist  Fixed Positend PopUp*/}
+          {openWishlist ? <Wishlist setOpenWishlist={setOpenWishlist} /> : null}
         </div>
         {/* sidebar menu */}
         {open && (
@@ -253,7 +257,7 @@ const Header = ({ activeHeading }) => {
                 <div>
                   <div
                     className="relative mr-[15px] cursor-pointer"
-                    oncclik={() => setOpenWishlist(!openWishlist)}
+                    onClick={() => setOpenWishlist(true) || setOpen(false)}
                   >
                     <AiOutlineHeart size={30} className="mt-5 ml-3" />
                     <span className="absolute   right-0 top-0 rounded-full bg-[#3bc177] w-4 h-4 top right p-0 m-0 text-white font-mono text-[12px]  leading-tight text-center">
