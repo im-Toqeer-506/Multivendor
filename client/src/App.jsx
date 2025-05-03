@@ -45,6 +45,15 @@ import {
   ShopWithDrawMoneyPage,
   ShopInboxPage,
 } from "./routes/ShopRoutes.js";
+import {
+  AdminDashboardPage,
+  AdminDashboardUsersPage,
+  AdminDashboardSellerPage,
+  AdminDashboardOrdersPage,
+  AdminDashboardProductsPage,
+  AdminDashboardEventsPage,
+  AdminDashboardWithdrawPage,
+} from "./routes/AdminRoutes.js";
 import { ShopHomePage } from "./routes/ShopRoutes.jsx";
 import Store from "./redux/store.js";
 import { getUser } from "./redux/actions/user";
@@ -54,6 +63,7 @@ import { getAllProducts } from "./redux/actions/product.js";
 import { getAllEvents } from "./redux/actions/event.js";
 import axios from "axios";
 import { server } from "./server.js";
+import ProtectedAdminRoute from "./routes/ProtectedAdminRoute.jsx";
 const App = () => {
   const [stripeApiKey, setStripeApiKey] = useState("");
   async function getStripeApikey() {
@@ -90,20 +100,15 @@ const App = () => {
             </Routes>
           </Elements>
         )}
-        {/* Order SuccessPage */}
 
         <Routes>
-          {/* Mounting Local Routes*/}
+          {/* Mounting User Routes Routes*/}
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route
             path="/activation/:activation_token"
             element={<ActivationPage />}
-          />
-          <Route
-            path="seller/activation/:activation_token"
-            element={<SellerActivationPage />}
           />
           <Route path="/products" element={<ProductsPage />} />
           <Route path="/product/:id" element={<ProductDetailsPage />} />
@@ -144,10 +149,24 @@ const App = () => {
               </ProtectedRoute>
             }
           />
-          <Route path="/shop/preview/:id" element={<ShopPreviewPage />} />
+          {/* User Supported Route */}
+          {/* Adding the CheckOut Page */}
+          <Route
+            path="/checkout"
+            element={
+              <ProtectedRoute>
+                <CheckOutPage />
+              </ProtectedRoute>
+            }
+          />
           {/* Mounting Shop Routes */}
           <Route path="/shop-create" element={<ShopCreatePage />} />
           <Route path="/shop-login" element={<ShopLoginPage />} />
+          <Route
+            path="seller/activation/:activation_token"
+            element={<SellerActivationPage />}
+          />
+          <Route path="/shop/preview/:id" element={<ShopPreviewPage />} />
           <Route
             path="/shop/:id"
             element={
@@ -239,22 +258,14 @@ const App = () => {
           />
           {/* Withdraw Money */}
           <Route
-            path="//dashboard-withdraw-money"
+            path="/dashboard-withdraw-money"
             element={
               <SellerProtectedRoute>
                 <ShopWithDrawMoneyPage />
               </SellerProtectedRoute>
             }
           />
-          {/* Adding the CheckOut Page */}
-          <Route
-            path="/checkout"
-            element={
-              <ProtectedRoute>
-                <CheckOutPage />
-              </ProtectedRoute>
-            }
-          />
+          {/* Seller DashBoard Messages */}
           <Route
             path="/dashboard-messages"
             element={
@@ -263,7 +274,65 @@ const App = () => {
               </ProtectedRoute>
             }
           />
+          {/* Order SuccessPage */}
           <Route path="/orders/success" element={<OrderSuccessPage />} />
+          {/* Admin Routes */}
+          <Route
+            path="/admin/dashboard"
+            element={
+              <ProtectedAdminRoute>
+                <AdminDashboardPage />
+              </ProtectedAdminRoute>
+            }
+          />
+          <Route
+            path="/admin-users"
+            element={
+              <ProtectedAdminRoute>
+                <AdminDashboardUsersPage />
+              </ProtectedAdminRoute>
+            }
+          />
+          <Route
+            path="/admin-sellers"
+            element={
+              <ProtectedAdminRoute>
+                <AdminDashboardSellerPage />
+              </ProtectedAdminRoute>
+            }
+          />
+          <Route
+            path="/admin-orders"
+            element={
+              <ProtectedAdminRoute>
+                <AdminDashboardOrdersPage />
+              </ProtectedAdminRoute>
+            }
+          />
+          <Route
+            path="/admin-products"
+            element={
+              <ProtectedAdminRoute>
+                <AdminDashboardProductsPage />
+              </ProtectedAdminRoute>
+            }
+          />
+          <Route
+            path="/admin-events"
+            element={
+              <ProtectedAdminRoute>
+                <AdminDashboardEventsPage />
+              </ProtectedAdminRoute>
+            }
+          />
+          <Route
+            path="/admin-withdraw-request"
+            element={
+              <ProtectedAdminRoute>
+                <AdminDashboardWithdrawPage />
+              </ProtectedAdminRoute>
+            }
+          />
         </Routes>
       </BrowserRouter>
       <ToastContainer

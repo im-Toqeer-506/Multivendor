@@ -7,6 +7,8 @@ const initialState = {
   user: null,
   addressloading: false,
   successMessage: null,
+  users: [],
+  Userloading: false,
 };
 //builder callback notation
 export const userReducer = createReducer(initialState, (builder) => {
@@ -36,7 +38,6 @@ export const userReducer = createReducer(initialState, (builder) => {
       state.loading = false;
       state.error = action.payload;
     })
-    
     // Update User Address
     .addCase("updateUserAddressRequest", (state) => {
       state.addressloading = true;
@@ -61,6 +62,18 @@ export const userReducer = createReducer(initialState, (builder) => {
     })
     .addCase("deleteUserAddressFailure", (state, action) => {
       state.addressloading = false;
+      state.error = action.payload;
+    })
+    //get all User --->ADMIN
+    .addCase("getAllUsersRequest", (state) => {
+      state.Userloading = true;
+    })
+    .addCase("getAllUsersSuccess", (state, action) => {
+      state.Userloading = false;
+      state.users = action.payload;
+    })
+    .addCase("getAllUsersFail", (state, action) => {
+      state.Userloading = false;
       state.error = action.payload;
     })
     //Clear Errors

@@ -31,6 +31,7 @@ const payment = require("./controller/payment");
 const order = require("./controller/order");
 const converation = require("./controller/conversation");
 const message = require("./controller/messages");
+const withdraw = require("./controller/withdraw");
 //Mount Routes
 app.use("/api/v2/user", user);
 app.use("/api/v2/shop", shop);
@@ -41,6 +42,7 @@ app.use("/api/v2/payment", payment);
 app.use("/api/v2/order", order);
 app.use("/api/v2/conversation", converation);
 app.use("/api/v2/message", message);
+app.use("/api/v2/withdraw", withdraw);
 //Error Handling Middleware
 app.use(ErrorHandler);
 module.exports = app;

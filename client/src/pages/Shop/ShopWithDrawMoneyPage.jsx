@@ -12,6 +12,7 @@ const ShopWithDrawMoneyPage = () => {
         </div>
         <WithDrawMoney />
       </div>
+      
     </div>
   );
 };

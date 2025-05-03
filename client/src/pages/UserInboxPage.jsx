@@ -23,6 +23,7 @@ const UserInboxPage = () => {
   const [userData, setUserData] = useState(null);
   const [onlineUsers, setOnlineUsers] = useState([]);
   const [activeStatus, setActiveStatus] = useState(false);
+  const [images, setImages] = useState({});
   const [open, setOpen] = useState(false);
   const scrollRef = useRef(null);
 
@@ -128,8 +129,58 @@ const UserInboxPage = () => {
     }
   };
 
+  const handleImageUpload = async (e) => {
+    // const reader = new FileReader();
+    // reader.onload = () => {
+    //   if (reader.readyState === 2) {
+    //     setImages(reader.result);
+    //     imageSendingHandler(reader.result);
+    //   }
+    // };
+    // reader.readAsDataURL(e.target.files[0]);
+    const file = e.target.files[0];
+    setImages(file);
+    imageSendingHandler(file);
+  };
+  const imageSendingHandler = async (e) => {
+    const formData = new FormData();
+    formData.append("images", e);
+    formData.append("user", user?._id);
+    formData.append("conversationId", currentChat?._id);
+
+    const receiverId = currentChat.members.find(
+      (member) => member !== user?._id
+    );
+
+    socketId.emit("sendMessage", {
+      senderId: user._id,
+      receiverId,
+      images: e,
+    });
+
+    try {
+      await axios
+        .post(`${server}/message/create-new-message`, formData)
+        .then((res) => {
+          setImages();
+          setMessages([...messages, res.data.message]);
+          updateLastMessageForImage();
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const updateLastMessageForImage = async () => {
+    await axios.put(
+      `${server}/conversation/update-last-message/${currentChat?._id}`,
+      {
+        lastMessage: "Photo",
+        lastMessageId: user?._id,
+      }
+    );
+  };
   useEffect(() => {
-    scrollRef.current?.scrollIntoView({ beahaviour: "smooth" });
+    scrollRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
   return (
@@ -171,6 +222,7 @@ const UserInboxPage = () => {
           userData={userData}
           activeStatus={activeStatus}
           scrollRef={scrollRef}
+          handleImageUpload={handleImageUpload}
         />
       )}
     </div>
@@ -300,8 +352,13 @@ const SellerInbox = ({
                   alt=""
                 />
               )}
-
-              {item.text !== "" && (
+              {item.images && (
+                <img
+                  src={`${backend_url}/${item.images}`}
+                  className="w-[300px] h-[300px] object-cover rounded-[10px] ml-2 mb-2"
+                />
+              )}
+              {item.text !== undefined && (
                 <div>
                   <div
                     className={`w-max p-2 rounded ${
@@ -310,7 +367,6 @@ const SellerInbox = ({
                   >
                     <p>{item.text}</p>
                   </div>
-
                   <p className="text-[12px] text-[#000000d3] pt-1">
                     {format(item.createdAt)}
                   </p>
@@ -326,7 +382,13 @@ const SellerInbox = ({
         onSubmit={sendMessageHandler}
       >
         <div className="w-[30px]">
-          <input type="file" name="" id="image" className="hidden" />
+          <input
+            type="file"
+            name=""
+            id="image"
+            className="hidden"
+            onChange={handleImageUpload}
+          />
           <label htmlFor="image">
             <TfiGallery className="cursor-pointer" size={20} />
           </label>

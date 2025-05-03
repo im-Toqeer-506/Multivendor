@@ -1,16 +1,22 @@
 import React from "react";
 import { AiOutlineLogin, AiOutlineMessage } from "react-icons/ai";
 import { RiLockPasswordFill } from "react-icons/ri";
-import { MdOutlineTrackChanges } from "react-icons/md";
+import {
+  MdOutlineAdminPanelSettings,
+  MdOutlineTrackChanges,
+} from "react-icons/md";
 import { server } from "../../server";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { TbAddressBook } from "react-icons/tb";
 import { HiOutlineReceiptRefund, HiOutlineShoppingBag } from "react-icons/hi";
 import { RxPerson } from "react-icons/rx";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const ProfileSideBar = ({ active, setActive }) => {
+  const { user } = useSelector((state) => state.user);
   const navigate = useNavigate();
   const logOutHandler = () => {
     axios
@@ -132,6 +138,29 @@ const ProfileSideBar = ({ active, setActive }) => {
           Address
         </span>
       </div>
+      {user && user.role === "Admin" && (
+        <Link to="/admin/dashboard">
+          <div
+            className="w-full flex cursor-pointer items-center mb-8 "
+            onClick={() => {
+              setActive(7);
+            }}
+          >
+            <MdOutlineAdminPanelSettings
+              size={20}
+              color={active === 8 ? "red" : ""}
+            />
+            <span
+              className={`pl-3 ${
+                active == 8 ? "text-[red]" : ""
+              } 800px:block  hidden `}
+            >
+              Admin DashBoard
+            </span>
+          </div>
+        </Link>
+      )}
+
       <div
         className="w-full flex cursor-pointer items-center mb-8 "
         onClick={() => {

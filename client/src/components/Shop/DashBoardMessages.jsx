@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { backend_url, server } from "../../server";
 import { useNavigate } from "react-router-dom";
@@ -12,6 +12,7 @@ const ENDPOINTS = "http://localhost:5000";
 const socketId = SocketIO(ENDPOINTS, { transports: ["websocket"] });
 const DashBoardMessages = () => {
   const [open, setOpen] = useState(false);
+  const [images, setImages] = useState({});
   const [conversation, setConversation] = useState([]);
   const { seller } = useSelector((state) => state.seller);
   const [arivalMessage, setArivalMessage] = useState(null);
@@ -21,6 +22,7 @@ const DashBoardMessages = () => {
   const [userData, setUserData] = useState(null);
   const [activestatus, setActiveStatus] = useState(false);
   const [onlineUsers, setOnlineUsers] = useState([]);
+  const scrollRef = useRef(null);
 
   useEffect(() => {
     socketId.on("getMessage", (data) => {
@@ -69,7 +71,7 @@ const DashBoardMessages = () => {
   useEffect(() => {
     const getMessages = async () => {
       try {
-        if (currentChat._id) {
+        if (currentChat?._id) {
           const response = await axios.get(
             `${server}/message/get-all-messages/${currentChat?._id}`
           );
@@ -87,13 +89,16 @@ const DashBoardMessages = () => {
 
     return online ? true : false;
   };
+  useEffect(() => {
+    scrollRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
   const sendMessageHandler = async (e) => {
     e.preventDefault();
     const message = {
       sender: seller._id,
       text: newmessage,
-      conversationId: currentChat._id,
+      conversationId: currentChat?._id,
     };
     const reciverId = currentChat.members.find(
       (member) => member.id !== seller._id
@@ -137,6 +142,56 @@ const DashBoardMessages = () => {
         console.log(error);
       });
   };
+  const handleImageUpload = async (e) => {
+    // const reader = new FileReader();
+    // reader.onload = () => {
+    //   if (reader.readyState === 2) {
+    //     setImages(reader.result);
+    //     imageSendingHandler(reader.result);
+    //   }
+    // };
+    // reader.readAsDataURL(e.target.files[0]);
+    const file = e.target.files[0];
+    setImages(file);
+    imageSendingHandler(file);
+  };
+  const imageSendingHandler = async (e) => {
+    const formData = new FormData();
+    formData.append("images", e);
+    formData.append("sender", seller._id);
+    formData.append("conversationId", currentChat?._id);
+
+    const receiverId = currentChat.members.find(
+      (member) => member !== seller._id
+    );
+
+    socketId.emit("sendMessage", {
+      senderId: seller._id,
+      receiverId,
+      images: e,
+    });
+
+    try {
+      await axios
+        .post(`${server}/message/create-new-message`, formData)
+        .then((res) => {
+          setImages();
+          setMessages([...messages, res.data.message]);
+          updateLastMessageForImage();
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const updateLastMessageForImage = async () => {
+    await axios.put(
+      `${server}/conversation/update-last-message/${currentChat?._id}`,
+      {
+        lastMessage: "Photo",
+        lastMessageId: seller?._id,
+      }
+    );
+  };
   return (
     <div className="w-full bg-white m-5 h-[85vh] overflow-y-scroll rounded ">
       {!open && (
@@ -166,9 +221,11 @@ const DashBoardMessages = () => {
           sellerId={seller._id}
           newmessage={newmessage}
           setNewMessage={setNewMessage}
+          scrollRef={scrollRef}
           sendMessageHandler={sendMessageHandler}
           userData={userData}
           activestatus={activestatus}
+          handleImageUpload={handleImageUpload}
         />
       )}
     </div>
@@ -255,9 +312,14 @@ const SellerInbox = ({
   sendMessageHandler,
   userData,
   activestatus,
+  handleImageUpload,
+  scrollRef,
 }) => {
   return (
-    <div className="w-full min-h-screen flex flex-col justify-between">
+    <div
+      className="w-full min-h-screen flex flex-col justify-between"
+      ref={scrollRef}
+    >
       {/* Message Header */}
       <div className="w-full flex items-center justify-between p-3 bg-slate-200">
         <div className="flex">
@@ -280,31 +342,46 @@ const SellerInbox = ({
       {/* Messages Map */}
       <div className="px-3 h-[65vh] py-3 overflow-y-scroll">
         {messages &&
-          messages.map((item, index) => (
-            <div
-              key={index}
-              className={`w-full flex my-2 ${
-                item.sender === sellerId ? "justify-end" : "justify-start"
-              }`}
-            >
-             
-              {item.sender !== sellerId && (
-                <img
-                  src={`${backend_url}/${userData?.avatar}`}
-                  alt="sender-image"
-                  className="w-[40px] h-[40px] rounded-full mr-3"
-                />
-              )}
-              <div>
-                <div className="bg-[#38c776] text-[#fff] p-2 rounded h-min w-max">
-                  <p>{item?.text}</p>
-                </div>
-                <p className="text-[12px] text-[#000000d3] pt-1">
-                  {format(item.createdAt)}
-                </p>
+          messages.map((item, index) => {
+            return (
+              <div
+                key={index}
+                className={`w-full flex my-2 ${
+                  item.sender === sellerId ? "justify-end" : "justify-start"
+                }`}
+              >
+                {item.sender !== sellerId && (
+                  <img
+                    src={`${backend_url}/${userData?.avatar}`}
+                    alt="sender-image"
+                    className="w-[40px] h-[40px] rounded-full mr-3"
+                  />
+                )}
+                {item.images && (
+                  <img
+                    src={`${backend_url}/${item.images}`}
+                    className="w-[300px] h-[300px] object-cover rounded-[10px] mr-2"
+                  />
+                )}
+
+                {item.text?.trim()  && (
+                  <div>
+                    <div
+                      className={`w-max p-2 rounded ${
+                        item.sender === sellerId ? "bg-[#000]" : "bg-[#38c776]"
+                      } text-[#fff] h-min`}
+                    >
+                      <p>{item?.text}</p>
+                    </div>
+
+                    <p className="text-[12px] text-[#000000d3] pt-1">
+                      {format(item.createdAt)}
+                    </p>
+                  </div>
+                )}
               </div>
-            </div>
-          ))}
+            );
+          })}
       </div>
 
       {/* All the Messages */}
@@ -316,7 +393,16 @@ const SellerInbox = ({
         onSubmit={sendMessageHandler}
       >
         <div className="w-[3%]">
-          <TfiGallery size={20} className="cursor-pointer" />
+          <input
+            type="file"
+            name=""
+            id="image"
+            className="hidden"
+            onChange={handleImageUpload}
+          />
+          <label htmlFor="image">
+            <TfiGallery size={20} className="cursor-pointer" />
+          </label>
         </div>
         <div className="w-[97%]">
           <input

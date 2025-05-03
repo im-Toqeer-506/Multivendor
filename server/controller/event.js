@@ -6,7 +6,7 @@ const { upload } = require("../multer");
 const Shop = require("../model/shop");
 const Event = require("../model/event");
 const fs = require("fs");
-const { isSeller } = require("../middleware/auth");
+const { isSeller, isAthuenticated, isAdmin } = require("../middleware/auth");
 router.post(
   "/create-event",
   upload.array("images"),
@@ -71,7 +71,6 @@ router.delete(
       if (!event) {
         return next(new ErrorHandler("Event not found with this id!", 500));
       }
-
       res.status(201).json({
         success: true,
         message: "Event Deleted successfully!",
@@ -85,18 +84,34 @@ router.delete(
 router.get(
   "/get-all-events",
   catchAsyncError(async (req, res, next) => {
-   try {
-    const events = await Event.find();
-    res.status(201).json({
-      success: true,
-      events,
-    });
-    
-   } catch (error) {
-    return next(new ErrorHandler(error, 400));
-    
-   }
-   
+    try {
+      const events = await Event.find();
+      res.status(201).json({
+        success: true,
+        events,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error, 400));
+    }
+  })
+);
+//get all Events ---- (Admin)
+router.get(
+  "/admin-all-events",
+  isAthuenticated,
+  isAdmin("Admin"),
+  catchAsyncError(async (req, res, next) => {
+    try {
+      const events = await Event.find().sort({
+        createdAt: -1,
+      });
+      res.status(200).json({
+        success: true,
+        events,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
   })
 );
 module.exports = router;

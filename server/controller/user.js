@@ -8,7 +8,7 @@ const fs = require("fs");
 const jwt = require("jsonwebtoken");
 const sendToken = require("../utils/jwtToken");
 const sendMail = require("../utils/sendMail");
-const { isAthuenticated } = require("../middleware/auth");
+const { isAthuenticated, isAdmin } = require("../middleware/auth");
 const router = express.Router();
 //craete_user Route
 router.post("/create-user", upload.single("file"), async (req, res, next) => {
@@ -312,6 +312,49 @@ router.get(
       res.status(201).json({
         success: true,
         user,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
+//get all Users ----> (Admin)
+router.get(
+  "/admin-all-users",
+  isAthuenticated,
+  isAdmin("Admin"),
+  catchAsyncError(async (req, res, next) => {
+    try {
+      const users = await User.find().sort({
+        createdAt: -1,
+      });
+      res.status(200).json({
+        success: true,
+        users,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+//DeleteUser ---admin
+router.delete(
+  "/admin-delete-user/:id",
+  isAthuenticated,
+  isAdmin("Admin"),
+  catchAsyncError(async (req, res, next) => {
+    try {
+      const user = await User.findById(req.params.id);
+      if (!user) {
+        return next(
+          new ErrorHandler(`User is not available with this ${id}!`, 400)
+        );
+      }
+      await User.findByIdAndDelete(req.params.id);
+      res.status(200).json({
+        success: true,
+        message: "User Deleted Successfully!",
       });
     } catch (error) {
       return next(new ErrorHandler(error.message, 500));
