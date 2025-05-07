@@ -81,7 +81,7 @@ const ProductCardDetails = ({ setOpen, data }) => {
               <div className="w-full 800px:w-[50%]">
                 {data.images && data.images[0] && (
                   <img
-                    src={`${backend_url}/${data.images[0]}`}
+                    src={`${data.images && data.images[0]?.url}`}
                     alt=""
                     className="w-full h-auto object-cover"
                   />
@@ -90,7 +90,7 @@ const ProductCardDetails = ({ setOpen, data }) => {
                 <div className="flex ">
                   {data.shop && data.shop.avatar && (
                     <img
-                      src={`${backend_url}/${data.shop.avatar}`}
+                      src={`${data?.shop?.avatar?.url}`}
                       alt=""
                       className="w-[50px] h-[50px] rounded-full mr-2"
                     />

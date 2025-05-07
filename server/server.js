@@ -1,5 +1,6 @@
 const app = require("./app");
 const dbConnection = require("./db/Database");
+const cloudinary=require('cloudinary')
 //Handling uncaugth Exception
 process.on("uncaughtException", (error) => {
   console.log(`Error: ${error.message}`);
@@ -14,6 +15,12 @@ if (process.env.NODE_ENV !== "PRODUCTION") {
 }
 //connection to database
 dbConnection();
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
+})
+
 
 const server = app.listen(process.env.PORT, () => {
   console.log(

@@ -130,7 +130,7 @@ const CartSingle = ({ item, qtyChangeHandler, removeFromCartHandler }) => {
         {/* Product Image */}
         <img
           className="w-[130px] h-min ml-2 mr-2 rounded-[5px] "
-          src={`${backend_url}/${item.images[0]}`}
+          src={`${data.images[0]?.url}`}
           alt="Static Product"
         />
         <div className="pl-[5px]">

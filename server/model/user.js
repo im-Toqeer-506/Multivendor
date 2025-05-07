@@ -24,7 +24,7 @@ const userSchema = new mongoose.Schema({
     type: Number,
     trim: true,
   },
-  
+
   addresses: [
     {
       country: { type: String },
@@ -40,8 +40,14 @@ const userSchema = new mongoose.Schema({
     default: "user",
   },
   avatar: {
-    type: String,
-    required: true,
+    public_id: {
+      type: String,
+      required: true,
+    },
+    url: {
+      type: String,
+      required: true,
+    },
   },
   createdAt: {
     type: Date,

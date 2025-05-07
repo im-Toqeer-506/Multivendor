@@ -141,7 +141,7 @@ const ProductDetails = ({ data }) => {
                         } cursor-pointer`}
                       >
                         <img
-                          src={`${backend_url}/${i}`}
+                              src={`${i?.url}`}
                           alt=""
                           className="h-[200px] overflow-hidden mr-3 mt-3"
                           onClick={() => setSelect(index)}
@@ -220,7 +220,7 @@ const ProductDetails = ({ data }) => {
                   <Link to={`/shop/preview/${data.shop?._id}`}>
                     <img
                       className="w-[50px] h-[50px] rounded-full  mr-2"
-                      src={`${backend_url}/${data?.shop?.avatar}`}
+                      src={`${data?.shop?.avatar?.url}`}
                       alt=""
                     />
                     {/* rating icons */}
@@ -323,7 +323,7 @@ const ProductsDetailsInfo = ({
             data.reviews.map((item, index) => (
               <div className="w-full flex my-2" key={index}>
                 <img
-                  src={`${backend_url}/${item.user?.avatar}`}
+                  src={`${item.user.avatar?.url}`}
                   alt=""
                   className="w-[50px] h-[50px] rounded-full"
                 />
@@ -348,7 +348,7 @@ const ProductsDetailsInfo = ({
             <Link to={`/shop/preview/${data?.shop?._id}`}>
               <div className="flex items-center">
                 <img
-                  src={`${backend_url}/${data?.shop?.avatar}`}
+                  src={`${data?.shop?.avatar?.url}`}
                   alt=""
                   className="w-[50px] h-[50px] rounded-full mr-2"
                 />

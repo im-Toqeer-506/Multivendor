@@ -143,28 +143,19 @@ const DashBoardMessages = () => {
       });
   };
   const handleImageUpload = async (e) => {
-    // const reader = new FileReader();
-    // reader.onload = () => {
-    //   if (reader.readyState === 2) {
-    //     setImages(reader.result);
-    //     imageSendingHandler(reader.result);
-    //   }
-    // };
-    // reader.readAsDataURL(e.target.files[0]);
-    const file = e.target.files[0];
-    setImages(file);
-    imageSendingHandler(file);
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (reader.readyState === 2) {
+        setImages(reader.result);
+        imageSendingHandler(reader.result);
+      }
+    };
+    reader.readAsDataURL(e.target.files[0]);
   };
   const imageSendingHandler = async (e) => {
-    const formData = new FormData();
-    formData.append("images", e);
-    formData.append("sender", seller._id);
-    formData.append("conversationId", currentChat?._id);
-
     const receiverId = currentChat.members.find(
       (member) => member !== seller._id
     );
-
     socketId.emit("sendMessage", {
       senderId: seller._id,
       receiverId,
@@ -173,8 +164,13 @@ const DashBoardMessages = () => {
 
     try {
       await axios
-        .post(`${server}/message/create-new-message`, formData)
+        .post(`${server}/message/create-new-message`, {
+          sender: seller._id,
+          conversationId: currentChat._id,
+          images: imageData,
+        })
         .then((res) => {
+          setLoading(false);
           setImages();
           setMessages([...messages, res.data.message]);
           updateLastMessageForImage();
@@ -281,7 +277,7 @@ const MessageList = ({
       <div className="relative">
         <img
           className="w-[50px] h-[50px] rounded-full "
-          src={`${backend_url}/${user?.avatar}`}
+          src={`${user?.avatar?.url}`}
         />
         {online ? (
           <div className="w-[12px] h-[12px] bg-green-400 rounded-full absolute top-[2px] right-[2px]"></div>
@@ -326,7 +322,7 @@ const SellerInbox = ({
           <img
             alt="User Avatar"
             className="w-[60px] h-[60px] rounded-full"
-            src={`${backend_url}/${userData?.avatar}`}
+            src={`${userData?.avatar?.url}`}
           />
           <div className="pl-3">
             <h1 className="text-[18px] font-[600]">{userData?.name}</h1>
@@ -352,19 +348,19 @@ const SellerInbox = ({
               >
                 {item.sender !== sellerId && (
                   <img
-                    src={`${backend_url}/${userData?.avatar}`}
+                    src={`${userData?.avatar?.url}`}
                     alt="sender-image"
                     className="w-[40px] h-[40px] rounded-full mr-3"
                   />
                 )}
                 {item.images && (
                   <img
-                    src={`${backend_url}/${item.images}`}
+                    src={`${item.images?.url}`}
                     className="w-[300px] h-[300px] object-cover rounded-[10px] mr-2"
                   />
                 )}
 
-                {item.text?.trim()  && (
+                {item.text?.trim() && (
                   <div>
                     <div
                       className={`w-max p-2 rounded ${

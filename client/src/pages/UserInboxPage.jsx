@@ -14,7 +14,7 @@ import styles from "../styles/style";
 const socketId = socketIO(ENDPOINT, { transports: ["websocket"] });
 
 const UserInboxPage = () => {
-  const { user, loading } = useSelector((state) => state.user);
+  const { user } = useSelector((state) => state.user);
   const [conversations, setConversations] = useState([]);
   const [arrivalMessage, setArrivalMessage] = useState(null);
   const [currentChat, setCurrentChat] = useState();
@@ -25,6 +25,7 @@ const UserInboxPage = () => {
   const [activeStatus, setActiveStatus] = useState(false);
   const [images, setImages] = useState({});
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
   const scrollRef = useRef(null);
 
   useEffect(() => {
@@ -130,38 +131,36 @@ const UserInboxPage = () => {
   };
 
   const handleImageUpload = async (e) => {
-    // const reader = new FileReader();
-    // reader.onload = () => {
-    //   if (reader.readyState === 2) {
-    //     setImages(reader.result);
-    //     imageSendingHandler(reader.result);
-    //   }
-    // };
-    // reader.readAsDataURL(e.target.files[0]);
-    const file = e.target.files[0];
-    setImages(file);
-    imageSendingHandler(file);
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (reader.readyState === 2) {
+        setImages(reader.result);
+        imageSendingHandler(reader.result);
+      }
+    };
+    reader.readAsDataURL(e.target.files[0]);
   };
-  const imageSendingHandler = async (e) => {
-    const formData = new FormData();
-    formData.append("images", e);
-    formData.append("user", user?._id);
-    formData.append("conversationId", currentChat?._id);
-
+  const imageSendingHandler = async (imageData) => {
     const receiverId = currentChat.members.find(
-      (member) => member !== user?._id
+      (member) => member !== user._id
     );
 
     socketId.emit("sendMessage", {
-      senderId: user._id,
+      senderId: user?._id,
       receiverId,
-      images: e,
+      images: imageData,
     });
 
     try {
+      setLoading(true);
       await axios
-        .post(`${server}/message/create-new-message`, formData)
+        .post(`${server}/message/create-new-message`, {
+          sender: user._id,
+          conversationId: currentChat._id,
+          images: imageData,
+        })
         .then((res) => {
+          setLoading(false);
           setImages();
           setMessages([...messages, res.data.message]);
           updateLastMessageForImage();
@@ -278,7 +277,7 @@ const MessageList = ({
     >
       <div className="relative">
         <img
-          src={`${backend_url}/${user?.avatar}`}
+          src={`${userData?.avatar?.url}`}
           alt=""
           className="w-[50px] h-[50px] rounded-full"
         />
@@ -319,7 +318,7 @@ const SellerInbox = ({
       <div className="w-full flex p-3 items-center justify-between bg-slate-200">
         <div className="flex">
           <img
-            src={`${backend_url}/${userData?.avatar}`}
+            src={`${userData?.avatar?.url}`}
             alt=""
             className="w-[60px] h-[60px] rounded-full"
           />
@@ -347,14 +346,14 @@ const SellerInbox = ({
             >
               {item.sender !== sellerId && (
                 <img
-                  src={`${backend_url}/${userData?.avatar}`}
+                  src={`${userData?.avatar?.url}`}
                   className="w-[40px] h-[40px] rounded-full mr-3"
                   alt=""
                 />
               )}
               {item.images && (
                 <img
-                  src={`${backend_url}/${item.images}`}
+                  src={`${item.images?.url}`}
                   className="w-[300px] h-[300px] object-cover rounded-[10px] ml-2 mb-2"
                 />
               )}

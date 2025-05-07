@@ -64,11 +64,7 @@ const ProductCard = ({ data, isEvent }) => {
           }`}
         >
           <img
-            src={
-              data && data.images && data.images.length > 0
-                ? `${backend_url}/${data.images[0]}`
-                : "defaultImage.jpg"
-            }
+            src={`${data.images && data.images[0]?.url}`}
             alt=""
             className="w-full h-[170px] object-cover rounded-t-lg"
           />

@@ -32,9 +32,17 @@ const CreateProduct = () => {
     }
   }, [dispatch, error, success]);
   const handleImageChange = (e) => {
-    e.preventDefault();
-    let files = Array.from(e.target.files);
-    setImages((prevImages) => [...prevImages, ...files]);
+    const files = Array.from(e.target.files);
+    setImages([]);
+    files.forEach((file) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        if (reader.readyState === 2) {
+          setImages((old) => [...old, reader.result]);
+        }
+      };
+      reader.readAsDataURL(file);
+    });
   };
   const HandleSubmit = (e) => {
     e.preventDefault();

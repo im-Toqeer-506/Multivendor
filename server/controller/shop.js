@@ -10,8 +10,9 @@ const { isSeller, isAthuenticated, isAdmin } = require("../middleware/auth");
 const ErrorHandler = require("../utils/ErrorHandler");
 const Shop = require("../model/shop");
 const catchAsyncError = require("../middleware/catchAsyncError");
+const cloudinary = require("cloudinary").v2;
 //craete Shop
-router.post("/create-shop", upload.single("file"), async (req, res, next) => {
+router.post("/create-shop", async (req, res, next) => {
   try {
     const { name, email, password, address, zipCode, phoneNumber } = req.body;
     if (!name || !email || !password) {
@@ -19,20 +20,11 @@ router.post("/create-shop", upload.single("file"), async (req, res, next) => {
     }
     const Selleremail = await Shop.findOne({ email });
     if (Selleremail) {
-      const filename = req.file.filename;
-      const filePath = `uploads/${filename}`;
-      fs.unlink(filePath, (err) => {
-        if (err) {
-          console.log(err);
-          res.status(500).json({
-            message: "Error Deleting Files",
-          });
-        }
-      });
       return next(new ErrorHandler("Seller is Already Exist!", 400));
     }
-    const file = req.file.filename;
-    const fileURL = path.join(file);
+    const myCloud = await cloudinary.uploader.upload(req.body.avatar, {
+      folder: "avatars",
+    });
     const seller = {
       name,
       email,
@@ -40,7 +32,10 @@ router.post("/create-shop", upload.single("file"), async (req, res, next) => {
       address,
       zipCode,
       phoneNumber,
-      avatar: fileURL,
+      avatar: {
+        public_id: myCloud.public_id,
+        url: myCloud.secure_url,
+      },
     };
     const activationToken = createActivationToken(seller);
     const activationUrl = `http://localhost:5173/seller/activation/${activationToken}`;
@@ -198,20 +193,25 @@ router.get(
 router.put(
   "/update-shop-avatar",
   isSeller,
-  upload.single("image"),
   catchAsyncError(async (req, res, next) => {
     try {
       const existSeller = await Shop.findById(req.seller._id);
-      const existsAvatarPath = `uploads/${existSeller.avatar}`;
-      fs.unlinkSync(existsAvatarPath);
-      const fileUrl = path.join(req.file.filename);
-      const seller = await Shop.findByIdAndUpdate(req.seller.id, {
-        avatar: fileUrl,
-      });
+      const imageId = existSeller.avatar.public_id;
+      await cloudinary.uploader.destroy(imageId);
 
+      const myCloud = await cloudinary.uploader.upload(req.body.avatar, {
+        folder: "avatars",
+        width: 150,
+      });
+      existSeller.avatar = {
+        public_id: myCloud.public_id,
+        url: myCloud.secure_url,
+      };
+
+      await existSeller.save();
       res.status(200).json({
         success: true,
-        seller,
+        seller: existSeller,
       });
     } catch (error) {
       return next(new ErrorHandler(error.message, 500));

@@ -46,8 +46,13 @@ const ShopCreate = () => {
   };
 
   const handleFileInputChange = (e) => {
-    const file = e.target.files[0];
-    setAvatar(file);
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (reader.readyState === 2) {
+        setAvatar(reader.result);
+      }
+    };
+    reader.readAsDataURL(e.target.files[0]);
   };
 
   return (
@@ -200,7 +205,7 @@ const ShopCreate = () => {
                   {/* Set the Avatar PreView */}
                   {avatar ? (
                     <img
-                      src={URL.createObjectURL(avatar)}
+                      src={avatar}
                       alt=""
                       className="h-full w-full object-cover rounded-full"
                     />

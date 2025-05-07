@@ -53,9 +53,17 @@ const CreateEvent = () => {
   }, [dispatch, error, success]);
   // Image Change Handler
   const handleImageChange = (e) => {
-    e.preventDefault();
     let files = Array.from(e.target.files);
-    setImages((prevImages) => [...prevImages, ...files]);
+    setImages([]);
+    files.forEach((file) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        if (reader.readyState === 2) {
+          setImages((old) => [...old, reader.result]);
+        }
+      };
+      reader.readAsDataURL(file);
+    });
   };
   // Form Submission Form
   const HandleSubmit = (e) => {
@@ -64,18 +72,20 @@ const CreateEvent = () => {
     images.forEach((image) => {
       newForm.append("images", image);
     });
-    newForm.append("name", name);
-    newForm.append("description", description);
-    newForm.append("category", category);
-    newForm.append("tags", tags);
-    newForm.append("originalPrice", originalPrice);
-    newForm.append("discountPrice", discountPrice);
-    newForm.append("shopId", seller._id);
-    newForm.append("stock", stock);
-    newForm.append("start_Date", startDate);
-    newForm.append("finish_Date", endDate);
-    dispatch(createEvent(newForm));
-    dispatch({ type: "clearSuccess" });
+    const data = {
+      name,
+      description,
+      category,
+      tags,
+      originalPrice,
+      discountPrice,
+      stock,
+      images,
+      shopId: seller._id,
+      start_date: startDate?.toISOString(),
+      finish_date: endDate?.toISOString(),
+    };
+    dispatch(createEvent(data));
   };
   return (
     <div className="w-[90%] 800px:w-[50%] bg-white  shadow h-[80vh] rounded-[4px] p-3 overflow-y-scroll">

@@ -6,10 +6,10 @@ const { upload } = require("../multer");
 const Shop = require("../model/shop");
 const Event = require("../model/event");
 const fs = require("fs");
+const cloudinary = require("cloudinary").v2;
 const { isSeller, isAthuenticated, isAdmin } = require("../middleware/auth");
 router.post(
   "/create-event",
-  upload.array("images"),
   catchAsyncError(async (req, res, next) => {
     try {
       const shopId = req.body.shopId;
@@ -17,12 +17,26 @@ router.post(
       if (!shop) {
         return next(new ErrorHandler("Shop Dose`nt Exist!", 404));
       } else {
-        const files = req.files;
-        const imgUrls = files.map((file) => `${file.filename}`);
-        const eventData = req.body;
-        eventData.images = imgUrls;
-        eventData.shop = shop;
-        const product = await Event.create(eventData);
+        let images = [];
+        if (typeof req.body.images === "string") {
+          images.push(req.body.images);
+        } else {
+          images = req.body.images;
+        }
+        const imagesLinks = [];
+        for (let i = 0; i < images.length; i++) {
+          const result = await cloudinary.uploader.upload(images[i], {
+            folder: "products",
+          });
+          imagesLinks.push({
+            public_id: result.public_id,
+            url: result.secure_url,
+          });
+        }
+        const productData = req.body;
+        productData.images = imagesLinks;
+        productData.shop = shop;
+        const product = await Event.create(productData);
         res.status(201).json({
           success: true,
           product,

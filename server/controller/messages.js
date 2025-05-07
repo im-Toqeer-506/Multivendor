@@ -5,27 +5,32 @@ const { upload } = require("../multer");
 const path = require("path");
 const ErrorHandler = require("../utils/ErrorHandler");
 const catchAsyncError = require("../middleware/catchAsyncError");
+const cloudinary = require("cloudinary").v2;
 //create new message
 router.post(
   "/create-new-message",
-  upload.single("images"),
   catchAsyncError(async (req, res, next) => {
     try {
-      const messageData = req.body;
-      if (req.file) {
-        const filename = req.file.filename;
-        const fileUrl = path.join(filename);
-        messageData.images = fileUrl;
+      const { sender, text, conversationId, images } = req.body;
+      let myCloud;
+
+      if (images) {
+        myCloud = await cloudinary.uploader.upload(images, {
+          folder: "messages",
+        });
       }
-      messageData.conversationId = req.body.conversationId;
-      messageData.sender = req.body.sender;
-      messageData.text = req.body.text;
       const message = new Messages({
-        conversationId: messageData.conversationId,
-        sender: messageData.sender,
-        text: messageData.text,
-        images: messageData.images ? messageData.images : undefined,
+        conversationId,
+        text: text ? text : undefined,
+        sender,
+        images: images
+          ? {
+              public_id: myCloud.public_id,
+              url: myCloud.secure_url,
+            }
+          : undefined,
       });
+
       await message.save();
       res.status(201).json({
         success: true,

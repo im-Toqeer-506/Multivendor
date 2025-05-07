@@ -10,44 +10,37 @@ const sendToken = require("../utils/jwtToken");
 const sendMail = require("../utils/sendMail");
 const { isAthuenticated, isAdmin } = require("../middleware/auth");
 const router = express.Router();
+const cloudinary = require("cloudinary").v2;
 //craete_user Route
-router.post("/create-user", upload.single("file"), async (req, res, next) => {
+router.post("/create-user", async (req, res, next) => {
   try {
-    const { name, email, password } = req.body;
-    //All fields are required
-    if (!name || !email || !password) {
-      return next(new ErrorHandler("All Fields Are Required!", 400));
+    const { name, email, password, avatar } = req.body;
+    console.log(req.body);
+    if (!name || !email || !password || !avatar) {
+      return next(new ErrorHandler("All fields are required", 400));
     }
-
     const userEmail = await User.findOne({ email });
-    // if the user Email already found in our DataBase
-    if (userEmail) {
-      //the file should also be deleted from server
-      const filename = req.file.filename;
-      const filePath = `uploads/${filename}`;
-      fs.unlink(filePath, (err) => {
-        if (err) {
-          console.log(err);
-          res.status(500).json({
-            message: "Error Deleting Files",
-          });
-        }
-      });
 
-      return next(new ErrorHandler("User Already Exist", 409));
+    if (userEmail) {
+      return next(new ErrorHandler("User already exists", 400));
     }
 
-    //if not then we will create a new User
+    const myCloud = await cloudinary.v2.uploader.upload(avatar, {
+      folder: "avatars",
+    });
 
-    const filename = req.file.filename;
-    const fileURL = path.join(filename);
     const user = {
-      name,
-      email,
-      password,
-      avatar: fileURL,
+      name: name,
+      email: email,
+      password: password,
+      avatar: {
+        public_id: myCloud.public_id,
+        url: myCloud.secure_url,
+      },
     };
+
     const activationToken = createActivationToken(user);
+
     const activationUrl = `http://localhost:5173/activation/${activationToken}`;
     try {
       await sendMail({
@@ -202,20 +195,29 @@ router.put(
 router.put(
   "/update-avatar",
   isAthuenticated,
-  upload.single("image"),
   catchAsyncError(async (req, res, next) => {
     try {
-      const existsUser = await User.findById(req.user.id);
-      const existsAvatarPath = `uploads/${existsUser.avatar}`;
-      fs.unlinkSync(existsAvatarPath);
-      const fileUrl = path.join(req.file.filename);
-      const user = await User.findByIdAndUpdate(req.body.id, {
-        avatar: fileUrl,
-      });
+      let existsUser = await User.findById(req.user.id);
+      if (req.body.avatar !== "") {
+        const imageId = existsUser.avatar.public_id;
+
+        await cloudinary.uploader.destroy(imageId);
+
+        const myCloud = await cloudinary.uploader.upload(req.body.avatar, {
+          folder: "avatars",
+          width: 150,
+        });
+        existsUser.avatar = {
+          public_id: myCloud.public_id,
+          url: myCloud.secure_url,
+        };
+      }
+
+      await existsUser.save();
 
       res.status(200).json({
         success: true,
-        user,
+        existsUser,
       });
     } catch (error) {
       return next(new ErrorHandler(error.message, 500));

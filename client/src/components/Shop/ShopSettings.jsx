@@ -18,24 +18,28 @@ const ShopSettings = () => {
   const [phoneNumber, setPhoneNumber] = useState(seller && seller.phoneNumber);
   const [zipCode, setZipcode] = useState(seller && seller.zipCode);
   const handleImage = async (e) => {
-    e.preventDefault();
-    const file = e.target.files[0];
-    setAvatar(file);
-    const formData = new FormData();
-    formData.append("image", file);
-    formData.append("id", seller._id);
-    try {
-      await axios.put(`${server}/shop/update-shop-avatar`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-        withCredentials: true,
-      });
-      dispatch(getSeller());
-      toast.success("Avatar Updated successfully!");
-    } catch (error) {
-      toast.error(error.response.data?.message);
-    }
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (reader.readyState === 2) {
+        setAvatar(reader.result);
+        axios
+          .put(
+            `${server}/shop/update-shop-avatar`,
+            { avatar: reader.result },
+            {
+              withCredentials: true,
+            }
+          )
+          .then((res) => {
+            dispatch(loadSeller());
+            toast.success("Avatar updated successfully!");
+          })
+          .catch((error) => {
+            toast.error(error.response.data.message);
+          });
+      }
+    };
+    reader.readAsDataURL(e.target.files[0]);
   };
   const updateHandler = async (e) => {
     e.preventDefault();
@@ -66,11 +70,7 @@ const ShopSettings = () => {
         <div className="w-full flex items-center justify-center">
           <div className="relative">
             <img
-              src={
-                avatar
-                  ? URL.createObjectURL(avatar)
-                  : `${backend_url}/${seller.avatar}`
-              }
+              src={avatar ? avatar : `${seller.avatar?.url}`}
               alt="Shop Avatar"
               className="w-[200px] h-[200px] rounded-full object-cover cursor-pointer"
             />

@@ -15,30 +15,38 @@ const SignUp = () => {
   const [avatar, setAvatar] = useState(null);
   //Handle the file Input Change
   const handleFileInputChange = (e) => {
-    const file = e.target.files[0];
-    setAvatar(file);
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (reader.readyState === 2) {
+        setAvatar(reader.result);
+      }
+    };
+    reader.readAsDataURL(e.target.files[0]);
   };
   // Handle form Submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const formData = new FormData();
-    formData.append("file", avatar);
-    formData.append("name", name);
-    formData.append("email", email);
-    formData.append("password", password);
-    const config = { headers: { "Content-Type": "multipart/form-data" } };
-    axios
-      .post(`${server}/user/create-user`, formData, config)
+    const config = {
+      headers: { "Content-Type": "multipart/form-data" },
+      withCredentials: true,
+    };
+
+    await axios
+      .post(
+        `${server}/user/create-user`,
+        { name, email, password, avatar },
+        config
+      )
       .then((res) => {
         toast.success(res.data.message);
         setName("");
         setEmail("");
         setPassword("");
-        setAvatar(null);
+        setAvatar();
         navigate("/login");
       })
       .catch((error) => {
-        toast.error(error.response.data.message);
+        toast.error(error.response?.data?.message);
       });
   };
 
@@ -134,11 +142,10 @@ const SignUp = () => {
               ></label>
               <div className="mt-2 flex items-center">
                 <span className="inline-block h-8 w-8 rounded-full overflow-hidden">
-                  {/* Set the Avatar PreView */}
                   {avatar ? (
                     <img
-                      src={URL.createObjectURL(avatar)}
-                      alt=""
+                      src={avatar}
+                      alt="avatar"
                       className="h-full w-full object-cover rounded-full"
                     />
                   ) : (

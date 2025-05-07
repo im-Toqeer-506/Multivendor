@@ -5,10 +5,7 @@ import styles from "../../styles/style";
 import { useState } from "react";
 import { AiOutlineHeart } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  removeFromWishList,
-  addToWishList,
-} from "../../redux/actions/wishlist";
+import { removeFromWishList } from "../../redux/actions/wishlist";
 import { backend_url } from "../../server";
 import { addToCart } from "../../redux/actions/cart";
 
@@ -73,7 +70,7 @@ const CartSingle = ({ item, removeFromWishlistHandler, addToCartHandler }) => {
         {/* Product Image */}
         <img
           className="w-[130px] h-min ml-2 mr-2 rounded-[5px] "
-          src={`${backend_url}/${item.images[0]}`}
+          src={`${item?.images[0]?.url}`}
           alt="Static Product"
         />
 
