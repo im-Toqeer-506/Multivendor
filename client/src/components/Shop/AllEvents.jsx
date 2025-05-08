@@ -10,13 +10,16 @@ const AllEvents = () => {
   const { events, isLoading } = useSelector((state) => state.events);
   const { seller } = useSelector((state) => state.seller);
   const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch(getAllEventsShop(seller._id));
-  }, [dispatch]);
+  }, []);
+
   const handleDelete = (id) => {
     dispatch(deleteEvent(id));
     window.location.reload();
   };
+
   const columns = [
     { field: "id", headerName: "Product Id", minWidth: 150, flex: 0.7 },
     {
@@ -83,7 +86,9 @@ const AllEvents = () => {
       },
     },
   ];
+
   const row = [];
+  
   events &&
     events.forEach((item) => {
       row.push({
@@ -99,7 +104,7 @@ const AllEvents = () => {
       {isLoading ? (
         <Loader />
       ) : (
-        <div className="w-full mx-8 pt-1 mt-10 bg-white">
+        <div className="w-full ">
           <DataGrid
             rows={row}
             columns={columns}

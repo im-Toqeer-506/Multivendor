@@ -32,6 +32,7 @@ const Categories = () => {
               };
 
               return (
+                console.log(i),
                 <div
                   className="w-full h-[100px] flex items-center justify-between cursor-pointer overflow-hidden"
                   key={i.id}
@@ -39,7 +40,7 @@ const Categories = () => {
                 >
                   <h5 className="text-[18px] leading-[1.3]">{i.title}</h5>
                   <img
-                    src={i.image_Url}
+                    src={i.imageUrl}
                     className="w-[120px] object-cover"
                     alt="image"
                   />

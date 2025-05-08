@@ -26,17 +26,12 @@ const SignUp = () => {
   // Handle form Submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const config = {
-      headers: { "Content-Type": "multipart/form-data" },
-      withCredentials: true,
-    };
+   
 
     await axios
       .post(
         `${server}/user/create-user`,
-        { name, email, password, avatar },
-        config
-      )
+        { name, email, password, avatar }  )
       .then((res) => {
         toast.success(res.data.message);
         setName("");

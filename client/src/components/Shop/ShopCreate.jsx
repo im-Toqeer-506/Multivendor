@@ -18,17 +18,17 @@ const ShopCreate = () => {
   const [visible, setVisible] = useState(false);
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const formData = new FormData();
-    formData.append("name", name);
-    formData.append("password", password);
-    formData.append("email", email);
-    formData.append("file", avatar);
-    formData.append("zipCode", zipCode);
-    formData.append("address", address);
-    formData.append("phoneNumber", phoneNumber);
-    const config = { headers: { "Content-Type": "multipart/form-data" } };
+
     axios
-      .post(`${server}/shop/create-shop`, formData, config)
+      .post(`${server}/shop/create-shop`, {
+        name,
+        email,
+        address,
+        zipCode,
+        phoneNumber,
+        password,
+        avatar,
+      })
       .then((res) => {
         toast.success(res.data.message);
         setName("");

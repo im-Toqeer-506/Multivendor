@@ -46,20 +46,19 @@ const CreateProduct = () => {
   };
   const HandleSubmit = (e) => {
     e.preventDefault();
-    const newForm = new FormData();
-    images.forEach((image) => {
-      newForm.append("images", image);
-    });
-    newForm.append("name", name);
-    newForm.append("description", description);
-    newForm.append("category", category);
-    newForm.append("tags", tags);
-    newForm.append("originalPrice", originalPrice);
-    newForm.append("discountPrice", discountPrice);
-    newForm.append("shopId", seller._id);
-    newForm.append("stock", stock);
-    dispatch(createProduct(newForm));
-    dispatch({ type: "clearSuccess" });
+    dispatch(
+      createProduct({
+        name,
+        description,
+        category,
+        tags,
+        originalPrice,
+        discountPrice,
+        stock,
+        shopId: seller._id,
+        images,
+      })
+    );
   };
   return (
     <div className="w-[90%] 800px:w-[50%] bg-white  shadow h-[80vh] rounded-[4px] p-3 overflow-y-scroll">

@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { categoriesData } from "../../static/data";
 import { AiOutlinePlusCircle } from "react-icons/ai";
 import { toast } from "react-toastify";
-import { createEvent } from "../../redux/actions/event";
+import { createEvent, getAllEventsShop } from "../../redux/actions/event";
 const CreateEvent = () => {
   const { success, error } = useSelector((state) => state.events);
   const { seller } = useSelector((state) => state.seller);
@@ -19,27 +19,32 @@ const CreateEvent = () => {
   const [discountPrice, setDiscountPrice] = useState();
   const [stock, setStock] = useState();
   const [startDate, setStartDate] = useState(null);
-  const [endDate, setendData] = useState(null);
-  //Handle End Date Change
-  const handleEndDateChange = (e) => {
-    const endDate = new Date(e.target.value);
-    setendData(endDate);
-  };
+  const [endDate, setendDate] = useState(null);
   // Start Date Change Handler
   const handleStartDateChange = (e) => {
     const startDate = new Date(e.target.value);
     const minEndDate = new Date(startDate.getTime() + 3 * 24 * 60 * 60 * 1000);
     setStartDate(startDate);
-    setendData(minEndDate);
-    document.getElementById("end-date").min = minEndDate
-      .toISOString()
-      .slice(0, 10);
+    setendDate(null);
+    document.getElementById("end-date").min = minEndDate.toISOString().slice(
+      0,
+      10
+    );
   };
+  //Handle End Date Change
+  const handleEndDateChange = (e) => {
+    const endDate = new Date(e.target.value);
+    setendDate(endDate);
+  };
+
   const today = new Date().toISOString().slice(0, 10);
-  // needNote to worry about this is siple ternery operator
+  //this is simply a ternary operator
   const minEndDate = startDate
     ? new Date(startDate.getTime() + 3 * 24 * 60 * 60 * 1000)
-    : today;
+        .toISOString()
+        .slice(0, 10)
+    : "";
+
   useEffect(() => {
     if (error) {
       toast.error(error);
@@ -47,13 +52,24 @@ const CreateEvent = () => {
     }
     if (success) {
       toast.success("Event Product Created Successfully!");
+      dispatch(getAllEventsShop(seller._id));
+      setImages([]);
+      setName("");
+      setDescription("");
+      setCategory("");
+      setTags("");
+      setOriginalPrice("");
+      setDiscountPrice("");
+      setStock("");
+      setStartDate("");
+      setendDate("");
       navigate("/dashboard");
-      window.location.reload();
+     
     }
   }, [dispatch, error, success]);
   // Image Change Handler
   const handleImageChange = (e) => {
-    let files = Array.from(e.target.files);
+    const files = Array.from(e.target.files);
     setImages([]);
     files.forEach((file) => {
       const reader = new FileReader();
@@ -82,10 +98,11 @@ const CreateEvent = () => {
       stock,
       images,
       shopId: seller._id,
-      start_date: startDate?.toISOString(),
-      finish_date: endDate?.toISOString(),
+      start_Date: startDate?.toISOString(),
+      Finish_Date: endDate?.toISOString(),
     };
     dispatch(createEvent(data));
+    window.location.reload();
   };
   return (
     <div className="w-[90%] 800px:w-[50%] bg-white  shadow h-[80vh] rounded-[4px] p-3 overflow-y-scroll">
@@ -223,7 +240,7 @@ const CreateEvent = () => {
             value={endDate ? endDate.toISOString().slice(0, 10) : ""}
             className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
             onChange={handleEndDateChange}
-            min={today}
+            min={minEndDate}
             placeholder="Enter your product stock..."
           />
         </div>

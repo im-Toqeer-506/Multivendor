@@ -34,12 +34,13 @@ router.post(
           });
         }
         const productData = req.body;
+        console.log(req.body);
         productData.images = imagesLinks;
         productData.shop = shop;
-        const product = await Event.create(productData);
+        const event = await Event.create(productData);
         res.status(201).json({
           success: true,
-          product,
+          event,
         });
       }
     } catch (error) {

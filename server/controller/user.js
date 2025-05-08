@@ -15,7 +15,7 @@ const cloudinary = require("cloudinary").v2;
 router.post("/create-user", async (req, res, next) => {
   try {
     const { name, email, password, avatar } = req.body;
-    console.log(req.body);
+   
     if (!name || !email || !password || !avatar) {
       return next(new ErrorHandler("All fields are required", 400));
     }
@@ -25,7 +25,7 @@ router.post("/create-user", async (req, res, next) => {
       return next(new ErrorHandler("User already exists", 400));
     }
 
-    const myCloud = await cloudinary.v2.uploader.upload(avatar, {
+    const myCloud = await cloudinary.uploader.upload(avatar, {
       folder: "avatars",
     });
 

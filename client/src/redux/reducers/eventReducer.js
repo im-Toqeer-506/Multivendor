@@ -2,7 +2,7 @@ import { createReducer } from "@reduxjs/toolkit";
 
 const initialState = {
   isLoading: true,
-  product: null,
+  event: null,
   events: [],
   allEvents: [],
   success: false,
@@ -18,7 +18,7 @@ export const eventReducer = createReducer(initialState, (builder) => {
     })
     .addCase("eventCreateSuccess", (state, action) => {
       state.isLoading = false;
-      state.events = [...state.events, action.payload];
+      state.event = action.payload;
       state.success = true;
     })
     .addCase("eventCreateFail", (state, action) => {

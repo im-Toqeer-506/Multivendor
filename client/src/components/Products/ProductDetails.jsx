@@ -92,7 +92,10 @@ const ProductDetails = ({ data }) => {
         )
       : 0;
   const averageRating =
+
     totalReviewsLength > 0 ? totalRatings / totalReviewsLength : 0;
+
+
   const handleMessageSubmit = async () => {
     if (isAuthenticated) {
       const groupTitle = data._id + user._id;
@@ -105,7 +108,7 @@ const ProductDetails = ({ data }) => {
           sellerId,
         })
         .then((res) => {
-          navigate(`/conversation/${res.data.conversation._id}`);
+          navigate(`/inbox?/${res.data.conversation._id}`);
         })
         .catch((error) => {
           toast.error(error.response.data?.message);

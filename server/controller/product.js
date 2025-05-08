@@ -15,10 +15,9 @@ router.post(
       const shopId = req.body.shopId;
       const shop = await Shop.findById(shopId);
       if (!shop) {
-        return next(ErrorHandler("Shop Dose`nt Exist!", 404));
+        return next(new ErrorHandler("Shop Id is invalid!", 400));
       } else {
         let images = [];
-
         if (typeof req.body.images === "string") {
           images.push(req.body.images);
         } else {

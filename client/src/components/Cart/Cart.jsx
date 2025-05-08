@@ -6,22 +6,24 @@ import styles from "../../styles/style";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { backend_url } from "../../server";
 import { addToCart, removeFromCart } from "../../redux/actions/cart";
 import { toast } from "react-toastify";
 const Cart = ({ setOpenCart }) => {
   const { cart } = useSelector((state) => state.cart);
   const dispatch = useDispatch();
+
   const removeFromCartHandler = (data) => {
     dispatch(removeFromCart(data));
   };
+
+  const qtyChangeHandler = (data) => {
+    dispatch(addToCart(data));
+  };
+
   const totalPrice = cart.reduce(
     (acc, item) => acc + item.qty * item.discountPrice,
     0
   );
-  const qtyChangeHandler = (data) => {
-    dispatch(addToCart(data));
-  };
   return (
     <div className="fixed top-0 left-0 w-full bg-[#0000004b] h-screen z-10">
       <div className="fixed top-0 right-0 h-full w-[80%] 800px:w-[25%] bg-white flex flex-col overflow-y-scroll justify-between shadow-sm">
@@ -130,7 +132,7 @@ const CartSingle = ({ item, qtyChangeHandler, removeFromCartHandler }) => {
         {/* Product Image */}
         <img
           className="w-[130px] h-min ml-2 mr-2 rounded-[5px] "
-          src={`${data.images[0]?.url}`}
+          src={`${item.images[0]?.url}`}
           alt="Static Product"
         />
         <div className="pl-[5px]">

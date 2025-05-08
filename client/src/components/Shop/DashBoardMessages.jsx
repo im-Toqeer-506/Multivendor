@@ -188,6 +188,9 @@ const DashBoardMessages = () => {
       }
     );
   };
+  console.log("Seller:", seller);
+  console.log("Conversations:", conversation);
+  console.log("Current Chat:", currentChat);
   return (
     <div className="w-full bg-white m-5 h-[85vh] overflow-y-scroll rounded ">
       {!open && (
