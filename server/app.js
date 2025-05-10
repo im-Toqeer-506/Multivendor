@@ -15,10 +15,13 @@ app.use(
   })
 );
 app.use("/", express.static("uploads"));
+app.use((req, res) => {
+  res.send("Hello from server!");
+});
 //config
 if (process.env.NODE_ENV !== "PRODUCTION") {
   require("dotenv").config({
-    path: "server/config/.env",
+    path: "config/.env",
   });
 }
 //Import Routes

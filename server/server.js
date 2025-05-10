@@ -10,7 +10,7 @@ process.on("uncaughtException", (error) => {
 //config
 if (process.env.NODE_ENV !== "PRODUCTION") {
   require("dotenv").config({
-    path: "server/config/.env",
+    path: "config/.env",
   });
 }
 //connection to database
