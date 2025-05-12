@@ -32,7 +32,6 @@ const Categories = () => {
               };
 
               return (
-                console.log(i),
                 <div
                   className="w-full h-[100px] flex items-center justify-between cursor-pointer overflow-hidden"
                   key={i.id}

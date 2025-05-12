@@ -13,6 +13,7 @@ if (process.env.NODE_ENV !== "PRODUCTION") {
     path: "config/.env",
   });
 }
+
 //connection to database
 dbConnection();
 cloudinary.config({
@@ -35,3 +36,5 @@ process.on("unhandledRejection", (error) => {
     process.exit(1);
   });
 });
+
+

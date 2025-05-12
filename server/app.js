@@ -1,9 +1,11 @@
 const express = require("express");
-const ErrorHandler = require("./middleware/error");
-const app = express();
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const ErrorHandler = require("./middleware/error");
+
+const app = express();
+
 // Middleware
 app.use(express.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -14,16 +16,24 @@ app.use(
     credentials: true,
   })
 );
-app.use("/", express.static("uploads"));
-app.use((req, res) => {
-  res.send("Hello from server!");
-});
-//config
-if (process.env.NODE_ENV !== "PRODUCTION") {
-  require("dotenv").config({
-    path: "config/.env",
+
+// Serve static files from /uploads via /uploads path
+app.use("/uploads", express.static("uploads"));
+
+// Health check route
+app.get("/health", (req, res) => {
+  res.status(200).json({
+    status: "OK",
+    uptime: process.uptime(),
+    timestamp: Date.now(),
   });
+});
+
+// Config - Load environment variables if not in production
+if (process.env.NODE_ENV !== "PRODUCTION") {
+  require("dotenv").config({ path: "config/.env" });
 }
+
 //Import Routes
 const user = require("./controller/user");
 const shop = require("./controller/shop");
@@ -46,6 +56,17 @@ app.use("/api/v2/order", order);
 app.use("/api/v2/conversation", converation);
 app.use("/api/v2/message", message);
 app.use("/api/v2/withdraw", withdraw);
-//Error Handling Middleware
+
+// Catch-all 404 handler
+app.use("*", (req, res) => {
+  res.status(404).json({
+    message: "Route not found",
+    path: req.originalUrl,
+    method: req.method,
+  });
+});
+
+// Global Error Handling Middleware
 app.use(ErrorHandler);
+
 module.exports = app;

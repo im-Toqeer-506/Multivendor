@@ -53,7 +53,7 @@ router.post("/create-shop", async (req, res, next) => {
       next(new ErrorHandler(error.message, 500));
     }
   } catch (error) {
-    console.log(error);
+    next(new ErrorHandler(error.message, 500));
   }
 });
 //create activation Token (Function)

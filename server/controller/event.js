@@ -34,7 +34,6 @@ router.post(
           });
         }
         const productData = req.body;
-        console.log(req.body);
         productData.images = imagesLinks;
         productData.shop = shop;
         const event = await Event.create(productData);
