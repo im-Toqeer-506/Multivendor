@@ -12,7 +12,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(
   cors({
-    origin: "https://client-eight-coral.vercel.app/",
+    origin: "https://client-eight-coral.vercel.app",
     credentials: true,
   })
 );
