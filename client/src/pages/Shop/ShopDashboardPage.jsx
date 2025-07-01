@@ -1,6 +1,6 @@
 import React from "react";
 import DashboardHeader from "../../components/Shop/Layout/DashboardHeader";
-import ShopDashboardSidebar from "../../components/shop/Layout/ShopDashboardSidebar";
+import ShopDashboardSidebar from "../../components/Shop/Layout/ShopDashboardSidebar";
 import DashBoardHero from "../../components/Shop/DashBoardHero";
 const ShopDashboardPage = () => {
   return (

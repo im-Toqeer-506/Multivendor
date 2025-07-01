@@ -1,7 +1,7 @@
 import React from "react";
 import ShopSettings from "../../components/Shop/ShopSettings";
 import DashboardHeader from "../../components/Shop/Layout/DashboardHeader";
-import ShopDashboardSidebar from "../../components/shop/Layout/ShopDashboardSidebar.jsx";
+import ShopDashboardSidebar from "../../components/Shop/Layout/ShopDashboardSidebar";
 const ShopSettingsPage = () => {
   return (
     <div>
