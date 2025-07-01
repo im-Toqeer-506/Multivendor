@@ -1,2 +1,2 @@
-export const server = "https://multivendor-3729.onrender.com/api/v2";
-export const backend_url = "https://multivendor-3729.onrender.com";
+export const server = "https://e-shop-backend-gules.vercel.app/api/v2";
+export const backend_url = "https://e-shop-backend-gules.vercel.app";
