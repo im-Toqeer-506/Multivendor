@@ -30,12 +30,12 @@ export const createProduct = (
     );
     dispatch({
       type: "productCreateSuccess",
-      payload: data.product,
+      payload: data?.product,
     });
   } catch (error) {
     dispatch({
       type: "productCreateFail",
-      payload: error.response.data.message,
+      payload: error.response?.data.message,
     });
   }
 };
@@ -52,7 +52,7 @@ export const getAllProductsShop = (id) => async (dispatch) => {
 
     dispatch({
       type: "getAllProductsShopSuccess",
-      payload: data.products,
+      payload: data?.products,
     });
   } catch (error) {
     dispatch({
@@ -76,7 +76,7 @@ export const deleteProduct = (id) => async (dispatch) => {
 
     dispatch({
       type: "deleteProductSuccess",
-      payload: data.message,
+      payload: data?.message,
     });
   } catch (error) {
     dispatch({
@@ -95,12 +95,12 @@ export const getAllProducts = () => async (dispatch) => {
     const { data } = await axios.get(`${server}/product/get-all-products`);
     dispatch({
       type: "getAllProductsSuccess",
-      payload: data.products,
+      payload: data?.products,
     });
   } catch (error) {
     dispatch({
       type: "getAllProductsFailed",
-      payload: error.response.data.message,
+      payload: error.response?.data.message,
     });
   }
 };

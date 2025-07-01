@@ -34,7 +34,7 @@ export const getAllEventsShop = (id) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: "getAllEventsShopFailed",
-      payload: error.response.data.message,
+      payload: error.response?.data?.message,
     });
   }
 };
