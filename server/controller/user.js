@@ -15,7 +15,7 @@ const cloudinary = require("cloudinary").v2;
 router.post("/create-user", async (req, res, next) => {
   try {
     const { name, email, password, avatar } = req.body;
-   
+
     if (!name || !email || !password || !avatar) {
       return next(new ErrorHandler("All fields are required", 400));
     }
@@ -41,7 +41,7 @@ router.post("/create-user", async (req, res, next) => {
 
     const activationToken = createActivationToken(user);
 
-    const activationUrl = `http://localhost:5173/activation/${activationToken}`;
+    const activationUrl = `https://client-eight-coral.vercel.app/activation/${activationToken}`;
     try {
       await sendMail({
         email: user.email,

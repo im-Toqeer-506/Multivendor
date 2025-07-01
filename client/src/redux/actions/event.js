@@ -70,12 +70,12 @@ export const getAllEvents = () => async (dispatch) => {
 
     dispatch({
       type: "getAllEventsSuccess",
-      payload: data.events,
+      payload: data?.events,
     });
   } catch (error) {
     dispatch({
       type: "getAllEventsFailed",
-      payload: error.response.data.message,
+      payload: error.response?.data.message,
     });
   }
 };

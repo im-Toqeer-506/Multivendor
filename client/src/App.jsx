@@ -77,10 +77,10 @@ const App = () => {
   }
   const dispatch = useDispatch();
   useEffect(() => {
-    Store.dispatch(getUser());
-    Store.dispatch(getSeller());
-    Store.dispatch(getAllProducts());
-    Store.dispatch(getAllEvents());
+    dispatch(getUser());
+    dispatch(getSeller());
+    dispatch(getAllProducts());
+    dispatch(getAllEvents());
     getStripeApikey();
   }, [dispatch]);
 
