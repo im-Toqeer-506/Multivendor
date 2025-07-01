@@ -64,6 +64,7 @@ import { getAllEvents } from "./redux/actions/event.js";
 import axios from "axios";
 import { server } from "./server.js";
 import ProtectedAdminRoute from "./routes/ProtectedAdminRoute.jsx";
+import { useDispatch } from "react-redux";
 const App = () => {
   const [stripeApiKey, setStripeApiKey] = useState("");
   async function getStripeApikey() {
@@ -74,6 +75,7 @@ const App = () => {
       toast.error("Error fetching Stripe API key:", error);
     }
   }
+  const dispatch = useDispatch();
   useEffect(() => {
     Store.dispatch(getUser());
     Store.dispatch(getSeller());
