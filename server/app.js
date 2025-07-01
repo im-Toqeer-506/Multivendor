@@ -19,6 +19,10 @@ app.use(
 
 // Serve static files from /uploads via /uploads path
 app.use("/uploads", express.static("uploads"));
+// Root route
+app.get("/", (req, res) => {
+  res.send("API is running :visit:  /health for status");
+});
 
 // Health check route
 app.get("/health", (req, res) => {
