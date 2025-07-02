@@ -4,7 +4,7 @@ const http = require("http");
 const cors = require("cors");
 const server = http.createServer(app);
 const io = socketIO(server);
-app.use(cors());
+app.use(cors({ origin: "https://client-eight-coral.vercel.app" }));
 require("dotenv").config({
   path: "./.env",
 });
