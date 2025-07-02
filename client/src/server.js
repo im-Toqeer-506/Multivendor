@@ -1,2 +1,2 @@
-export const server = "https://multivendor-green.vercel.app/api/v2";
-export const backend_url = "https://multivendor-green.vercel.app";
+export const server = "backend-theta-weld-83.vercel.app/api/v2";
+export const backend_url = "backend-theta-weld-83.vercel.app";
