@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import Header from "../components/Layout/Header";
 import { useSelector } from "react-redux";
 import socketIO from "socket.io-client";
-const ENDPOINT = "http://localhost:5000";
+const ENDPOINT = "https://toqeer-socket-working.onrender.com";
 import { format } from "timeago.js";
 import { backend_url, server } from "../server";
 import axios from "axios";

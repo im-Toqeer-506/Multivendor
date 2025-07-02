@@ -8,7 +8,7 @@ import { format } from "timeago.js";
 import { AiOutlineArrowRight, AiOutlineSend } from "react-icons/ai";
 import styles from "../../styles/style";
 import SocketIO from "socket.io-client";
-const ENDPOINTS = "http://localhost:5000";
+const ENDPOINTS = "https://toqeer-socket-working.onrender.com";
 const socketId = SocketIO(ENDPOINTS, { transports: ["websocket"] });
 const DashBoardMessages = () => {
   const [open, setOpen] = useState(false);
