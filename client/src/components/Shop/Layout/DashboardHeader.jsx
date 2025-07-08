@@ -39,7 +39,7 @@ const DashboardHeader = () => {
                 className="mx-5 cursor-pointer"
               />
             </Link>
-            <Link to={`/dashboard-orders`} className="800px:block hidden">
+            <Link to={`/dashboard-products`} className="800px:block hidden">
               <FiPackage
                 color="#555"
                 size={30}

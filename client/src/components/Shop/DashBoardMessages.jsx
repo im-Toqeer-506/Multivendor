@@ -40,23 +40,22 @@ const DashBoardMessages = () => {
   }, [arivalMessage, currentChat]);
 
   useEffect(() => {
-    const getAllConversations = async () => {
-      await axios
-        .get(
-          `${server}/conversation/get-all-conversation-seller/${seller._id}`,
+    const getConversation = async () => {
+      try {
+        const response = await axios.get(
+          `${server}/conversation/get-all-conversation-seller/${seller?._id}`,
           {
             withCredentials: true,
           }
-        )
-        .then((res) => {
-          setConversation(res.data.conversations);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+        );
+
+        setConversation(response.data.conversations);
+      } catch (error) {
+        // console.log(error);
+      }
     };
-    getAllConversations();
-  }, [seller._id]);
+    getConversation();
+  }, [seller, messages]);
   useEffect(() => {
     if (seller) {
       const sellerId = seller._id;
@@ -71,12 +70,10 @@ const DashBoardMessages = () => {
   useEffect(() => {
     const getMessages = async () => {
       try {
-        if (currentChat?._id) {
-          const response = await axios.get(
-            `${server}/message/get-all-messages/${currentChat?._id}`
-          );
-          setMessages(response.data.messages);
-        }
+        const response = await axios.get(
+          `${server}/message/get-all-messages/${currentChat?._id}`
+        );
+        setMessages(response.data.messages);
       } catch (error) {
         console.log(error);
       }
@@ -85,7 +82,7 @@ const DashBoardMessages = () => {
   }, [currentChat]);
   const onLineCheck = (chat) => {
     const chatMembers = chat.members.find((member) => member !== seller._id);
-    const online = onlineUsers.find((user) => user.userId !== chatMembers);
+    const online = onlineUsers.find((user) => user.userId === chatMembers);
 
     return online ? true : false;
   };
@@ -135,7 +132,6 @@ const DashBoardMessages = () => {
         lastMessageId: seller._id,
       })
       .then((res) => {
-        console.log(res.data.conversation);
         setNewMessage("");
       })
       .catch((error) => {
@@ -146,20 +142,21 @@ const DashBoardMessages = () => {
     const reader = new FileReader();
     reader.onload = () => {
       if (reader.readyState === 2) {
-        setImages(reader.result);
-        imageSendingHandler(reader.result);
+        const imageData = reader.result;
+        setImages(imageData);
+        imageSendingHandler(imageData);
       }
     };
     reader.readAsDataURL(e.target.files[0]);
   };
-  const imageSendingHandler = async (e) => {
+  const imageSendingHandler = async (imageData) => {
     const receiverId = currentChat.members.find(
       (member) => member !== seller._id
     );
     socketId.emit("sendMessage", {
       senderId: seller._id,
       receiverId,
-      images: e,
+      images: imageData,
     });
 
     try {
@@ -188,9 +185,7 @@ const DashBoardMessages = () => {
       }
     );
   };
-  console.log("Seller:", seller);
-  console.log("Conversations:", conversation);
-  console.log("Current Chat:", currentChat);
+
   return (
     <div className="w-full bg-white m-5 h-[85vh] overflow-y-scroll rounded ">
       {!open && (
@@ -201,7 +196,7 @@ const DashBoardMessages = () => {
           {conversation.map((item, index) => (
             <MessageList
               key={index}
-              me={seller._id}
+              me={seller?._id}
               item={item}
               setOpen={setOpen}
               setCurrentChat={setCurrentChat}
