@@ -238,14 +238,14 @@ const MessageList = ({
   setActiveStatus,
 }) => {
   const [active, setActive] = useState(0);
-  const [user, setUser] = useState();
+  const [user, setUser] = useState([]);
   const navigate = useNavigate();
   const handleClick = (id) => {
-    navigate(`?${id}`);
+    navigate(`/dashboard-messages?${id}`);
   };
 
   useEffect(() => {
-    setActiveStatus(online);
+  
     const userId = item.members.find((user) => user != me);
     const getUser = async () => {
       try {
@@ -268,8 +268,8 @@ const MessageList = ({
           handleClick(item._id) ||
           setCurrentChat(item) ||
           setUserData(user) ||
-          setActiveStatus(online) ||
-          setOpen(true);
+          setActiveStatus(online) 
+         
       }}
     >
       <div className="relative">
@@ -289,7 +289,7 @@ const MessageList = ({
           <span>
             {item?.lastMessageId !== user?._id
               ? "YOU: "
-              : `${user.name.split(" ")[0]}: `}
+              : `${user?.name?.split(" ")[0]}: `}
             {item?.lastMessage}
           </span>
         </p>
