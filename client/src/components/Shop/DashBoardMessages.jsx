@@ -245,7 +245,6 @@ const MessageList = ({
   };
 
   useEffect(() => {
-  
     const userId = item.members.find((user) => user != me);
     const getUser = async () => {
       try {
@@ -268,8 +267,8 @@ const MessageList = ({
           handleClick(item._id) ||
           setCurrentChat(item) ||
           setUserData(user) ||
-          setActiveStatus(online) 
-         
+          setActiveStatus(online) ||
+          setOpen(true);
       }}
     >
       <div className="relative">
