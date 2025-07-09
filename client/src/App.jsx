@@ -32,6 +32,7 @@ import {
 import ProtectedRoute from "./routes/ProtectedRoutes.jsx";
 // import Shop Routes
 import {
+  ShopHomePage,
   ShopDashboardPage,
   ShopCreateProduct,
   ShopAllProducts,
@@ -54,7 +55,7 @@ import {
   AdminDashboardEventsPage,
   AdminDashboardWithdrawPage,
 } from "./routes/AdminRoutes.js";
-import { ShopHomePage } from "./routes/ShopRoutes.jsx";
+
 import Store from "./redux/store.js";
 import { getUser } from "./redux/actions/user";
 import { getSeller } from "./redux/actions/seller";

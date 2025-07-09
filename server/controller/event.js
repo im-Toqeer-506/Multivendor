@@ -65,26 +65,18 @@ router.delete(
   isSeller,
   catchAsyncError(async (req, res, next) => {
     try {
-      const productId = req.params.id;
-
-      const eventData = await Event.findById(productId);
-
-      eventData.images.forEach((imageUrl) => {
-        const filename = imageUrl;
-        const filePath = `uploads/${filename}`;
-
-        fs.unlink(filePath, (err) => {
-          if (err) {
-            console.log(err);
-          }
-        });
-      });
-
-      const event = await Event.findByIdAndDelete(productId);
+      const event = await Event.findById(req.params.id);
 
       if (!event) {
-        return next(new ErrorHandler("Event not found with this id!", 500));
+        return next(new ErrorHandler("Event is not found with this id", 404));
       }
+
+      for (let i = 0; i < event.images.length; i++) {
+        const result = await cloudinary.uploader.destroy(
+          event.images[i].public_id
+        );
+      }
+      await event.deleteOne();
       res.status(201).json({
         success: true,
         message: "Event Deleted successfully!",
