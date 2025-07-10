@@ -21,7 +21,7 @@ const OrderDetails = () => {
     dispatch(getAllOrdersOfShop(seller._id));
   }, [dispatch, seller._id]);
   useEffect(() => {
-    if (data?.status);
+    if (data?.status)
     {
       setStatus(data.status);
     }

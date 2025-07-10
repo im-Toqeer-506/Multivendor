@@ -99,17 +99,14 @@ const UserOrderDetails = () => {
                 US${item.discountPrice} x {item.qty}
               </h5>
             </div>
-            {!item.isReviewed && item?.status !== "Delivered" ? null : (
+            {!item.isReviewed && data?.status === "Delivered" ? (
               <div
                 className={`${styles.button} text-[#fff]`}
-                onClick={() => {
-                  setOpen(true);
-                  setSelectedItem(item);
-                }}
+                onClick={() => setOpen(true) || setSelectedItem(item)}
               >
-                Write a Review
+                Write a review
               </div>
-            )}
+            ) : null}
           </div>
         ))}
       {/* Review PopUp */}

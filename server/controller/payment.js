@@ -7,7 +7,7 @@ router.post(
   catchAsyncError(async (req, res, next) => {
     const paymentIntent = await stripe.paymentIntents.create({
       amount: req.body.amount,
-      currency: "pkr",
+      currency: "usd",
       metadata: {
         company: "Ecommerce",
       },
