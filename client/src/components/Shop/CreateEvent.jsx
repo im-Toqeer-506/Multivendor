@@ -102,7 +102,7 @@ const CreateEvent = () => {
       Finish_Date: endDate?.toISOString(),
     };
     dispatch(createEvent(data));
-    window.location.reload();
+ 
   };
   return (
     <div className="w-[90%] 800px:w-[50%] bg-white  shadow h-[80vh] rounded-[4px] p-3 overflow-y-scroll">
