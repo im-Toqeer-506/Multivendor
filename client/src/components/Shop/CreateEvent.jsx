@@ -66,7 +66,7 @@ const CreateEvent = () => {
       navigate("/dashboard");
      
     }
-  }, [dispatch, error, success]);
+  }, [dispatch, error, success,navigate]);
   // Image Change Handler
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
