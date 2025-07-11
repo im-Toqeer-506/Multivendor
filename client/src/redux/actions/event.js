@@ -9,7 +9,7 @@ export const createEvent = (data) => async (dispatch) => {
     const { event } = await axios.post(`${server}/event/create-event`, data);
     dispatch({
       type: "eventCreateSuccess",
-      payload: { event },
+      payload:  event ,
     });
   } catch (error) {
     dispatch({
