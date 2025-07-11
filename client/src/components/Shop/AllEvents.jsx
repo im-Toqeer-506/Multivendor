@@ -17,6 +17,7 @@ const AllEvents = () => {
 
   const handleDelete = (id) => {
     dispatch(deleteEvent(id));
+    window.location.reload(true);
   };
 
   const columns = [
@@ -87,7 +88,7 @@ const AllEvents = () => {
   ];
 
   const row = [];
-  
+
   events &&
     events.forEach((item) => {
       row.push({
