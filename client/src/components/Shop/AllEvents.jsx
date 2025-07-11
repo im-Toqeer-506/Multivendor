@@ -16,8 +16,14 @@ const AllEvents = () => {
   }, []);
 
   const handleDelete = (id) => {
-    dispatch(deleteEvent(id));
-    window.location.reload(true);
+    dispatch(deleteEvent(id))
+      .then(() => {
+        toast.success("Event deleted successfully!");
+        dispatch(getAllEventsShop(seller._id));
+      })
+      .catch((err) => {
+        toast.error(err);
+      });
   };
 
   const columns = [
