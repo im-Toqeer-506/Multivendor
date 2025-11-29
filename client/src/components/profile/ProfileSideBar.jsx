@@ -13,22 +13,23 @@ import { TbAddressBook } from "react-icons/tb";
 import { HiOutlineReceiptRefund, HiOutlineShoppingBag } from "react-icons/hi";
 import { RxPerson } from "react-icons/rx";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector,useDispatch } from "react-redux";
 
 const ProfileSideBar = ({ active, setActive }) => {
   const { user } = useSelector((state) => state.user);
   const navigate = useNavigate();
-  const logOutHandler = () => {
-    axios
-      .get(`${server}/user/logout`, { withCredentials: true })
-      .then((res) => {
-        toast.success(res.data.message);
-        window.location.reload(true);
-        navigate("/login");
-      })
-      .catch((error) => {
-        toast.error(error.response.data?.message);
+  const dispatch=useDispatch();
+  const logOutHandler = async () => {
+    try {
+      const res = await axios.get(`${server}/user/logout`, {
+        withCredentials: true,
       });
+      toast.success(res.data.message);
+      dispatch({ type: "LogoutSuccess" });
+      navigate("/login");
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Logout failed");
+    }
   };
   return (
     <div className="w-ful bg-[#fff] shadow-sm rounded-[4px] p-4 pt-8">
